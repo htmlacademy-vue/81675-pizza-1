@@ -31,6 +31,8 @@
               v-for="item in ingredients"
               :key="item.id"
               :item="item"
+              @add="() => $emit('ingredientAdd', item)"
+              @remove="() => $emit('ingredientRemove', item)"
             />
           </ul>
         </div>

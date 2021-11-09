@@ -22,6 +22,8 @@
             :sauces="sauces"
             :selected-sauce="selectedSauce"
             @sauceChange="onSauceChange"
+            @ingredientAdd="onIngredientAdd"
+            @ingredientRemove="onIngredientRemove"
           />
 
           <BuilderPizzaView :total-price="totalPrice" />
@@ -52,10 +54,16 @@ export default {
     const dough = pizzaData.dough;
     const sizes = pizzaData.sizes;
     const sauces = pizzaData.sauces;
+    const ingredients = pizzaData.ingredients.map((item) => {
+      return {
+        ...item,
+        amount: 0,
+      };
+    });
     return {
       dough,
       sizes,
-      ingredients: pizzaData.ingredients,
+      ingredients,
       sauces,
 
       selectedDough: dough[0],
@@ -64,10 +72,17 @@ export default {
     };
   },
   computed: {
+    ingredientsPrice() {
+      return this.ingredients.reduce((acc, item) => {
+        return acc + item.price * item.amount;
+      }, 0);
+    },
     totalPrice() {
       return (
         this.selectedSize.multiplier *
-        (this.selectedDough.price + this.selectedSauce.price)
+        (this.selectedDough.price +
+          this.selectedSauce.price +
+          this.ingredientsPrice)
       );
     },
   },
@@ -80,6 +95,12 @@ export default {
     },
     onSauceChange(sauce) {
       this.selectedSauce = sauce;
+    },
+    onIngredientAdd(item) {
+      item.amount++;
+    },
+    onIngredientRemove(item) {
+      item.amount--;
     },
   },
 };
