@@ -21,39 +21,11 @@
           <p>Начинка:</p>
 
           <ul class="ingredients__list">
-            <li
-              class="ingredients__item"
+            <BuilderIngredientItem
               v-for="item in ingredients"
               :key="item.id"
-            >
-              <span
-                class="filling"
-                :class="`filling--${ingredientName(item)}`"
-                >{{ item.name }}</span
-              >
-
-              <div class="counter counter--orange ingredients__counter">
-                <button
-                  type="button"
-                  class="counter__button counter__button--minus"
-                  disabled
-                >
-                  <span class="visually-hidden">Меньше</span>
-                </button>
-                <input
-                  type="text"
-                  name="counter"
-                  class="counter__input"
-                  value="0"
-                />
-                <button
-                  type="button"
-                  class="counter__button counter__button--plus"
-                >
-                  <span class="visually-hidden">Больше</span>
-                </button>
-              </div>
-            </li>
+              :item="item"
+            />
           </ul>
         </div>
       </div>
@@ -62,8 +34,10 @@
 </template>
 
 <script>
+import BuilderIngredientItem from "@/modules/builder/components/BuilderIngredientItem";
 export default {
   name: "BuilderIngredientsSelector",
+  components: { BuilderIngredientItem },
   props: {
     sauces: {
       type: Array,
@@ -72,12 +46,6 @@ export default {
     ingredients: {
       type: Array,
       required: true,
-    },
-  },
-  methods: {
-    ingredientName(item) {
-      const match = item.image.match(/(\w+).svg/);
-      return match?.[1] ?? "";
     },
   },
 };
