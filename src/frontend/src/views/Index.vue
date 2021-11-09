@@ -26,7 +26,12 @@
             @ingredientRemove="onIngredientRemove"
           />
 
-          <BuilderPizzaView :total-price="totalPrice" />
+          <BuilderPizzaView
+            :ingredients="ingredients"
+            :total-price="totalPrice"
+            :selected-sauce="selectedSauce"
+            :selected-dough="selectedDough"
+          />
         </div>
       </form>
     </main>
@@ -55,8 +60,11 @@ export default {
     const sizes = pizzaData.sizes;
     const sauces = pizzaData.sauces;
     const ingredients = pizzaData.ingredients.map((item) => {
+      const match = item.image.match(/(\w+).svg/);
+      const nameEn = match?.[1] ?? "";
       return {
         ...item,
+        nameEn,
         amount: 0,
       };
     });

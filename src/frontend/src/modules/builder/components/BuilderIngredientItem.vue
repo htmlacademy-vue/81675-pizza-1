@@ -1,6 +1,6 @@
 <template>
   <li class="ingredients__item">
-    <span class="filling" :class="`filling--${itemName}`">
+    <span class="filling" :class="`filling--${item.nameEn}`">
       {{ item.name }}
     </span>
 
@@ -18,6 +18,7 @@
         name="counter"
         class="counter__input"
         v-model="item.amount"
+        disabled
       />
       <button
         type="button"
@@ -44,10 +45,6 @@ export default {
     },
   },
   computed: {
-    itemName() {
-      const match = this.item.image.match(/(\w+).svg/);
-      return match?.[1] ?? "";
-    },
     isAddDisabled() {
       return this.item.amount >= MAX_AMOUNT;
     },

@@ -10,11 +10,14 @@
     </label>
 
     <div class="content__constructor">
-      <div class="pizza pizza--foundation--big-tomato">
+      <div class="pizza" :class="pizzaClass">
         <div class="pizza__wrapper">
-          <div class="pizza__filling pizza__filling--ananas"></div>
-          <div class="pizza__filling pizza__filling--bacon"></div>
-          <div class="pizza__filling pizza__filling--cheddar"></div>
+          <div
+            v-for="item in ingredientClasses"
+            :key="item"
+            class="pizza__filling"
+            :class="item"
+          ></div>
         </div>
       </div>
     </div>
@@ -33,6 +36,36 @@ export default {
     totalPrice: {
       type: Number,
       required: true,
+    },
+    selectedSauce: {
+      type: Object,
+      required: true,
+    },
+    selectedDough: {
+      type: Object,
+      required: true,
+    },
+    ingredients: {
+      type: Array,
+      required: true,
+    },
+  },
+  computed: {
+    doughClassName() {
+      return this.selectedDough.value === "large" ? "big" : "small";
+    },
+    pizzaClass() {
+      return `pizza--foundation--${this.doughClassName}-${this.selectedSauce.value}`;
+    },
+    ingredientClasses() {
+      return this.ingredients
+        .filter((item) => item.amount > 0)
+        .map((item) => {
+          const classes = [`pizza__filling--${item.nameEn}`];
+          if (item.amount === 2) classes.push("pizza__filling--second");
+          if (item.amount === 3) classes.push("pizza__filling--third");
+          return classes.join(" ");
+        });
     },
   },
 };
