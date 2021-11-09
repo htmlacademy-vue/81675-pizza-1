@@ -15,6 +15,8 @@
             name="diameter"
             :value="size.value"
             class="visually-hidden"
+            :checked="size.id === selectedSize.id"
+            @change="$emit('change', size)"
           />
           <span>{{ size.name }}</span>
         </label>
@@ -29,6 +31,10 @@ export default {
   props: {
     sizes: {
       type: Array,
+      required: true,
+    },
+    selectedSize: {
+      type: Object,
       required: true,
     },
   },

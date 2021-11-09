@@ -12,7 +12,13 @@
             v-for="sauce in sauces"
             :key="sauce.id"
           >
-            <input type="radio" name="sauce" :value="sauce.value" checked />
+            <input
+              type="radio"
+              name="sauce"
+              :value="sauce.value"
+              :checked="sauce.id === selectedSauce.id"
+              @change="$emit('sauceChange', sauce)"
+            />
             <span>{{ sauce.name }}</span>
           </label>
         </div>
@@ -45,6 +51,10 @@ export default {
     },
     ingredients: {
       type: Array,
+      required: true,
+    },
+    selectedSauce: {
+      type: Object,
       required: true,
     },
   },

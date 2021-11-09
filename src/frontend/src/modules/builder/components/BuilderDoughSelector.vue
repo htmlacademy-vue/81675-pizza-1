@@ -15,7 +15,8 @@
             name="dough"
             :value="item.value"
             class="visually-hidden"
-            checked
+            :checked="item.id === selectedDough.id"
+            @change="$emit('change', item)"
           />
           <b>{{ item.name }}</b>
           <span>{{ item.description }}</span>
@@ -31,6 +32,10 @@ export default {
   props: {
     dough: {
       type: Array,
+      required: true,
+    },
+    selectedDough: {
+      type: Object,
       required: true,
     },
   },
