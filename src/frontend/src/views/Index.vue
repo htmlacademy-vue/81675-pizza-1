@@ -31,6 +31,9 @@
             :total-price="totalPrice"
             :selected-sauce="selectedSauce"
             :selected-dough="selectedDough"
+            :pizza-name="pizzaName"
+            @pizzaNameInput="(v) => (pizzaName = v)"
+            @addToCart="onAddToCart"
           />
         </div>
       </form>
@@ -73,10 +76,11 @@ export default {
       sizes,
       ingredients,
       sauces,
-
       selectedDough: dough[0],
       selectedSize: sizes[0],
       selectedSauce: sauces[0],
+      pizzaName: "",
+      cart: [],
     };
   },
   computed: {
@@ -109,6 +113,45 @@ export default {
     },
     onIngredientRemove(item) {
       item.amount--;
+    },
+    onAddToCart() {
+      const pizzaIngredients = this.ingredients
+        .filter((item) => item.amount > 0)
+        .map((item) => {
+          return {
+            id: item.id,
+            amount: item.amount,
+            price: item.price,
+          };
+        });
+
+      const pizza = {
+        name: this.pizzaName,
+        dough: {
+          id: this.selectedDough.id,
+          price: this.selectedDough.price,
+        },
+        size: {
+          id: this.selectedSize.id,
+          multiplier: this.selectedSize.multiplier,
+        },
+        sauce: {
+          id: this.selectedSauce.id,
+          price: this.selectedSauce.price,
+        },
+        ingredients: pizzaIngredients,
+      };
+      this.cart.push(pizza);
+      this.resetState();
+    },
+    resetState() {
+      this.selectedDough = pizzaData.dough[0];
+      this.selectedSize = pizzaData.sizes[0];
+      this.selectedSauce = pizzaData.sauces[0];
+      this.pizzaName = "";
+      this.ingredients.forEach((item) => {
+        item.amount = 0;
+      });
     },
   },
 };

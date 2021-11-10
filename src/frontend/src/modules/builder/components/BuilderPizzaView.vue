@@ -6,6 +6,8 @@
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
+        :value="pizzaName"
+        @input="(e) => $emit('pizzaNameInput', e.target.value)"
       />
     </label>
 
@@ -24,7 +26,14 @@
 
     <div class="content__result">
       <p>Итого: {{ totalPrice }} ₽</p>
-      <button type="button" class="button" disabled>Готовьте!</button>
+      <button
+        type="button"
+        class="button"
+        :disabled="!isPizzaReady"
+        @click="$emit('addToCart')"
+      >
+        Готовьте!
+      </button>
     </div>
   </div>
 </template>
@@ -49,6 +58,10 @@ export default {
       type: Array,
       required: true,
     },
+    pizzaName: {
+      type: String,
+      required: true,
+    },
   },
   computed: {
     doughClassName() {
@@ -66,6 +79,12 @@ export default {
           if (item.amount === 3) classes.push("pizza__filling--third");
           return classes.join(" ");
         });
+    },
+    hasAnIngredient() {
+      return this.ingredients.some((item) => item.amount > 0);
+    },
+    isPizzaReady() {
+      return this.pizzaName && this.hasAnIngredient;
     },
   },
 };
