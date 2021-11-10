@@ -1,6 +1,6 @@
 <template>
   <div
-    :draggable="true"
+    :draggable="!disabled"
     @dragstart.self="onDrag"
     @dragover.prevent
     @dragenter.prevent
@@ -18,6 +18,7 @@ export default {
       type: Object,
       required: true,
     },
+    disabled: Boolean,
   },
   methods: {
     onDrag({ dataTransfer }) {

@@ -1,6 +1,6 @@
 <template>
   <li class="ingredients__item">
-    <AppDrag :transfer-data="item">
+    <AppDrag :transfer-data="item" :disabled="isAddDisabled">
       <span class="filling" :class="`filling--${item.nameEn}`">
         {{ item.name }}
       </span>

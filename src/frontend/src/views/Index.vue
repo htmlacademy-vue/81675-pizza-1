@@ -50,7 +50,6 @@ import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelecto
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";
 import BuilderPizzaView from "@/modules/builder/components/BuilderPizzaView";
 import Header from "@/common/components/Header";
-import { INGREDIENT_MAX_AMOUNT } from "@/common/constants";
 
 export default {
   name: "Index",
@@ -119,9 +118,7 @@ export default {
     },
     onIngredientAddById(id) {
       const ingredient = this.ingredients.find((item) => item.id === id);
-      if (ingredient.amount < INGREDIENT_MAX_AMOUNT) {
-        ingredient.amount++;
-      }
+      this.onIngredientAdd(ingredient);
     },
     onAddToCart() {
       const pizzaIngredients = this.ingredients
