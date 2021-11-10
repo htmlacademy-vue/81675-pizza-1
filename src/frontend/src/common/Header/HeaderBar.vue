@@ -29,11 +29,7 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {
-      isAuthed: false,
-    };
+    isAuthed: Boolean,
   },
   computed: {
     cartTotalPrice() {
