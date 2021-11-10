@@ -1,14 +1,31 @@
 <template>
   <div id="app">
-    <Index />
+    <component :is="layout" :cart="cart">
+      <router-view :cart="cart" @addToCart="onAddToCart" />
+    </component>
   </div>
 </template>
 
 <script>
-import Index from "@/views/Index";
+import AppLayout from "@/layouts/AppLayout";
 export default {
   name: "App",
-  components: { Index },
+  components: { AppLayout },
+  data() {
+    return {
+      cart: [],
+    };
+  },
+  computed: {
+    layout() {
+      return this.$route.meta.layout || "AppLayout";
+    },
+  },
+  methods: {
+    onAddToCart(item) {
+      this.cart.push(item);
+    },
+  },
 };
 </script>
 
