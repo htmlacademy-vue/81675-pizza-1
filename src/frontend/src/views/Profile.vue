@@ -10,8 +10,10 @@
         />
       </router-link>
 
-      <a class="layout__link" href="#">История заказов</a>
-      <a class="layout__link layout__link--active" href="#">Мои данные</a>
+      <router-link to="/orders" class="layout__link layout__link--active">
+        История заказов
+      </router-link>
+      <router-link to="/profile" class="layout__link">Мои данные</router-link>
     </div>
 
     <div class="layout__content">
