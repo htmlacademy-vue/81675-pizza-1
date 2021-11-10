@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import HeaderBar from "@/common/components/HeaderBar";
+import HeaderBar from "@/common/Header/HeaderBar";
 export default {
   name: "AppLayout",
   components: { HeaderBar },

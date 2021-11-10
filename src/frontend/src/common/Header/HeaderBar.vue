@@ -13,22 +13,27 @@
     <div class="header__cart">
       <router-link to="/cart">{{ cartTotalPrice }} ₽</router-link>
     </div>
-    <div class="header__user">
-      <router-link to="/login" class="header__login">
-        <span>Войти</span>
-      </router-link>
-    </div>
+    <HeaderAuthed v-if="isAuthed" />
+    <HeaderGuest v-else />
   </header>
 </template>
 
 <script>
+import HeaderAuthed from "@/common/Header/HeaderAuthed";
+import HeaderGuest from "@/common/Header/HeaderGuest";
 export default {
   name: "HeaderBar",
+  components: { HeaderGuest, HeaderAuthed },
   props: {
     cart: {
       type: Array,
       required: true,
     },
+  },
+  data() {
+    return {
+      isAuthed: false,
+    };
   },
   computed: {
     cartTotalPrice() {
