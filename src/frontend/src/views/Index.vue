@@ -1,5 +1,6 @@
 <template>
-  <AppLayout>
+  <div>
+    <Header :cart="cart" />
     <main class="content">
       <form action="#" method="post">
         <div class="content__wrapper">
@@ -38,7 +39,7 @@
         </div>
       </form>
     </main>
-  </AppLayout>
+  </div>
 </template>
 
 <script>
@@ -47,12 +48,12 @@ import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelec
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";
 import BuilderPizzaView from "@/modules/builder/components/BuilderPizzaView";
-import AppLayout from "@/layouts/AppLayout";
+import Header from "@/common/Header";
 
 export default {
   name: "Index",
   components: {
-    AppLayout,
+    Header,
     BuilderPizzaView,
     BuilderIngredientsSelector,
     BuilderSizeSelector,
