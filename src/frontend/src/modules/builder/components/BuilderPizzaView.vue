@@ -11,18 +11,20 @@
       />
     </label>
 
-    <div class="content__constructor">
-      <div class="pizza" :class="pizzaClass">
-        <div class="pizza__wrapper">
-          <div
-            v-for="item in ingredientClasses"
-            :key="item"
-            class="pizza__filling"
-            :class="item"
-          ></div>
+    <AppDrop @drop="onDrop">
+      <div class="content__constructor">
+        <div class="pizza" :class="pizzaClass">
+          <div class="pizza__wrapper">
+            <div
+              v-for="item in ingredientClasses"
+              :key="item"
+              class="pizza__filling"
+              :class="item"
+            ></div>
+          </div>
         </div>
       </div>
-    </div>
+    </AppDrop>
 
     <div class="content__result">
       <p>Итого: {{ totalPrice }} ₽</p>
@@ -39,8 +41,10 @@
 </template>
 
 <script>
+import AppDrop from "@/common/components/AppDrop";
 export default {
   name: "BuilderPizzaView",
+  components: { AppDrop },
   props: {
     totalPrice: {
       type: Number,
@@ -85,6 +89,11 @@ export default {
     },
     isPizzaReady() {
       return this.pizzaName && this.hasAnIngredient;
+    },
+  },
+  methods: {
+    onDrop(ingredient) {
+      this.$emit("ingredientAdd", ingredient.id);
     },
   },
 };

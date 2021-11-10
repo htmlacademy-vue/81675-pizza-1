@@ -1,8 +1,10 @@
 <template>
   <li class="ingredients__item">
-    <span class="filling" :class="`filling--${item.nameEn}`">
-      {{ item.name }}
-    </span>
+    <AppDrag :transfer-data="item">
+      <span class="filling" :class="`filling--${item.nameEn}`">
+        {{ item.name }}
+      </span>
+    </AppDrag>
 
     <div class="counter counter--orange ingredients__counter">
       <button
@@ -33,11 +35,15 @@
 </template>
 
 <script>
-const MIN_AMOUNT = 0;
-const MAX_AMOUNT = 3;
+import AppDrag from "@/common/components/AppDrag";
+import {
+  INGREDIENT_MAX_AMOUNT,
+  INGREDIENT_MIN_AMOUNT,
+} from "@/common/constants";
 
 export default {
   name: "BuilderIngredientItem",
+  components: { AppDrag },
   props: {
     item: {
       type: Object,
@@ -46,10 +52,10 @@ export default {
   },
   computed: {
     isAddDisabled() {
-      return this.item.amount >= MAX_AMOUNT;
+      return this.item.amount >= INGREDIENT_MAX_AMOUNT;
     },
     isRemoveDisabled() {
-      return this.item.amount <= MIN_AMOUNT;
+      return this.item.amount <= INGREDIENT_MIN_AMOUNT;
     },
   },
 };

@@ -35,6 +35,7 @@
             :pizza-name="pizzaName"
             @pizzaNameInput="(v) => (pizzaName = v)"
             @addToCart="onAddToCart"
+            @ingredientAdd="onIngredientAddById"
           />
         </div>
       </form>
@@ -48,7 +49,8 @@ import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelec
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";
 import BuilderPizzaView from "@/modules/builder/components/BuilderPizzaView";
-import Header from "@/common/Header";
+import Header from "@/common/components/Header";
+import { INGREDIENT_MAX_AMOUNT } from "@/common/constants";
 
 export default {
   name: "Index",
@@ -114,6 +116,12 @@ export default {
     },
     onIngredientRemove(item) {
       item.amount--;
+    },
+    onIngredientAddById(id) {
+      const ingredient = this.ingredients.find((item) => item.id === id);
+      if (ingredient.amount < INGREDIENT_MAX_AMOUNT) {
+        ingredient.amount++;
+      }
     },
     onAddToCart() {
       const pizzaIngredients = this.ingredients
