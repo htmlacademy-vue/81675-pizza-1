@@ -1,46 +1,43 @@
 <template>
-  <div>
-    <Header :cart="cart" />
-    <main class="content">
-      <form action="#" method="post">
-        <div class="content__wrapper">
-          <h1 class="title title--big">Конструктор пиццы</h1>
+  <main class="content">
+    <form action="#" method="post">
+      <div class="content__wrapper">
+        <h1 class="title title--big">Конструктор пиццы</h1>
 
-          <BuilderDoughSelector
-            :dough="dough"
-            :selected-dough="selectedDough"
-            @change="onDoughChange"
-          />
+        <BuilderDoughSelector
+          :dough="dough"
+          :selected-dough="selectedDough"
+          @change="onDoughChange"
+        />
 
-          <BuilderSizeSelector
-            :sizes="sizes"
-            :selected-size="selectedSize"
-            @change="onSizeChange"
-          />
+        <BuilderSizeSelector
+          :sizes="sizes"
+          :selected-size="selectedSize"
+          @change="onSizeChange"
+        />
 
-          <BuilderIngredientsSelector
-            :ingredients="ingredients"
-            :sauces="sauces"
-            :selected-sauce="selectedSauce"
-            @sauceChange="onSauceChange"
-            @ingredientAdd="onIngredientAdd"
-            @ingredientRemove="onIngredientRemove"
-          />
+        <BuilderIngredientsSelector
+          :ingredients="ingredients"
+          :sauces="sauces"
+          :selected-sauce="selectedSauce"
+          @sauceChange="onSauceChange"
+          @ingredientAdd="onIngredientAdd"
+          @ingredientRemove="onIngredientRemove"
+        />
 
-          <BuilderPizzaView
-            :ingredients="ingredients"
-            :total-price="totalPrice"
-            :selected-sauce="selectedSauce"
-            :selected-dough="selectedDough"
-            :pizza-name="pizzaName"
-            @pizzaNameInput="(v) => (pizzaName = v)"
-            @addToCart="onAddToCart"
-            @ingredientAdd="onIngredientAddById"
-          />
-        </div>
-      </form>
-    </main>
-  </div>
+        <BuilderPizzaView
+          :ingredients="ingredients"
+          :total-price="totalPrice"
+          :selected-sauce="selectedSauce"
+          :selected-dough="selectedDough"
+          :pizza-name="pizzaName"
+          @pizzaNameInput="(v) => (pizzaName = v)"
+          @addToCart="onAddToCart"
+          @ingredientAdd="onIngredientAddById"
+        />
+      </div>
+    </form>
+  </main>
 </template>
 
 <script>
@@ -49,16 +46,20 @@ import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelec
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";
 import BuilderPizzaView from "@/modules/builder/components/BuilderPizzaView";
-import Header from "@/common/components/Header";
 
 export default {
   name: "Index",
   components: {
-    Header,
     BuilderPizzaView,
     BuilderIngredientsSelector,
     BuilderSizeSelector,
     BuilderDoughSelector,
+  },
+  props: {
+    cart: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     const dough = pizzaData.dough;
@@ -82,7 +83,6 @@ export default {
       selectedSize: sizes[0],
       selectedSauce: sauces[0],
       pizzaName: "",
-      cart: [],
     };
   },
   computed: {
@@ -147,7 +147,7 @@ export default {
         },
         ingredients: pizzaIngredients,
       };
-      this.cart.push(pizza);
+      this.$emit("addToCart", pizza);
       this.resetState();
     },
     resetState() {

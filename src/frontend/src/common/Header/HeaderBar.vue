@@ -1,32 +1,35 @@
 <template>
   <header class="header">
     <div class="header__logo">
-      <a href="#" class="logo">
+      <router-link to="/" class="logo">
         <img
           src="@/assets/img/logo.svg"
           alt="V!U!E! Pizza logo"
           width="90"
           height="40"
         />
-      </a>
+      </router-link>
     </div>
     <div class="header__cart">
-      <a href="#">{{ cartTotalPrice }} ₽</a>
+      <router-link to="/cart">{{ cartTotalPrice }} ₽</router-link>
     </div>
-    <div class="header__user">
-      <a href="#" class="header__login"><span>Войти</span></a>
-    </div>
+    <HeaderAuthed v-if="isAuthed" />
+    <HeaderGuest v-else />
   </header>
 </template>
 
 <script>
+import HeaderAuthed from "@/common/Header/HeaderAuthed";
+import HeaderGuest from "@/common/Header/HeaderGuest";
 export default {
-  name: "Header",
+  name: "HeaderBar",
+  components: { HeaderGuest, HeaderAuthed },
   props: {
     cart: {
       type: Array,
       required: true,
     },
+    isAuthed: Boolean,
   },
   computed: {
     cartTotalPrice() {
