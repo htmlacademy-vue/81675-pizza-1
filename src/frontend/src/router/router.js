@@ -38,7 +38,7 @@ const routes = [
     name: "Orders",
     component: Orders,
     meta: {
-      layout: "AppLayout",
+      layout: "AppSidebarLayout",
     },
   },
   {
@@ -46,7 +46,7 @@ const routes = [
     name: "Profile",
     component: Profile,
     meta: {
-      layout: "AppLayout",
+      layout: "AppSidebarLayout",
     },
   },
 ];

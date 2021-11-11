@@ -8,9 +8,10 @@
 
 <script>
 import AppLayout from "@/layouts/AppLayout";
+import AppSidebarLayout from "@/layouts/AppSidebarLayout";
 export default {
   name: "App",
-  components: { AppLayout },
+  components: { AppLayout, AppSidebarLayout },
   data() {
     return {
       isAuthed: false,
