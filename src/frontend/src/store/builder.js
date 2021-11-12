@@ -69,7 +69,7 @@ export default {
   actions: {
     resetState({ commit }) {
       commit("selectDough", pizzaData.dough[0]);
-      commit("selectSize", pizzaData.size[0]);
+      commit("selectSize", pizzaData.sizes[0]);
       commit("selectSauce", pizzaData.sauces[0]);
       commit("setPizzaName", "");
       commit("setIngredients", initIngredients(pizzaData.ingredients));

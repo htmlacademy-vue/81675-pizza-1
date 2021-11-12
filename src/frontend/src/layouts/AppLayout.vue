@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderBar :cart="cart" />
+    <HeaderBar />
     <slot />
   </div>
 </template>
@@ -10,11 +10,5 @@ import HeaderBar from "@/common/Header/HeaderBar";
 export default {
   name: "AppLayout",
   components: { HeaderBar },
-  props: {
-    cart: {
-      type: Array,
-      required: true,
-    },
-  },
 };
 </script>

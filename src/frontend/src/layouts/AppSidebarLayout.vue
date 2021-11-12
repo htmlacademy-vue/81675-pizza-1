@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderBar :cart="cart" />
+    <HeaderBar />
     <main class="layout">
       <Sidebar />
       <slot />
@@ -14,11 +14,5 @@ import Sidebar from "@/common/components/Sidebar";
 export default {
   name: "AppSidebarLayout",
   components: { Sidebar, HeaderBar },
-  props: {
-    cart: {
-      type: Array,
-      required: true,
-    },
-  },
 };
 </script>

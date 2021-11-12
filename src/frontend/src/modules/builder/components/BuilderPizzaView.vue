@@ -32,7 +32,7 @@
         type="button"
         class="button"
         :disabled="!isPizzaReady"
-        @click="$emit('addToCart')"
+        @click="onAddToCart"
       >
         Готовьте!
       </button>
@@ -50,6 +50,7 @@ export default {
     ...mapState("Builder", [
       "selectedDough",
       "selectedSauce",
+      "selectedSize",
       "ingredients",
       "pizzaName",
     ]),
@@ -83,6 +84,36 @@ export default {
     },
     onPizzaNameChange(e) {
       this.$store.commit("Builder/setPizzaName", e.target.value);
+    },
+    onAddToCart() {
+      const pizzaIngredients = this.ingredients
+        .filter((item) => item.amount > 0)
+        .map((item) => {
+          return {
+            id: item.id,
+            amount: item.amount,
+            price: item.price,
+          };
+        });
+
+      const pizza = {
+        name: this.pizzaName,
+        dough: {
+          id: this.selectedDough.id,
+          price: this.selectedDough.price,
+        },
+        size: {
+          id: this.selectedSize.id,
+          multiplier: this.selectedSize.multiplier,
+        },
+        sauce: {
+          id: this.selectedSauce.id,
+          price: this.selectedSauce.price,
+        },
+        ingredients: pizzaIngredients,
+      };
+      this.$store.commit("Cart/addToCart", pizza);
+      this.$store.dispatch("Builder/resetState");
     },
   },
 };
