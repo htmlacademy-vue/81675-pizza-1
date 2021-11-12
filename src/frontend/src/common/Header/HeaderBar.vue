@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import HeaderAuthed from "@/common/Header/HeaderAuthed";
 import HeaderGuest from "@/common/Header/HeaderGuest";
 export default {
@@ -29,9 +30,9 @@ export default {
       type: Array,
       required: true,
     },
-    isAuthed: Boolean,
   },
   computed: {
+    ...mapState("Auth", ["isAuthed"]),
     cartTotalPrice() {
       return this.cart.reduce((acc, pizza) => {
         return acc + this.pizzaPrice(pizza);

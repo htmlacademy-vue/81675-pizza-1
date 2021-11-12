@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <component :is="layout" :cart="cart" :is-authed="isAuthed">
-      <router-view :cart="cart" @addToCart="onAddToCart" @login="onLogin" />
+    <component :is="layout" :cart="cart">
+      <router-view :cart="cart" @addToCart="onAddToCart" />
     </component>
   </div>
 </template>
@@ -14,7 +14,6 @@ export default {
   components: { AppLayout, AppSidebarLayout },
   data() {
     return {
-      isAuthed: false,
       cart: [],
     };
   },
@@ -26,11 +25,6 @@ export default {
   methods: {
     onAddToCart(item) {
       this.cart.push(item);
-    },
-    onLogin() {
-      console.log("todo");
-      this.isAuthed = true;
-      this.$router.push({ path: "/profile" });
     },
   },
 };

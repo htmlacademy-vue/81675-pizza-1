@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderBar :cart="cart" :is-authed="isAuthed" />
+    <HeaderBar :cart="cart" />
     <main class="layout">
       <Sidebar />
       <slot />
@@ -19,7 +19,6 @@ export default {
       type: Array,
       required: true,
     },
-    isAuthed: Boolean,
   },
 };
 </script>

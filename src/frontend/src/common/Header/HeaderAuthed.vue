@@ -19,12 +19,20 @@
       </picture>
       <span>Василий Ложкин</span>
     </router-link>
-    <a href="#" class="header__logout"><span>Выйти</span></a>
+    <a href="#" class="header__logout" @click.prevent="onLogout"
+      ><span>Выйти</span></a
+    >
   </div>
 </template>
 
 <script>
 export default {
   name: "HeaderAuthed",
+  methods: {
+    onLogout() {
+      this.$store.commit("Auth/logout");
+      this.$router.push({ path: "/" });
+    },
+  },
 };
 </script>
