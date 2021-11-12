@@ -16,7 +16,7 @@
             :value="size.value"
             class="visually-hidden"
             :checked="size.id === selectedSize.id"
-            @change="$emit('change', size)"
+            @change="onSelect(size)"
           />
           <span>{{ size.name }}</span>
         </label>
@@ -26,16 +26,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "BuilderSizeSelector",
-  props: {
-    sizes: {
-      type: Array,
-      required: true,
-    },
-    selectedSize: {
-      type: Object,
-      required: true,
+  computed: {
+    ...mapState("Builder", ["sizes", "selectedSize"]),
+  },
+  methods: {
+    onSelect(item) {
+      this.$store.commit("Builder/selectSize", item);
     },
   },
 };

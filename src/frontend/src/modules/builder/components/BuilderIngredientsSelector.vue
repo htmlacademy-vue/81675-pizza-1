@@ -17,7 +17,7 @@
               name="sauce"
               :value="sauce.value"
               :checked="sauce.id === selectedSauce.id"
-              @change="$emit('sauceChange', sauce)"
+              @change="onSauceChange(sauce)"
             />
             <span>{{ sauce.name }}</span>
           </label>
@@ -31,8 +31,8 @@
               v-for="item in ingredients"
               :key="item.id"
               :item="item"
-              @add="() => $emit('ingredientAdd', item)"
-              @remove="() => $emit('ingredientRemove', item)"
+              @add="onIngredientAdd(item)"
+              @remove="onIngredientRemove(item)"
             />
           </ul>
         </div>
@@ -43,21 +43,22 @@
 
 <script>
 import BuilderIngredientItem from "@/modules/builder/components/BuilderIngredientItem";
+import { mapState } from "vuex";
 export default {
   name: "BuilderIngredientsSelector",
   components: { BuilderIngredientItem },
-  props: {
-    sauces: {
-      type: Array,
-      required: true,
+  computed: {
+    ...mapState("Builder", ["sauces", "ingredients", "selectedSauce"]),
+  },
+  methods: {
+    onIngredientAdd(item) {
+      this.$store.commit("Builder/ingredientAdd", item);
     },
-    ingredients: {
-      type: Array,
-      required: true,
+    onIngredientRemove(item) {
+      this.$store.commit("Builder/ingredientRemove", item);
     },
-    selectedSauce: {
-      type: Object,
-      required: true,
+    onSauceChange(item) {
+      this.$store.commit("Builder/selectSauce", item);
     },
   },
 };

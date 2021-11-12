@@ -7,7 +7,7 @@
         name="pizza_name"
         placeholder="Введите название пиццы"
         :value="pizzaName"
-        @input="(e) => $emit('pizzaNameInput', e.target.value)"
+        @input="onPizzaNameChange"
       />
     </label>
 
@@ -42,32 +42,18 @@
 
 <script>
 import AppDrop from "@/common/components/AppDrop";
+import { mapState, mapGetters } from "vuex";
 export default {
   name: "BuilderPizzaView",
   components: { AppDrop },
-  props: {
-    totalPrice: {
-      type: Number,
-      required: true,
-    },
-    selectedSauce: {
-      type: Object,
-      required: true,
-    },
-    selectedDough: {
-      type: Object,
-      required: true,
-    },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    pizzaName: {
-      type: String,
-      required: true,
-    },
-  },
   computed: {
+    ...mapState("Builder", [
+      "selectedDough",
+      "selectedSauce",
+      "ingredients",
+      "pizzaName",
+    ]),
+    ...mapGetters("Builder", ["totalPrice"]),
     doughClassName() {
       return this.selectedDough.value === "large" ? "big" : "small";
     },
@@ -93,7 +79,10 @@ export default {
   },
   methods: {
     onDrop(ingredient) {
-      this.$emit("ingredientAdd", ingredient.id);
+      this.$store.commit("Builder/ingredientAddById", ingredient.id);
+    },
+    onPizzaNameChange(e) {
+      this.$store.commit("Builder/setPizzaName", e.target.value);
     },
   },
 };

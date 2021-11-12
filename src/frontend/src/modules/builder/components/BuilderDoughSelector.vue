@@ -16,7 +16,7 @@
             :value="item.value"
             class="visually-hidden"
             :checked="item.id === selectedDough.id"
-            @change="$emit('change', item)"
+            @change="onChange(item)"
           />
           <b>{{ item.name }}</b>
           <span>{{ item.description }}</span>
@@ -27,16 +27,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "BuilderDoughSelector",
-  props: {
-    dough: {
-      type: Array,
-      required: true,
-    },
-    selectedDough: {
-      type: Object,
-      required: true,
+  computed: {
+    ...mapState("Builder", ["dough", "selectedDough"]),
+  },
+  methods: {
+    onChange(item) {
+      this.$store.commit("Builder/selectDough", item);
     },
   },
 };
