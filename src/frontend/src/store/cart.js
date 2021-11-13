@@ -9,24 +9,33 @@ const images = [
   { id: 3, image: potatoImg },
 ];
 
-const normalizedMiscData = miscData.map((item) => {
-  const img = images.find((imgItem) => imgItem.id === item.id);
-  return {
-    ...item,
-    image: img.image,
-    amount: 0,
-  };
+const defaultState = () => ({
+  cart: [],
+  additional: miscData.map((item) => {
+    const img = images.find((imgItem) => imgItem.id === item.id);
+    return {
+      ...item,
+      image: img.image,
+      amount: 0,
+    };
+  }),
+  isOrderComplete: false,
 });
 
 export default {
   namespaced: true,
   state: {
-    cart: [],
-    additional: normalizedMiscData,
+    ...defaultState(),
   },
   mutations: {
     addToCart(state, payload) {
       state.cart.push(payload);
+    },
+    setOrderComplete(state, payload) {
+      state.isOrderComplete = payload;
+    },
+    resetCart(state) {
+      Object.assign(state, defaultState());
     },
   },
   getters: {
