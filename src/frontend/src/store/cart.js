@@ -31,6 +31,10 @@ export default {
     addToCart(state, payload) {
       state.cart.push(payload);
     },
+    removeFromCart(state, payload) {
+      const index = state.cart.findIndex((item) => item === payload);
+      state.cart.splice(index, 1);
+    },
     setOrderComplete(state, payload) {
       state.isOrderComplete = payload;
     },

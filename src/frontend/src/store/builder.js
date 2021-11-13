@@ -74,5 +74,22 @@ export default {
       commit("setPizzaName", "");
       commit("setIngredients", initIngredients(pizzaData.ingredients));
     },
+    editPizza({ commit }, pizza) {
+      const dough = pizzaData.dough.find((item) => item.id === pizza.dough.id);
+      const size = pizzaData.sizes.find((item) => item.id === pizza.size.id);
+      const sauce = pizzaData.sauces.find((item) => item.id === pizza.sauce.id);
+      const allIngredients = initIngredients(pizzaData.ingredients);
+      pizza.ingredients.forEach((pizzaIngredient) => {
+        const ingredient = allIngredients.find(
+          (ingredient) => ingredient.id === pizzaIngredient.id
+        );
+        ingredient.amount = pizzaIngredient.amount;
+      });
+      commit("selectDough", dough);
+      commit("selectSize", size);
+      commit("selectSauce", sauce);
+      commit("setPizzaName", pizza.name);
+      commit("setIngredients", allIngredients);
+    },
   },
 };

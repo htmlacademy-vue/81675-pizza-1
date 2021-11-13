@@ -32,7 +32,9 @@
     </div>
 
     <div class="cart-list__button">
-      <button type="button" class="cart-list__edit">Изменить</button>
+      <button type="button" class="cart-list__edit" @click="onEditPizza">
+        Изменить
+      </button>
     </div>
   </li>
 </template>
@@ -64,6 +66,11 @@ export default {
     },
     onPlus() {
       this.item.amount++;
+    },
+    onEditPizza() {
+      this.$store.commit("Cart/removeFromCart", this.item);
+      this.$store.dispatch("Builder/editPizza", this.item);
+      this.$router.push({ path: "/" });
     },
   },
 };
