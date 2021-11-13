@@ -7,12 +7,17 @@
             <h1 class="title title--big">Корзина</h1>
           </div>
 
-          <CartPizzaList />
-          <CartAdditionalList />
-          <CartOrderForm />
+          <div class="sheet cart__empty" v-if="isCartEmpty">
+            <p>В корзине нет ни одного товара</p>
+          </div>
+          <div v-else>
+            <CartPizzaList />
+            <CartAdditionalList />
+            <CartOrderForm />
+          </div>
         </div>
       </main>
-      <section class="footer">
+      <section class="footer" v-if="!isCartEmpty">
         <div class="footer__more">
           <router-link to="/" class="button button--border button--arrow">
             Хочу еще одну
@@ -49,8 +54,11 @@ export default {
     CartAdditionalList,
   },
   computed: {
-    ...mapState("Cart", ["isOrderComplete"]),
+    ...mapState("Cart", ["isOrderComplete", "cart"]),
     ...mapGetters("Cart", ["cartTotalPrice"]),
+    isCartEmpty() {
+      return this.cart.length === 0;
+    },
   },
   methods: {
     onSubmit() {

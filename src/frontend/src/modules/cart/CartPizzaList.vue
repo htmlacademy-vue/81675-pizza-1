@@ -1,27 +1,18 @@
 <template>
-  <div>
-    <div class="sheet cart__empty" v-if="isCartEmpty">
-      <p>В корзине нет ни одного товара</p>
-    </div>
-
-    <ul class="cart-list sheet" v-else>
-      <CartPizzaItem v-for="(item, index) in cart" :item="item" :key="index" />
-    </ul>
-  </div>
+  <ul class="cart-list sheet">
+    <CartPizzaItem v-for="(item, index) in cart" :item="item" :key="index" />
+  </ul>
 </template>
 
 <script>
-import { mapState } from "vuex";
 import CartPizzaItem from "@/modules/cart/CartPizzaItem";
+import { mapState } from "vuex";
 
 export default {
   name: "CartPizzaList",
   components: { CartPizzaItem },
   computed: {
     ...mapState("Cart", ["cart"]),
-    isCartEmpty() {
-      return this.cart.length === 0;
-    },
   },
 };
 </script>
