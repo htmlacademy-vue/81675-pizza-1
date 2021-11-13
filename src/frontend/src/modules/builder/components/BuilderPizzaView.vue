@@ -115,6 +115,7 @@ export default {
           price: this.selectedSauce.price,
         },
         ingredients: pizzaIngredients,
+        amount: 1,
       };
       this.$store.commit("Cart/addToCart", pizza);
       this.$store.dispatch("Builder/resetState");

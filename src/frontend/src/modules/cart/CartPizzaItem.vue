@@ -19,13 +19,23 @@
     </div>
 
     <div class="counter cart-list__counter">
-      <button type="button" class="counter__button counter__button--minus">
+      <button
+        type="button"
+        class="counter__button counter__button--minus"
+        @click="onMinus"
+      >
         <span class="visually-hidden">Меньше</span>
       </button>
-      <input type="text" name="counter" class="counter__input" value="1" />
+      <input
+        type="text"
+        name="counter"
+        class="counter__input"
+        :value="item.amount"
+      />
       <button
         type="button"
         class="counter__button counter__button--plus counter__button--orange"
+        @click="onPlus"
       >
         <span class="visually-hidden">Больше</span>
       </button>
@@ -58,6 +68,14 @@ export default {
     },
     price() {
       return this.$store.getters["Cart/pizzaPrice"](this.item);
+    },
+  },
+  methods: {
+    onMinus() {
+      this.item.amount--;
+    },
+    onPlus() {
+      this.item.amount++;
     },
   },
 };

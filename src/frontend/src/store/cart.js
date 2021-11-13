@@ -41,7 +41,11 @@ export default {
         const ingredientsPrice = ingredients.reduce((acc, item) => {
           return acc + item.price * item.amount;
         }, 0);
-        return size.multiplier * (dough.price + sauce.price + ingredientsPrice);
+        return (
+          size.multiplier *
+          (dough.price + sauce.price + ingredientsPrice) *
+          pizza.amount
+        );
       };
     },
     cartTotalPrice(state, getters) {
