@@ -31,8 +31,6 @@
               v-for="item in ingredients"
               :key="item.id"
               :item="item"
-              @add="onIngredientAdd(item)"
-              @remove="onIngredientRemove(item)"
             />
           </ul>
         </div>
@@ -51,12 +49,6 @@ export default {
     ...mapState("Builder", ["sauces", "ingredients", "selectedSauce"]),
   },
   methods: {
-    onIngredientAdd(item) {
-      this.$store.commit("Builder/ingredientAdd", item);
-    },
-    onIngredientRemove(item) {
-      this.$store.commit("Builder/ingredientRemove", item);
-    },
     onSauceChange(item) {
       this.$store.commit("Builder/selectSauce", item);
     },

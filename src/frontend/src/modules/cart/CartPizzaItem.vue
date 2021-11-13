@@ -62,10 +62,10 @@ export default {
   },
   methods: {
     onMinus() {
-      this.item.amount--;
+      this.$store.commit("Cart/pizzaRemove", this.item);
     },
     onPlus() {
-      this.item.amount++;
+      this.$store.commit("Cart/pizzaAdd", this.item);
     },
     onEditPizza() {
       this.$store.commit("Cart/removeFromCart", this.item);

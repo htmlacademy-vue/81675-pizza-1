@@ -32,10 +32,10 @@ export default {
   },
   methods: {
     onPlus() {
-      this.item.amount++;
+      this.$store.commit("Cart/additionalAdd", this.item);
     },
     onMinus() {
-      this.item.amount--;
+      this.$store.commit("Cart/additionalRemove", this.item);
     },
   },
 };

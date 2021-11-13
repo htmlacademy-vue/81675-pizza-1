@@ -11,8 +11,8 @@
       :value="item.amount"
       :min="min"
       :max="max"
-      @plus="$emit('add', item)"
-      @minus="$emit('remove', item)"
+      @plus="onAdd(item)"
+      @minus="onRemove(item)"
     />
   </li>
 </template>
@@ -43,6 +43,14 @@ export default {
     },
     isDndDisabled() {
       return this.item.amount >= this.max;
+    },
+  },
+  methods: {
+    onAdd(item) {
+      this.$store.commit("Builder/ingredientAdd", item);
+    },
+    onRemove(item) {
+      this.$store.commit("Builder/ingredientRemove", item);
     },
   },
 };

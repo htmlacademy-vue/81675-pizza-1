@@ -35,6 +35,18 @@ export default {
       const index = state.cart.findIndex((item) => item === payload);
       state.cart.splice(index, 1);
     },
+    pizzaAdd(state, pizza) {
+      pizza.amount++;
+    },
+    pizzaRemove(state, pizza) {
+      pizza.amount--;
+    },
+    additionalAdd(state, item) {
+      item.amount++;
+    },
+    additionalRemove(state, item) {
+      item.amount--;
+    },
     setOrderComplete(state, payload) {
       state.isOrderComplete = payload;
     },
