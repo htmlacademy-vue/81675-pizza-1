@@ -7,7 +7,7 @@
         <select name="test" class="select">
           <option value="1">Заберу сам</option>
           <option value="2">Новый адрес</option>
-          <option value="3">Дом</option>
+          <option value="3" v-if="isAuthed">Дом</option>
         </select>
       </label>
 
@@ -45,7 +45,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "CartOrderForm",
+  computed: {
+    ...mapState("Auth", ["isAuthed"]),
+  },
 };
 </script>

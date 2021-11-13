@@ -14,12 +14,19 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "CartOrderSuccess",
+  computed: {
+    ...mapState("Auth", ["isAuthed"]),
+  },
   methods: {
     onClose() {
-      this.$store.commit("Cart/resetCart", false);
-      this.$router.push({ path: "/" });
+      this.$store.commit("Cart/resetCart");
+      this.$store.commit("Builder/resetState");
+      const path = this.isAuthed ? "/orders" : "/";
+      this.$router.push({ path });
     },
   },
 };

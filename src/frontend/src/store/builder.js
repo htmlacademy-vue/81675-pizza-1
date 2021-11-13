@@ -50,6 +50,13 @@ export default {
       const item = state.ingredients.find((item) => item.id === payload);
       item.amount++;
     },
+    resetState(state) {
+      state.selectedDough = pizzaData.dough[0];
+      state.selectedSize = pizzaData.sizes[0];
+      state.selectedSauce = pizzaData.sauces[0];
+      state.pizzaName = "";
+      state.ingredients = initIngredients(pizzaData.ingredients);
+    },
   },
   getters: {
     ingredientsPrice(state) {
@@ -67,13 +74,6 @@ export default {
     },
   },
   actions: {
-    resetState({ commit }) {
-      commit("selectDough", pizzaData.dough[0]);
-      commit("selectSize", pizzaData.sizes[0]);
-      commit("selectSauce", pizzaData.sauces[0]);
-      commit("setPizzaName", "");
-      commit("setIngredients", initIngredients(pizzaData.ingredients));
-    },
     editPizza({ commit }, pizza) {
       const dough = pizzaData.dough.find((item) => item.id === pizza.dough.id);
       const size = pizzaData.sizes.find((item) => item.id === pizza.size.id);

@@ -118,7 +118,7 @@ export default {
         amount: 1,
       };
       this.$store.commit("Cart/addToCart", pizza);
-      this.$store.dispatch("Builder/resetState");
+      this.$store.commit("Builder/resetState");
     },
   },
 };
