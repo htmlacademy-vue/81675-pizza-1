@@ -93,6 +93,7 @@ export default {
             id: item.id,
             amount: item.amount,
             price: item.price,
+            name: item.name,
           };
         });
 
@@ -100,14 +101,17 @@ export default {
         name: this.pizzaName,
         dough: {
           id: this.selectedDough.id,
+          name: this.selectedDough.name,
           price: this.selectedDough.price,
         },
         size: {
           id: this.selectedSize.id,
+          name: this.selectedSize.name,
           multiplier: this.selectedSize.multiplier,
         },
         sauce: {
           id: this.selectedSauce.id,
+          name: this.selectedSauce.name,
           price: this.selectedSauce.price,
         },
         ingredients: pizzaIngredients,

@@ -35,17 +35,18 @@ export default {
         return acc + item.price * item.amount;
       }, 0);
     },
-    cartTotalPrice(state, getters) {
-      const pizzaPrice = (pizza) => {
+    pizzaPrice() {
+      return (pizza) => {
         const { dough, size, sauce, ingredients } = pizza;
         const ingredientsPrice = ingredients.reduce((acc, item) => {
           return acc + item.price * item.amount;
         }, 0);
         return size.multiplier * (dough.price + sauce.price + ingredientsPrice);
       };
-
+    },
+    cartTotalPrice(state, getters) {
       const pizzasPrice = state.cart.reduce(
-        (acc, pizza) => acc + pizzaPrice(pizza),
+        (acc, pizza) => acc + getters.pizzaPrice(pizza),
         0
       );
       return pizzasPrice + getters.additionalPrice;
