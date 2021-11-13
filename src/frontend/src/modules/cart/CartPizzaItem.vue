@@ -18,28 +18,14 @@
       </div>
     </div>
 
-    <div class="counter cart-list__counter">
-      <button
-        type="button"
-        class="counter__button counter__button--minus"
-        @click="onMinus"
-      >
-        <span class="visually-hidden">Меньше</span>
-      </button>
-      <input
-        type="text"
-        name="counter"
-        class="counter__input"
-        :value="item.amount"
-      />
-      <button
-        type="button"
-        class="counter__button counter__button--plus counter__button--orange"
-        @click="onPlus"
-      >
-        <span class="visually-hidden">Больше</span>
-      </button>
-    </div>
+    <PlusMinus
+      :value="item.amount"
+      @plus="onPlus"
+      @minus="onMinus"
+      :min="0"
+      :max="10"
+      type="orange"
+    />
 
     <div class="cart-list__price">
       <b>{{ price }} ₽</b>
@@ -52,8 +38,10 @@
 </template>
 
 <script>
+import PlusMinus from "@/common/components/PlusMinus";
 export default {
   name: "CartPizzaItem",
+  components: { PlusMinus },
   props: {
     item: {
       type: Object,

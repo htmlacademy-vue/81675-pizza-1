@@ -6,31 +6,12 @@
     </p>
 
     <div class="additional-list__wrapper">
-      <div class="counter additional-list__counter">
-        <button
-          type="button"
-          class="counter__button counter__button--minus"
-          :disabled="isAddDisabled"
-          @click="item.amount--"
-        >
-          <span class="visually-hidden">Меньше</span>
-        </button>
-        <input
-          type="text"
-          name="counter"
-          class="counter__input"
-          :value="item.amount"
-        />
-        <button
-          type="button"
-          class="counter__button counter__button--plus counter__button--orange"
-          :disabled="isRemoveDisabled"
-          @click="item.amount++"
-        >
-          <span class="visually-hidden">Больше</span>
-        </button>
-      </div>
-
+      <PlusMinus
+        :value="item.amount"
+        @plus="onPlus"
+        @minus="onMinus"
+        type="orange"
+      />
       <div class="additional-list__price">
         <b>× {{ item.price }} ₽</b>
       </div>
@@ -39,20 +20,22 @@
 </template>
 
 <script>
+import PlusMinus from "@/common/components/PlusMinus";
 export default {
   name: "CartAdditionalItem",
+  components: { PlusMinus },
   props: {
     item: {
       type: Object,
       required: true,
     },
   },
-  computed: {
-    isAddDisabled() {
-      return this.item.amount <= 0;
+  methods: {
+    onPlus() {
+      this.item.amount++;
     },
-    isRemoveDisabled() {
-      return this.item.amount >= 10;
+    onMinus() {
+      this.item.amount--;
     },
   },
 };
