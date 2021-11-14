@@ -23,6 +23,7 @@ export default {
     selectedSize: pizzaData.sizes[0],
     selectedSauce: pizzaData.sauces[0],
     pizzaName: "",
+    pizzaAmount: 1,
   },
   mutations: {
     setIngredients(state, payload) {
@@ -40,6 +41,9 @@ export default {
     setPizzaName(state, payload) {
       state.pizzaName = payload;
     },
+    setPizzaAmount(state, payload) {
+      state.pizzaAmount = payload;
+    },
     ingredientAdd(state, payload) {
       payload.amount++;
     },
@@ -55,6 +59,7 @@ export default {
       state.selectedSize = pizzaData.sizes[0];
       state.selectedSauce = pizzaData.sauces[0];
       state.pizzaName = "";
+      state.pizzaAmount = 1;
       state.ingredients = initIngredients(pizzaData.ingredients);
     },
   },
@@ -66,6 +71,7 @@ export default {
     },
     totalPrice(state, getters) {
       return (
+        state.pizzaAmount *
         state.selectedSize.multiplier *
         (state.selectedDough.price +
           state.selectedSauce.price +
@@ -90,6 +96,7 @@ export default {
       commit("selectSauce", sauce);
       commit("setPizzaName", pizza.name);
       commit("setIngredients", allIngredients);
+      commit("setPizzaAmount", pizza.amount);
     },
   },
 };

@@ -53,6 +53,7 @@ export default {
       "selectedSize",
       "ingredients",
       "pizzaName",
+      "pizzaAmount",
     ]),
     ...mapGetters("Builder", ["totalPrice"]),
     doughClassName() {
@@ -115,7 +116,7 @@ export default {
           price: this.selectedSauce.price,
         },
         ingredients: pizzaIngredients,
-        amount: 1,
+        amount: this.pizzaAmount,
       };
       this.$store.commit("Cart/addToCart", pizza);
       this.$store.commit("Builder/resetState");
