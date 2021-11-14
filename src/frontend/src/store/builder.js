@@ -1,29 +1,16 @@
-import pizzaData from "@/static/pizza.json";
 import Api from "@/services/Api";
-
-function initIngredients(ingredients) {
-  return ingredients.map((item) => {
-    const match = item.image.match(/(\w+).svg/);
-    const nameEn = match?.[1] ?? "";
-    return {
-      ...item,
-      nameEn,
-      amount: 0,
-    };
-  });
-}
 
 export default {
   namespaced: true,
   state: {
-    isLoading: false,
+    isLoading: true,
     dough: [],
-    sizes: pizzaData.sizes,
-    sauces: pizzaData.sauces,
-    ingredients: initIngredients(pizzaData.ingredients),
+    sizes: [],
+    sauces: [],
+    ingredients: [],
     selectedDough: null,
-    selectedSize: pizzaData.sizes[0],
-    selectedSauce: pizzaData.sauces[0],
+    selectedSize: null,
+    selectedSauce: null,
     pizzaName: "",
     pizzaAmount: 1,
     pizzaId: "",
@@ -64,12 +51,15 @@ export default {
       Object.assign(state, newState);
     },
     resetState(state) {
-      state.selectedDough = pizzaData.dough[0];
-      state.selectedSize = pizzaData.sizes[0];
-      state.selectedSauce = pizzaData.sauces[0];
-      state.pizzaName = "";
-      state.pizzaAmount = 1;
-      state.ingredients = initIngredients(pizzaData.ingredients);
+      Object.assign(state, {
+        selectedDough: state.dough[0],
+        selectedSize: state.sizes[0],
+        seletedSauce: state.sauces[0],
+        pizzaName: "",
+        pizzaAmount: 1,
+        pizzaId: "",
+      });
+      state.ingredients.forEach((item) => (item.amount = 0));
     },
   },
   getters: {
@@ -116,32 +106,42 @@ export default {
   },
   actions: {
     async init({ commit }) {
-      const dough = await Api.fetchDough();
+      const [dough, sizes, sauces, ingredients] = await Promise.all([
+        Api.fetchDough(),
+        Api.fetchSizes(),
+        Api.fetchSauces(),
+        Api.fetchIngredients(),
+      ]);
       const changes = {
         isLoading: false,
         dough,
+        sizes,
+        sauces,
+        ingredients,
         selectedDough: dough[0],
+        selectedSize: sizes[0],
+        selectedSauce: sauces[0],
       };
       commit("setState", changes);
     },
-    editPizza({ commit }, pizza) {
-      const dough = pizzaData.dough.find((item) => item.id === pizza.dough.id);
-      const size = pizzaData.sizes.find((item) => item.id === pizza.size.id);
-      const sauce = pizzaData.sauces.find((item) => item.id === pizza.sauce.id);
-      const allIngredients = initIngredients(pizzaData.ingredients);
-      pizza.ingredients.forEach((pizzaIngredient) => {
-        const ingredient = allIngredients.find(
-          (ingredient) => ingredient.id === pizzaIngredient.id
+    editPizza({ commit, state }, pizza) {
+      const dough = state.dough.find((item) => item.id === pizza.dough.id);
+      const size = state.sizes.find((item) => item.id === pizza.size.id);
+      const sauce = state.sauces.find((item) => item.id === pizza.sauce.id);
+      state.ingredients.forEach((item) => {
+        const pizzaIngredient = pizza.ingredients.find(
+          (pizzaIng) => item.id === pizzaIng.id
         );
-        ingredient.amount = pizzaIngredient.amount;
+        item.amount = pizzaIngredient ? pizzaIngredient.amount : 0;
       });
-      commit("selectDough", dough);
-      commit("selectSize", size);
-      commit("selectSauce", sauce);
-      commit("setPizzaName", pizza.name);
-      commit("setIngredients", allIngredients);
-      commit("setPizzaAmount", pizza.amount);
-      commit("setPizzaId", pizza.id);
+      commit("setState", {
+        selectedDough: dough,
+        selectedSize: size,
+        selectedSauce: sauce,
+        pizzaName: pizza.name,
+        pizzaAmount: pizza.amount,
+        pizzaId: pizza.id,
+      });
     },
   },
 };

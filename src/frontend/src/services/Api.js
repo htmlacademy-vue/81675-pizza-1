@@ -17,6 +17,44 @@ async function fetchDough() {
   });
 }
 
+async function fetchSizes() {
+  const url = `${BASE_URL}/sizes`;
+  const res = await axios.get(url);
+  return res.data;
+}
+
+async function fetchSauces() {
+  const url = `${BASE_URL}/sauces`;
+  const res = await axios.get(url);
+  const values = {
+    ["Томатный"]: "tomato",
+    ["Сливочный"]: "creamy",
+  };
+  return res.data.map((item) => {
+    return {
+      ...item,
+      value: values[item.name],
+    };
+  });
+}
+
+async function fetchIngredients() {
+  const url = `${BASE_URL}/ingredients`;
+  const res = await axios.get(url);
+  return res.data.map((item) => {
+    const match = item.image.match(/(\w+).svg/);
+    const nameEn = match?.[1] ?? "";
+    return {
+      ...item,
+      nameEn,
+      amount: 0,
+    };
+  });
+}
+
 export default {
   fetchDough,
+  fetchSizes,
+  fetchSauces,
+  fetchIngredients,
 };
