@@ -30,7 +30,8 @@ export default {
   name: "Login",
   methods: {
     onSubmit() {
-      this.$emit("login");
+      this.$store.commit("Auth/login");
+      this.$router.push({ path: "/profile" });
     },
   },
 };

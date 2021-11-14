@@ -19,33 +19,15 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
 import HeaderAuthed from "@/common/Header/HeaderAuthed";
 import HeaderGuest from "@/common/Header/HeaderGuest";
 export default {
   name: "HeaderBar",
   components: { HeaderGuest, HeaderAuthed },
-  props: {
-    cart: {
-      type: Array,
-      required: true,
-    },
-    isAuthed: Boolean,
-  },
   computed: {
-    cartTotalPrice() {
-      return this.cart.reduce((acc, pizza) => {
-        return acc + this.pizzaPrice(pizza);
-      }, 0);
-    },
-  },
-  methods: {
-    pizzaPrice(pizza) {
-      const { dough, size, sauce, ingredients } = pizza;
-      const ingredientsPrice = ingredients.reduce((acc, item) => {
-        return acc + item.price * item.amount;
-      }, 0);
-      return size.multiplier * (dough.price + sauce.price + ingredientsPrice);
-    },
+    ...mapState("Auth", ["isAuthed"]),
+    ...mapGetters("Cart", ["cartTotalPrice"]),
   },
 };
 </script>

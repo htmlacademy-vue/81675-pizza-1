@@ -7,7 +7,7 @@
         name="pizza_name"
         placeholder="Введите название пиццы"
         :value="pizzaName"
-        @input="(e) => $emit('pizzaNameInput', e.target.value)"
+        @input="onPizzaNameChange"
       />
     </label>
 
@@ -32,7 +32,7 @@
         type="button"
         class="button"
         :disabled="!isPizzaReady"
-        @click="$emit('addToCart')"
+        @click="onAddToCart"
       >
         Готовьте!
       </button>
@@ -42,32 +42,21 @@
 
 <script>
 import AppDrop from "@/common/components/AppDrop";
+import { mapState, mapGetters } from "vuex";
+import _ from "lodash";
 export default {
   name: "BuilderPizzaView",
   components: { AppDrop },
-  props: {
-    totalPrice: {
-      type: Number,
-      required: true,
-    },
-    selectedSauce: {
-      type: Object,
-      required: true,
-    },
-    selectedDough: {
-      type: Object,
-      required: true,
-    },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    pizzaName: {
-      type: String,
-      required: true,
-    },
-  },
   computed: {
+    ...mapState("Builder", [
+      "selectedDough",
+      "selectedSauce",
+      "selectedSize",
+      "ingredients",
+      "pizzaName",
+      "pizzaAmount",
+    ]),
+    ...mapGetters("Builder", ["totalPrice", "pizzaObj"]),
     doughClassName() {
       return this.selectedDough.value === "large" ? "big" : "small";
     },
@@ -93,7 +82,16 @@ export default {
   },
   methods: {
     onDrop(ingredient) {
-      this.$emit("ingredientAdd", ingredient.id);
+      this.$store.commit("Builder/ingredientAddById", ingredient.id);
+    },
+    onPizzaNameChange(e) {
+      this.$store.commit("Builder/setPizzaName", e.target.value);
+    },
+    onAddToCart() {
+      const pizza = _.cloneDeep(this.pizzaObj);
+      if (!pizza.id) pizza.id = _.uniqueId();
+      this.$store.commit("Cart/addToCart", pizza);
+      this.$store.commit("Builder/resetState");
     },
   },
 };
