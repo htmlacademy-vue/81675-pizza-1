@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import HeaderAuthed from "@/common/Header/HeaderAuthed";
 import HeaderGuest from "@/common/Header/HeaderGuest";
 export default {
   name: "HeaderBar",
   components: { HeaderGuest, HeaderAuthed },
   computed: {
-    ...mapState("Auth", ["isAuthed"]),
+    ...mapGetters("Auth", ["isAuthed"]),
     ...mapGetters("Cart", ["cartTotalPrice"]),
   },
 };

@@ -68,10 +68,26 @@ async function fetchAdditional() {
   });
 }
 
+function login(payload) {
+  const url = `${BASE_URL}/login`;
+  return axios.post(url, payload);
+}
+
+function whoAmI(token) {
+  const url = `${BASE_URL}/whoAmI`;
+  return axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 export default {
   fetchDough,
   fetchSizes,
   fetchSauces,
   fetchIngredients,
   fetchAdditional,
+  login,
+  whoAmI,
 };

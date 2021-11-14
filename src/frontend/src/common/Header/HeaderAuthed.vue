@@ -17,7 +17,7 @@
           height="32"
         />
       </picture>
-      <span>Василий Ложкин</span>
+      <span>{{ user.name }}</span>
     </router-link>
     <a href="#" class="header__logout" @click.prevent="onLogout"
       ><span>Выйти</span></a
@@ -26,11 +26,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "HeaderAuthed",
+  computed: {
+    ...mapState("Auth", ["user"]),
+  },
   methods: {
     onLogout() {
-      this.$store.commit("Auth/logout");
+      this.$store.dispatch("Auth/logout");
       this.$router.push({ path: "/" });
     },
   },
