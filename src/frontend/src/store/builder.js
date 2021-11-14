@@ -24,6 +24,7 @@ export default {
     selectedSauce: pizzaData.sauces[0],
     pizzaName: "",
     pizzaAmount: 1,
+    pizzaId: "",
   },
   mutations: {
     setIngredients(state, payload) {
@@ -43,6 +44,9 @@ export default {
     },
     setPizzaAmount(state, payload) {
       state.pizzaAmount = payload;
+    },
+    setPizzaId(state, payload) {
+      state.pizzaId = payload;
     },
     ingredientAdd(state, payload) {
       payload.amount++;
@@ -78,6 +82,32 @@ export default {
           getters.ingredientsPrice)
       );
     },
+    pizzaIngredients(state) {
+      return state.ingredients.filter((item) => item.amount > 0);
+    },
+    pizzaObj(state, getters) {
+      return {
+        id: state.pizzaId,
+        name: state.pizzaName,
+        dough: {
+          id: state.selectedDough.id,
+          name: state.selectedDough.name,
+          price: state.selectedDough.price,
+        },
+        size: {
+          id: state.selectedSize.id,
+          name: state.selectedSize.name,
+          multiplier: state.selectedSize.multiplier,
+        },
+        sauce: {
+          id: state.selectedSauce.id,
+          name: state.selectedSauce.name,
+          price: state.selectedSauce.price,
+        },
+        ingredients: getters.pizzaIngredients,
+        amount: state.pizzaAmount,
+      };
+    },
   },
   actions: {
     editPizza({ commit }, pizza) {
@@ -97,6 +127,7 @@ export default {
       commit("setPizzaName", pizza.name);
       commit("setIngredients", allIngredients);
       commit("setPizzaAmount", pizza.amount);
+      commit("setPizzaId", pizza.id);
     },
   },
 };

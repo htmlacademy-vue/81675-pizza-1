@@ -68,7 +68,6 @@ export default {
       this.$store.commit("Cart/pizzaAdd", this.item);
     },
     onEditPizza() {
-      this.$store.commit("Cart/removeFromCart", this.item);
       this.$store.dispatch("Builder/editPizza", this.item);
       this.$router.push({ path: "/" });
     },

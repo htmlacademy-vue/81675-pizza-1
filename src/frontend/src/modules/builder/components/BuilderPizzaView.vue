@@ -43,6 +43,7 @@
 <script>
 import AppDrop from "@/common/components/AppDrop";
 import { mapState, mapGetters } from "vuex";
+import _ from "lodash";
 export default {
   name: "BuilderPizzaView",
   components: { AppDrop },
@@ -55,7 +56,7 @@ export default {
       "pizzaName",
       "pizzaAmount",
     ]),
-    ...mapGetters("Builder", ["totalPrice"]),
+    ...mapGetters("Builder", ["totalPrice", "pizzaObj"]),
     doughClassName() {
       return this.selectedDough.value === "large" ? "big" : "small";
     },
@@ -87,37 +88,8 @@ export default {
       this.$store.commit("Builder/setPizzaName", e.target.value);
     },
     onAddToCart() {
-      const pizzaIngredients = this.ingredients
-        .filter((item) => item.amount > 0)
-        .map((item) => {
-          return {
-            id: item.id,
-            amount: item.amount,
-            price: item.price,
-            name: item.name,
-          };
-        });
-
-      const pizza = {
-        name: this.pizzaName,
-        dough: {
-          id: this.selectedDough.id,
-          name: this.selectedDough.name,
-          price: this.selectedDough.price,
-        },
-        size: {
-          id: this.selectedSize.id,
-          name: this.selectedSize.name,
-          multiplier: this.selectedSize.multiplier,
-        },
-        sauce: {
-          id: this.selectedSauce.id,
-          name: this.selectedSauce.name,
-          price: this.selectedSauce.price,
-        },
-        ingredients: pizzaIngredients,
-        amount: this.pizzaAmount,
-      };
+      const pizza = _.cloneDeep(this.pizzaObj);
+      if (!pizza.id) pizza.id = _.uniqueId();
       this.$store.commit("Cart/addToCart", pizza);
       this.$store.commit("Builder/resetState");
     },

@@ -28,8 +28,15 @@ export default {
     ...defaultState(),
   },
   mutations: {
-    addToCart(state, payload) {
-      state.cart.push(payload);
+    addToCart(state, pizza) {
+      const pizzaInCartIndex = state.cart.findIndex(
+        (item) => item.id === pizza.id
+      );
+      if (pizzaInCartIndex !== -1) {
+        state.cart.splice(pizzaInCartIndex, 1, pizza);
+      } else {
+        state.cart.push(pizza);
+      }
     },
     removeFromCart(state, payload) {
       const index = state.cart.findIndex((item) => item === payload);
