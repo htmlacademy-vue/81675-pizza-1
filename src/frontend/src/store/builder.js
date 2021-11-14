@@ -1,4 +1,5 @@
 import pizzaData from "@/static/pizza.json";
+import Api from "@/services/Api";
 
 function initIngredients(ingredients) {
   return ingredients.map((item) => {
@@ -15,11 +16,12 @@ function initIngredients(ingredients) {
 export default {
   namespaced: true,
   state: {
-    dough: pizzaData.dough,
+    isLoading: false,
+    dough: [],
     sizes: pizzaData.sizes,
     sauces: pizzaData.sauces,
     ingredients: initIngredients(pizzaData.ingredients),
-    selectedDough: pizzaData.dough[0],
+    selectedDough: null,
     selectedSize: pizzaData.sizes[0],
     selectedSauce: pizzaData.sauces[0],
     pizzaName: "",
@@ -58,6 +60,9 @@ export default {
       const item = state.ingredients.find((item) => item.id === payload);
       item.amount++;
     },
+    setState(state, newState) {
+      Object.assign(state, newState);
+    },
     resetState(state) {
       state.selectedDough = pizzaData.dough[0];
       state.selectedSize = pizzaData.sizes[0];
@@ -77,7 +82,7 @@ export default {
       return (
         state.pizzaAmount *
         state.selectedSize.multiplier *
-        (state.selectedDough.price +
+        (state.selectedDough?.price +
           state.selectedSauce.price +
           getters.ingredientsPrice)
       );
@@ -110,6 +115,15 @@ export default {
     },
   },
   actions: {
+    async init({ commit }) {
+      const dough = await Api.fetchDough();
+      const changes = {
+        isLoading: false,
+        dough,
+        selectedDough: dough[0],
+      };
+      commit("setState", changes);
+    },
     editPizza({ commit }, pizza) {
       const dough = pizzaData.dough.find((item) => item.id === pizza.dough.id);
       const size = pizzaData.sizes.find((item) => item.id === pizza.size.id);

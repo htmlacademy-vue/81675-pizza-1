@@ -58,7 +58,7 @@ export default {
     ]),
     ...mapGetters("Builder", ["totalPrice", "pizzaObj"]),
     doughClassName() {
-      return this.selectedDough.value === "large" ? "big" : "small";
+      return this.selectedDough?.value === "large" ? "big" : "small";
     },
     pizzaClass() {
       return `pizza--foundation--${this.doughClassName}-${this.selectedSauce.value}`;

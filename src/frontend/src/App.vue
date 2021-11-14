@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <component :is="layout">
+    <div v-if="isLoading">Загрузка...</div>
+    <component :is="layout" v-else>
       <router-view />
     </component>
   </div>
@@ -9,13 +10,18 @@
 <script>
 import AppLayout from "@/layouts/AppLayout";
 import AppSidebarLayout from "@/layouts/AppSidebarLayout";
+import { mapState } from "vuex";
 export default {
   name: "App",
   components: { AppLayout, AppSidebarLayout },
   computed: {
+    ...mapState("Builder", ["isLoading"]),
     layout() {
       return this.$route.meta.layout || "AppLayout";
     },
+  },
+  created() {
+    this.$store.dispatch("Builder/init");
   },
 };
 </script>

@@ -15,7 +15,7 @@
             name="dough"
             :value="item.value"
             class="visually-hidden"
-            :checked="item.id === selectedDough.id"
+            :checked="isChecked(item)"
             @change="onChange(item)"
           />
           <b>{{ item.name }}</b>
@@ -35,6 +35,9 @@ export default {
     ...mapState("Builder", ["dough", "selectedDough"]),
   },
   methods: {
+    isChecked(item) {
+      return item.id === this.selectedDough?.id;
+    },
     onChange(item) {
       this.$store.commit("Builder/selectDough", item);
     },
