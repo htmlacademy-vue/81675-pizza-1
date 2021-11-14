@@ -106,12 +106,15 @@ export default {
   },
   actions: {
     async init({ commit }) {
-      const [dough, sizes, sauces, ingredients] = await Promise.all([
-        Api.fetchDough(),
-        Api.fetchSizes(),
-        Api.fetchSauces(),
-        Api.fetchIngredients(),
-      ]);
+      const [dough, sizes, sauces, ingredients, additional] = await Promise.all(
+        [
+          Api.fetchDough(),
+          Api.fetchSizes(),
+          Api.fetchSauces(),
+          Api.fetchIngredients(),
+          Api.fetchAdditional(),
+        ]
+      );
       const changes = {
         isLoading: false,
         dough,
@@ -123,6 +126,7 @@ export default {
         selectedSauce: sauces[0],
       };
       commit("setState", changes);
+      commit("Cart/setState", { additional }, { root: true });
     },
     editPizza({ commit, state }, pizza) {
       const dough = state.dough.find((item) => item.id === pizza.dough.id);

@@ -1,31 +1,9 @@
-import miscData from "@/static/misc.json";
-import colaImg from "@/assets/img/cola.svg";
-import sauceImg from "@/assets/img/sauce.svg";
-import potatoImg from "@/assets/img/potato.svg";
-
-const images = [
-  { id: 1, image: colaImg },
-  { id: 2, image: sauceImg },
-  { id: 3, image: potatoImg },
-];
-
-const defaultState = () => ({
-  cart: [],
-  additional: miscData.map((item) => {
-    const img = images.find((imgItem) => imgItem.id === item.id);
-    return {
-      ...item,
-      image: img.image,
-      amount: 0,
-    };
-  }),
-  isOrderComplete: false,
-});
-
 export default {
   namespaced: true,
   state: {
-    ...defaultState(),
+    cart: [],
+    additional: [],
+    isOrderComplete: false,
   },
   mutations: {
     addToCart(state, pizza) {
@@ -58,7 +36,14 @@ export default {
       state.isOrderComplete = payload;
     },
     resetCart(state) {
-      Object.assign(state, defaultState());
+      Object.assign(state, {
+        cart: [],
+        isOrderComplete: false,
+      });
+      state.additional.forEach((item) => (item.amount = 0));
+    },
+    setState(state, newState) {
+      Object.assign(state, newState);
     },
   },
   getters: {

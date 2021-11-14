@@ -1,4 +1,7 @@
 import axios from "axios";
+import colaImg from "@/assets/img/cola.svg";
+import sauceImg from "@/assets/img/sauce.svg";
+import potatoImg from "@/assets/img/potato.svg";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -52,9 +55,23 @@ async function fetchIngredients() {
   });
 }
 
+async function fetchAdditional() {
+  const url = `${BASE_URL}/misc`;
+  const images = [colaImg, sauceImg, potatoImg];
+  const res = await axios.get(url);
+  return res.data.map((item, index) => {
+    return {
+      ...item,
+      amount: 0,
+      image: images[index],
+    };
+  });
+}
+
 export default {
   fetchDough,
   fetchSizes,
   fetchSauces,
   fetchIngredients,
+  fetchAdditional,
 };
