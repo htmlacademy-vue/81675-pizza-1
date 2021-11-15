@@ -21,6 +21,7 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch("Auth/init");
     this.$store.dispatch("Builder/init");
   },
 };

@@ -1,4 +1,5 @@
 import Api from "@/services/Api";
+import jwtService from "@/services/jwtService";
 
 export default {
   namespaced: true,
@@ -24,11 +25,23 @@ export default {
     },
   },
   actions: {
+    async init({ commit }) {
+      const token = jwtService.getToken();
+      if (!token) return;
+
+      try {
+        const userResult = await Api.whoAmI(token);
+        commit("setState", { token, user: userResult.data });
+      } catch {
+        console.log("invalid token");
+      }
+    },
     async login({ commit }, payload) {
       commit("setState", { loginError: "" });
       try {
         const loginResult = await Api.login(payload);
         const { token } = loginResult.data;
+        jwtService.saveToken(token);
         const userResult = await Api.whoAmI(token);
 
         commit("setState", {
