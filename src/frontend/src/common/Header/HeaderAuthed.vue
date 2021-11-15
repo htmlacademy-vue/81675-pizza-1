@@ -12,7 +12,7 @@
         <img
           src="@/assets/img/users/user5.jpg"
           srcset="@/assets/img/users/user5@2x.jpg"
-          alt="Василий Ложкин"
+          :alt="user.name"
           width="32"
           height="32"
         />
