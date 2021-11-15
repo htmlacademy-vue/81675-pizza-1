@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwtService from "@/services/jwtService";
 import colaImg from "@/assets/img/cola.svg";
 import sauceImg from "@/assets/img/sauce.svg";
 import potatoImg from "@/assets/img/potato.svg";
@@ -73,11 +74,21 @@ function login(payload) {
   return axios.post(url, payload);
 }
 
-function whoAmI(token) {
+async function logout() {
+  const url = `${BASE_URL}/logout`;
+  await axios.delete(url, {
+    headers: {
+      Authorization: `Bearer ${jwtService.getToken()}`,
+    },
+  });
+  jwtService.removeToken();
+}
+
+function whoAmI() {
   const url = `${BASE_URL}/whoAmI`;
   return axios.get(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${jwtService.getToken()}`,
     },
   });
 }
@@ -89,5 +100,6 @@ export default {
   fetchIngredients,
   fetchAdditional,
   login,
+  logout,
   whoAmI,
 };

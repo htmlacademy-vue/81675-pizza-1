@@ -1,18 +1,19 @@
 import Api from "@/services/Api";
 import jwtService from "@/services/jwtService";
 
+const getEmptyUser = () => ({
+  avatar: "",
+  email: "",
+  id: "",
+  name: "",
+  phone: "",
+});
+
 export default {
   namespaced: true,
   state: {
-    token: "",
     loginError: "",
-    user: {
-      avatar: "",
-      email: "",
-      id: "",
-      name: "",
-      phone: "",
-    },
+    user: getEmptyUser(),
   },
   mutations: {
     setState(state, newState) {
@@ -21,7 +22,7 @@ export default {
   },
   getters: {
     isAuthed(state) {
-      return state.token;
+      return !!state.user?.id;
     },
   },
   actions: {
@@ -42,10 +43,9 @@ export default {
         const loginResult = await Api.login(payload);
         const { token } = loginResult.data;
         jwtService.saveToken(token);
-        const userResult = await Api.whoAmI(token);
+        const userResult = await Api.whoAmI();
 
         commit("setState", {
-          token,
           user: userResult.data,
         });
       } catch (e) {
@@ -55,8 +55,9 @@ export default {
         throw Error(errorMessage);
       }
     },
-    logout({ state }) {
-      state.token = "";
+    async logout({ commit }) {
+      await Api.logout();
+      commit("setState", { user: getEmptyUser() });
     },
   },
 };
