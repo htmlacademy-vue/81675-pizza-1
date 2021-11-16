@@ -34,8 +34,19 @@ function editAddress(payload) {
   return axios.put(url, payload, params);
 }
 
+function removeAddress(payload) {
+  const url = `${BASE_URL}/addresses/${payload.id}`;
+  const params = {
+    headers: {
+      Authorization: `Bearer ${jwtService.getToken()}`,
+    },
+  };
+  return axios.delete(url, params);
+}
+
 export default {
   getAddresses,
   addAddress,
   editAddress,
+  removeAddress,
 };

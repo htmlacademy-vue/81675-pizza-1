@@ -1,13 +1,9 @@
 <template>
   <div>
-    <div
-      class="layout__address"
-      v-for="(address, index) in addresses"
-      :key="address.id"
-    >
+    <div class="layout__address" v-for="address in addresses" :key="address.id">
       <div class="sheet address-form">
         <div class="address-form__header">
-          <b>Адрес №{{ index + 1 }}. {{ address.name }}</b>
+          <b>Адрес №{{ address.id }}. {{ address.name }}</b>
           <div class="address-form__edit">
             <button type="button" class="icon" @click="onEdit(address)">
               <span class="visually-hidden">Изменить адрес</span>

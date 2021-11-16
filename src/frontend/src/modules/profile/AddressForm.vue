@@ -5,7 +5,7 @@
       @submit.prevent="onSave"
     >
       <div class="address-form__header">
-        <b>Адрес №1</b>
+        <b>{{ title }}</b>
       </div>
 
       <div class="address-form__wrapper">
@@ -70,8 +70,12 @@
       </div>
 
       <div class="address-form__buttons">
-        <button type="button" class="button button--transparent">
-          Удалить
+        <button
+          type="button"
+          class="button button--transparent"
+          @click="onRemove"
+        >
+          {{ isNew ? "Отмена" : "Удалить" }}
         </button>
         <button type="submit" class="button">Сохранить</button>
       </div>
@@ -87,15 +91,29 @@ export default {
   computed: {
     ...mapState("Address", ["form"]),
     ...mapState("Auth", ["user"]),
+    isNew() {
+      return !this.form.id;
+    },
+    title() {
+      return this.isNew ? "Новый адрес" : `Адрес №${this.form.id}`;
+    },
   },
   methods: {
-    ...mapActions("Address", ["addAddress", "editAddress"]),
+    ...mapActions("Address", ["addAddress", "editAddress", "removeAddress"]),
     onSave() {
       const payload = {
         ...this.form,
         userId: this.user.id,
       };
       this.form.id ? this.editAddress(payload) : this.addAddress(payload);
+    },
+    onRemove() {
+      if (this.isNew) {
+        this.$store.commit("Address/setState", { form: null });
+        return;
+      }
+
+      this.removeAddress(this.form);
     },
   },
 };

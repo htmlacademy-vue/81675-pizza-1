@@ -47,5 +47,14 @@ export default {
         console.log(e);
       }
     },
+    async removeAddress({ commit, dispatch }, payload) {
+      try {
+        await addressService.removeAddress(payload);
+        commit("setState", { form: null });
+        dispatch("fetchAddresses");
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 };
