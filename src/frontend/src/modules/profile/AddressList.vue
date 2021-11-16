@@ -1,28 +1,45 @@
 <template>
-  <div class="layout__address">
-    <div class="sheet address-form">
-      <div class="address-form__header">
-        <b>Адрес №1. Тест</b>
-        <div class="address-form__edit">
-          <button type="button" class="icon">
-            <span class="visually-hidden">Изменить адрес</span>
-          </button>
+  <div>
+    <div
+      class="layout__address"
+      v-for="(address, index) in addresses"
+      :key="address.id"
+    >
+      <div class="sheet address-form">
+        <div class="address-form__header">
+          <b>Адрес №{{ index + 1 }}. {{ address.name }}</b>
+          <div class="address-form__edit">
+            <button type="button" class="icon" @click="onEdit(address)">
+              <span class="visually-hidden">Изменить адрес</span>
+            </button>
+          </div>
         </div>
+        <p>
+          {{ address.street }}, д. {{ address.building }}, кв.
+          {{ address.flat }}
+        </p>
+        <small>{{ address.comment }}</small>
       </div>
-      <p>Невский пр., д. 22, кв. 46</p>
-      <small>Позвоните, пожалуйста, от проходной</small>
     </div>
   </div>
 </template>
 
 <script>
-import addressService from "@/services/addressService";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "AddressList",
+  computed: {
+    ...mapState("Address", ["addresses"]),
+  },
   async created() {
-    const res = await addressService.getAddresses();
-    console.log("res", res);
+    await this.fetchAddresses();
+  },
+  methods: {
+    ...mapActions("Address", ["fetchAddresses"]),
+    onEdit(address) {
+      this.$store.commit("Address/editAddress", address);
+    },
   },
 };
 </script>

@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "AddressForm",
@@ -89,11 +89,13 @@ export default {
     ...mapState("Auth", ["user"]),
   },
   methods: {
+    ...mapActions("Address", ["addAddress", "editAddress"]),
     onSave() {
-      this.$store.dispatch("Address/saveAddress", {
+      const payload = {
         ...this.form,
         userId: this.user.id,
-      });
+      };
+      this.form.id ? this.editAddress(payload) : this.addAddress(payload);
     },
   },
 };

@@ -3,25 +3,39 @@ import jwtService from "@/services/jwtService";
 
 const BASE_URL = "http://localhost:3000";
 
-function getAddresses() {
+async function getAddresses() {
   const url = `${BASE_URL}/addresses`;
-  return axios.get(url, {
+  const res = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${jwtService.getToken()}`,
     },
   });
+  return res.data;
 }
 
-function saveAddress(payload) {
+function addAddress(payload) {
   const url = `${BASE_URL}/addresses`;
-  return axios.post(url, payload, {
+  const params = {
     headers: {
       Authorization: `Bearer ${jwtService.getToken()}`,
     },
-  });
+  };
+
+  return axios.post(url, payload, params);
+}
+
+function editAddress(payload) {
+  const url = `${BASE_URL}/addresses/${payload.id}`;
+  const params = {
+    headers: {
+      Authorization: `Bearer ${jwtService.getToken()}`,
+    },
+  };
+  return axios.put(url, payload, params);
 }
 
 export default {
   getAddresses,
-  saveAddress,
+  addAddress,
+  editAddress,
 };
