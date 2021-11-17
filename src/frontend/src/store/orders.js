@@ -1,6 +1,7 @@
 export default {
   namespaced: true,
   state: {
+    userPhone: "",
     address: {
       street: "",
       building: "",
@@ -41,7 +42,7 @@ export default {
       const user = rootState.Auth.user;
       const order = {
         userId: user.id,
-        phone: user.phone,
+        phone: state.userPhone,
         address: state.address,
         pizzas,
         misc,

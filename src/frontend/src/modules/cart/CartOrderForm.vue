@@ -19,7 +19,13 @@
 
       <label class="input input--big-label">
         <span>Контактный телефон:</span>
-        <input type="text" name="tel" placeholder="+7 999-999-99-99" />
+        <input
+          type="text"
+          name="tel"
+          placeholder="+7 999-999-99-99"
+          :value="userPhone"
+          @input="onUserPhoneInput"
+        />
       </label>
 
       <div class="cart-form__address" v-if="isAddressFormVisible">
@@ -76,7 +82,7 @@ export default {
   computed: {
     ...mapGetters("Auth", ["isAuthed"]),
     ...mapState("Address", ["addresses", "form"]),
-    ...mapState("Orders", ["address"]),
+    ...mapState("Orders", ["address", "userPhone"]),
     isAddressFormVisible() {
       return this.deliveryOptionId !== -1;
     },
@@ -118,6 +124,9 @@ export default {
     },
     onFlatInput(e) {
       this.updateAddress({ flat: e.target.value });
+    },
+    onUserPhoneInput(e) {
+      this.$store.commit("Orders/setState", { userPhone: e.target.value });
     },
   },
 };

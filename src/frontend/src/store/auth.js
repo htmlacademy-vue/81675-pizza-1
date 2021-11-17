@@ -32,7 +32,9 @@ export default {
 
       try {
         const userResult = await Api.whoAmI(token);
-        commit("setState", { token, user: userResult.data });
+        const user = userResult.data;
+        commit("setState", { token, user });
+        commit("Orders/setState", { userPhone: user.phone }, { root: true });
 
         dispatch("Address/fetchAddresses", null, { root: true });
       } catch {
