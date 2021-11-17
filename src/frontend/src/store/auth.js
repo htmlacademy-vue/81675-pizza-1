@@ -35,6 +35,7 @@ export default {
         commit("setState", { token, user: userResult.data });
       } catch {
         console.log("invalid token");
+        jwtService.removeToken();
       }
     },
     async login({ commit }, payload) {

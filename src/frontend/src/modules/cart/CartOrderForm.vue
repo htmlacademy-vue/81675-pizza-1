@@ -4,10 +4,16 @@
       <label class="cart-form__select">
         <span class="cart-form__label">Получение заказа:</span>
 
-        <select name="test" class="select">
-          <option value="1">Заберу сам</option>
-          <option value="2">Новый адрес</option>
-          <option value="3" v-if="isAuthed">Дом</option>
+        <select name="test" class="select" v-model="deliveryOptionId">
+          <option :value="-1">Заберу сам</option>
+          <option :value="0">Новый адрес</option>
+          <option
+            :value="address.id"
+            v-for="address in addresses"
+            :key="address.id"
+          >
+            {{ address.name }}
+          </option>
         </select>
       </label>
 
@@ -16,27 +22,42 @@
         <input type="text" name="tel" placeholder="+7 999-999-99-99" />
       </label>
 
-      <div class="cart-form__address">
+      <div class="cart-form__address" v-if="isAddressFormVisible">
         <span class="cart-form__label">Новый адрес:</span>
 
         <div class="cart-form__input">
           <label class="input">
             <span>Улица*</span>
-            <input type="text" name="street" />
+            <input
+              type="text"
+              name="street"
+              v-model="street"
+              :disabled="isAddressInputDisabled"
+            />
           </label>
         </div>
 
         <div class="cart-form__input cart-form__input--small">
           <label class="input">
             <span>Дом*</span>
-            <input type="text" name="house" />
+            <input
+              type="text"
+              name="house"
+              v-model="building"
+              :disabled="isAddressInputDisabled"
+            />
           </label>
         </div>
 
         <div class="cart-form__input cart-form__input--small">
           <label class="input">
             <span>Квартира</span>
-            <input type="text" name="apartment" />
+            <input
+              type="text"
+              name="apartment"
+              v-model="flat"
+              :disabled="isAddressInputDisabled"
+            />
           </label>
         </div>
       </div>
@@ -45,12 +66,40 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "CartOrderForm",
   computed: {
     ...mapGetters("Auth", ["isAuthed"]),
+    ...mapState("Address", ["addresses", "form"]),
+    isAddressFormVisible() {
+      return this.deliveryOptionId !== -1;
+    },
+    isAddressInputDisabled() {
+      return this.deliveryOptionId > 0;
+    },
+  },
+  data() {
+    return {
+      deliveryOptionId: -1,
+      street: "",
+      building: "",
+      flat: "",
+    };
+  },
+  watch: {
+    deliveryOptionId(value) {
+      const address = this.addresses.find((item) => item.id === value);
+      const addressData = address
+        ? {
+            street: address.street,
+            building: address.building,
+            flat: address.flat,
+          }
+        : { street: "", building: "", flat: "" };
+      Object.assign(this, addressData);
+    },
   },
 };
 </script>
