@@ -26,29 +26,27 @@ export default {
     },
   },
   actions: {
-    async init({ commit }) {
+    async init({ commit, dispatch }) {
       const token = jwtService.getToken();
       if (!token) return;
 
       try {
         const userResult = await Api.whoAmI(token);
         commit("setState", { token, user: userResult.data });
+
+        dispatch("Address/fetchAddresses", null, { root: true });
       } catch {
         console.log("invalid token");
         jwtService.removeToken();
       }
     },
-    async login({ commit }, payload) {
+    async login({ commit, dispatch }, payload) {
       commit("setState", { loginError: "" });
       try {
         const loginResult = await Api.login(payload);
         const { token } = loginResult.data;
         jwtService.saveToken(token);
-        const userResult = await Api.whoAmI();
-
-        commit("setState", {
-          user: userResult.data,
-        });
+        dispatch("init");
       } catch (e) {
         const errorMessage =
           e.response?.data?.error?.message ?? "Ошибка аутентификации";

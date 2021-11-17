@@ -21,18 +21,14 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "AddressList",
   computed: {
     ...mapState("Address", ["addresses"]),
   },
-  async created() {
-    await this.fetchAddresses();
-  },
   methods: {
-    ...mapActions("Address", ["fetchAddresses"]),
     onEdit(address) {
       this.$store.commit("Address/editAddress", address);
     },

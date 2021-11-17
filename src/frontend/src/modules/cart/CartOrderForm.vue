@@ -87,8 +87,6 @@ export default {
   data() {
     return {
       deliveryOptionId: -1,
-      building: "",
-      flat: "",
     };
   },
   watch: {
