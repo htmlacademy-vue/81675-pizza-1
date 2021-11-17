@@ -37,6 +37,7 @@ export default {
         commit("Orders/setState", { userPhone: user.phone }, { root: true });
 
         dispatch("Address/fetchAddresses", null, { root: true });
+        dispatch("Orders/getOrders", null, { root: true });
       } catch {
         console.log("invalid token");
         jwtService.removeToken();

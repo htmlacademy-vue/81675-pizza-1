@@ -1,6 +1,9 @@
+import ordersService from "@/services/ordersService";
+
 export default {
   namespaced: true,
   state: {
+    orders: [],
     userPhone: "",
     address: {
       street: "",
@@ -15,7 +18,11 @@ export default {
     },
   },
   actions: {
-    createOrder({ state, rootState }) {
+    async getOrders({ commit }) {
+      const orders = await ordersService.fetchOrders();
+      commit("setState", { orders });
+    },
+    async createOrder({ state, rootState, commit }) {
       const pizzas = rootState.Cart.cart.map((item) => {
         return {
           name: item.name,
@@ -49,7 +56,12 @@ export default {
       };
       console.log("create", order);
 
-      // commit("Cart/setOrderComplete", true);
+      try {
+        await ordersService.createOrder(order);
+        commit("Cart/setOrderComplete", true, { root: true });
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 };
