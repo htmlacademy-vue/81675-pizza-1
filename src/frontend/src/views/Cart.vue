@@ -63,38 +63,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      // this.$store.commit("Cart/setOrderComplete", true);
-      const pizzas = this.cart.map((item) => {
-        return {
-          name: item.name,
-          sauceId: item.sauce.id,
-          doughId: item.dough.id,
-          sizeId: item.size.id,
-          quantity: item.amount,
-          ingredients: item.ingredients.map((ingredient) => {
-            return {
-              ingredientId: ingredient.id,
-              quantity: ingredient.amount,
-            };
-          }),
-        };
-      });
-      const misc = this.additional
-        .filter((item) => item.amount > 0)
-        .map((item) => {
-          return {
-            miscId: item.id,
-            quantity: item.amount,
-          };
-        });
-      const order = {
-        userId: this.user.id,
-        phone: this.user.phone,
-        address: "todo",
-        pizzas,
-        misc,
-      };
-      this.$store.dispatch("Orders/createOrder", order);
+      this.$store.dispatch("Orders/createOrder");
     },
   },
 };

@@ -31,7 +31,8 @@
             <input
               type="text"
               name="street"
-              v-model="street"
+              :value="address.street"
+              @input="onStreetInput"
               :disabled="isAddressInputDisabled"
             />
           </label>
@@ -43,7 +44,8 @@
             <input
               type="text"
               name="house"
-              v-model="building"
+              :value="address.building"
+              @input="onBuildingInput"
               :disabled="isAddressInputDisabled"
             />
           </label>
@@ -55,7 +57,8 @@
             <input
               type="text"
               name="apartment"
-              v-model="flat"
+              :value="address.flat"
+              @input="onFlatInput"
               :disabled="isAddressInputDisabled"
             />
           </label>
@@ -73,6 +76,7 @@ export default {
   computed: {
     ...mapGetters("Auth", ["isAuthed"]),
     ...mapState("Address", ["addresses", "form"]),
+    ...mapState("Orders", ["address"]),
     isAddressFormVisible() {
       return this.deliveryOptionId !== -1;
     },
@@ -83,7 +87,6 @@ export default {
   data() {
     return {
       deliveryOptionId: -1,
-      street: "",
       building: "",
       flat: "",
     };
@@ -96,9 +99,27 @@ export default {
             street: address.street,
             building: address.building,
             flat: address.flat,
+            comment: address.comment,
           }
-        : { street: "", building: "", flat: "" };
+        : { street: "", building: "", flat: "", comment: "" };
+      this.$store.commit("Orders/setState", { address: addressData });
       Object.assign(this, addressData);
+    },
+  },
+  methods: {
+    updateAddress(payload) {
+      this.$store.commit("Orders/setState", {
+        address: { ...this.address, ...payload },
+      });
+    },
+    onStreetInput(e) {
+      this.updateAddress({ street: e.target.value });
+    },
+    onBuildingInput(e) {
+      this.updateAddress({ building: e.target.value });
+    },
+    onFlatInput(e) {
+      this.updateAddress({ flat: e.target.value });
     },
   },
 };
