@@ -18,9 +18,52 @@ export default {
     },
   },
   actions: {
-    async getOrders({ commit }) {
+    async getOrders({ commit, rootState }) {
+      const doughById = (id) =>
+        rootState.Builder.dough.find((item) => item.id === id);
+      const sauceById = (id) =>
+        rootState.Builder.sauces.find((item) => item.id === id);
+      const sizeById = (id) =>
+        rootState.Builder.sizes.find((item) => item.id === id);
+      const ingredientById = (id) =>
+        rootState.Builder.ingredients.find((item) => item.id === id);
+      const miscById = (id) =>
+        rootState.Cart.additional.find((item) => item.id === id);
+
       const orders = await ordersService.fetchOrders();
-      commit("setState", { orders });
+      const normalizedOrders = orders.map((order) => {
+        const pizzas = order.orderPizzas.map((orderPizza) => {
+          return {
+            name: orderPizza.name,
+            amount: orderPizza.quantity,
+            dough: doughById(orderPizza.doughId),
+            sauce: sauceById(orderPizza.sauceId),
+            size: sizeById(orderPizza.sizeId),
+            ingredients: orderPizza.ingredients.map((item) => {
+              return {
+                ...ingredientById(item.ingredientId),
+                amount: item.quantity,
+              };
+            }),
+          };
+        });
+
+        const misc =
+          order.orderMisc?.map((orderMisc) => {
+            return {
+              ...miscById(orderMisc.id),
+              amount: orderMisc.quantity,
+            };
+          }) ?? [];
+
+        return {
+          id: order.id,
+          orderAddress: order.orderAddress,
+          orderPizzas: pizzas,
+          orderMisc: misc,
+        };
+      });
+      commit("setState", { orders: normalizedOrders });
     },
     async createOrder({ state, rootState, commit }) {
       const pizzas = rootState.Cart.cart.map((item) => {
