@@ -20,9 +20,10 @@ export default {
       return this.$route.meta.layout || "AppLayout";
     },
   },
-  created() {
-    this.$store.dispatch("Auth/init");
-    this.$store.dispatch("Builder/init");
+  async created() {
+    await this.$store.dispatch("Auth/init");
+    await this.$store.dispatch("Public/init");
+    await this.$store.dispatch("Builder/init");
   },
 };
 </script>

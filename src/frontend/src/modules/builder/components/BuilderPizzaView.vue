@@ -49,14 +49,13 @@ export default {
   components: { AppDrop },
   computed: {
     ...mapState("Builder", [
-      "selectedDough",
       "selectedSauce",
       "selectedSize",
       "ingredients",
       "pizzaName",
       "pizzaAmount",
     ]),
-    ...mapGetters("Builder", ["totalPrice", "pizzaObj"]),
+    ...mapGetters("Builder", ["totalPrice", "pizzaObj", "selectedDough"]),
     doughClassName() {
       return this.selectedDough?.value === "large" ? "big" : "small";
     },

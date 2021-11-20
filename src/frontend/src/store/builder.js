@@ -8,7 +8,7 @@ export default {
     sizes: [],
     sauces: [],
     ingredients: [],
-    selectedDough: null,
+    selectedDoughId: 0,
     selectedSize: null,
     selectedSauce: null,
     pizzaName: "",
@@ -20,7 +20,7 @@ export default {
       state.ingredients = payload;
     },
     selectDough(state, payload) {
-      state.selectedDough = payload;
+      state.selectedDoughId = payload;
     },
     selectSize(state, payload) {
       state.selectedSize = payload;
@@ -50,11 +50,11 @@ export default {
     setState(state, newState) {
       Object.assign(state, newState);
     },
-    resetState(state) {
+    resetState(state, rootState) {
       Object.assign(state, {
-        selectedDough: state.dough[0],
+        selectedDoughId: rootState["Public/dough"][0]?.id,
         selectedSize: state.sizes[0],
-        seletedSauce: state.sauces[0],
+        selectedSauce: state.sauces[0],
         pizzaName: "",
         pizzaAmount: 1,
         pizzaId: "",
@@ -63,6 +63,9 @@ export default {
     },
   },
   getters: {
+    selectedDough(state, rootState, getters, rootGetters) {
+      return rootGetters["Public/doughById"](state.selectedDoughId);
+    },
     ingredientsPrice(state) {
       return state.ingredients.reduce((acc, item) => {
         return acc + item.price * item.amount;
@@ -72,7 +75,7 @@ export default {
       return (
         state.pizzaAmount *
         state.selectedSize.multiplier *
-        (state.selectedDough?.price +
+        (getters.selectedDough?.price +
           state.selectedSauce.price +
           getters.ingredientsPrice)
       );
@@ -85,7 +88,7 @@ export default {
         id: state.pizzaId,
         name: state.pizzaName,
         dough: {
-          id: state.selectedDough.id,
+          id: state.selectedDoughId,
           name: state.selectedDough.name,
           price: state.selectedDough.price,
         },
@@ -105,31 +108,27 @@ export default {
     },
   },
   actions: {
-    async init({ commit }) {
-      const [dough, sizes, sauces, ingredients, additional] = await Promise.all(
-        [
-          publicService.fetchDough(),
-          publicService.fetchSizes(),
-          publicService.fetchSauces(),
-          publicService.fetchIngredients(),
-          publicService.fetchAdditional(),
-        ]
-      );
+    async init({ commit, rootState }) {
+      const [sizes, sauces, ingredients, additional] = await Promise.all([
+        publicService.fetchSizes(),
+        publicService.fetchSauces(),
+        publicService.fetchIngredients(),
+        publicService.fetchAdditional(),
+      ]);
       const changes = {
         isLoading: false,
-        dough,
         sizes,
         sauces,
         ingredients,
-        selectedDough: dough[0],
+        selectedDoughId: rootState.Public.dough[0]?.id,
         selectedSize: sizes[0],
         selectedSauce: sauces[0],
       };
       commit("setState", changes);
       commit("Cart/setState", { additional }, { root: true });
     },
-    editPizza({ commit, state }, pizza) {
-      const dough = state.dough.find((item) => item.id === pizza.dough.id);
+    editPizza({ commit, state, rootGetters }, pizza) {
+      const dough = rootGetters["Public/doughById"](pizza.dough.id);
       const size = state.sizes.find((item) => item.id === pizza.size.id);
       const sauce = state.sauces.find((item) => item.id === pizza.sauce.id);
       state.ingredients.forEach((item) => {
@@ -139,7 +138,7 @@ export default {
         item.amount = pizzaIngredient ? pizzaIngredient.amount : 0;
       });
       commit("setState", {
-        selectedDough: dough,
+        selectedDoughId: dough.id,
         selectedSize: size,
         selectedSauce: sauce,
         pizzaName: pizza.name,
