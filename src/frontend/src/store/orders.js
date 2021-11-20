@@ -93,10 +93,10 @@ export default {
       const order = {
         userId: user.id,
         phone: state.userPhone,
-        address: state.address,
         pizzas,
         misc,
       };
+      order.address = state.address.street ? state.address : null;
       console.log("create", order);
 
       try {

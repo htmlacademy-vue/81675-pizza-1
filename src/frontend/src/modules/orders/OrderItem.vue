@@ -39,7 +39,7 @@
       </li>
     </ul>
 
-    <p class="order__address">Адрес доставки: {{ order.orderAddress.name }}</p>
+    <p class="order__address">Адрес доставки: {{ orderAddress }}</p>
   </section>
 </template>
 
@@ -61,6 +61,9 @@ export default {
       return this.order.orderMisc.reduce((acc, item) => {
         return acc + item.price * item.amount;
       }, 0);
+    },
+    orderAddress() {
+      return this.order.orderAddress?.name ?? "самовывоз";
     },
     orderPrice() {
       const pizzasPrice = this.order.orderPizzas.reduce(
