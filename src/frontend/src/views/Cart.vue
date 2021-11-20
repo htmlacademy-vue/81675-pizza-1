@@ -64,11 +64,6 @@ export default {
   methods: {
     async onSubmit() {
       await this.$store.dispatch("Orders/createOrder");
-      try {
-        await this.$store.dispatch("Orders/getOrders");
-      } catch (e) {
-        console.log(e);
-      }
     },
   },
 };

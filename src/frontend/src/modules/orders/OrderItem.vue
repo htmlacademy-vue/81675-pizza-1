@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     onRemove() {
-      console.log("todo remove");
+      this.$store.dispatch("Orders/removeOrder", this.order.id);
     },
     onReOrder() {
       console.log("todo reorder");

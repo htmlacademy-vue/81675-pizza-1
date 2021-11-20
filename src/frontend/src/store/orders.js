@@ -65,7 +65,7 @@ export default {
       });
       commit("setState", { orders: normalizedOrders });
     },
-    async createOrder({ state, rootState, commit }) {
+    async createOrder({ state, rootState, commit, rootGetters, dispatch }) {
       const pizzas = rootState.Cart.cart.map((item) => {
         return {
           name: item.name,
@@ -102,6 +102,19 @@ export default {
       try {
         await ordersService.createOrder(order);
         commit("Cart/setOrderComplete", true, { root: true });
+        if (rootGetters["Auth/isAuthed"]) {
+          dispatch("getOrders");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async removeOrder({ rootGetters, dispatch }, id) {
+      try {
+        await ordersService.removeOrder(id);
+        if (rootGetters["Auth/isAuthed"]) {
+          dispatch("getOrders");
+        }
       } catch (e) {
         console.log(e);
       }

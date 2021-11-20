@@ -23,7 +23,18 @@ function createOrder(payload) {
   return axios.post(url, payload, params);
 }
 
+function removeOrder(id) {
+  const url = `${BASE_URL}/orders/${id}`;
+  const params = {
+    headers: {
+      Authorization: `Bearer ${jwtService.getToken()}`,
+    },
+  };
+  return axios.delete(url, params);
+}
+
 export default {
   fetchOrders,
   createOrder,
+  removeOrder,
 };
