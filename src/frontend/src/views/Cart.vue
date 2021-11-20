@@ -62,8 +62,13 @@ export default {
     },
   },
   methods: {
-    onSubmit() {
-      this.$store.dispatch("Orders/createOrder");
+    async onSubmit() {
+      await this.$store.dispatch("Orders/createOrder");
+      try {
+        await this.$store.dispatch("Orders/getOrders");
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 };
