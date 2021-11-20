@@ -4,6 +4,8 @@ export default {
   namespaced: true,
   state: {
     dough: [],
+    sizes: [],
+    sauces: [],
   },
   mutations: {
     setState(state, newState) {
@@ -16,11 +18,25 @@ export default {
         return state.dough.find((item) => item.id === id);
       };
     },
+    sizeById(state) {
+      return (id) => {
+        return state.sizes.find((item) => item.id === id);
+      };
+    },
+    sauceById(state) {
+      return (id) => {
+        return state.sauces.find((item) => item.id === id);
+      };
+    },
   },
   actions: {
     async init({ commit }) {
-      const dough = await publicService.fetchDough();
-      commit("setState", { dough });
+      const [dough, sizes, sauces] = await Promise.all([
+        publicService.fetchDough(),
+        publicService.fetchSizes(),
+        publicService.fetchSauces(),
+      ]);
+      commit("setState", { dough, sizes, sauces });
     },
   },
 };

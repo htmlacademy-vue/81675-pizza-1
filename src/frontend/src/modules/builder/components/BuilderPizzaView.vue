@@ -48,14 +48,13 @@ export default {
   name: "BuilderPizzaView",
   components: { AppDrop },
   computed: {
-    ...mapState("Builder", [
+    ...mapState("Builder", ["ingredients", "pizzaName", "pizzaAmount"]),
+    ...mapGetters("Builder", [
+      "totalPrice",
+      "pizzaObj",
+      "selectedDough",
       "selectedSauce",
-      "selectedSize",
-      "ingredients",
-      "pizzaName",
-      "pizzaAmount",
     ]),
-    ...mapGetters("Builder", ["totalPrice", "pizzaObj", "selectedDough"]),
     doughClassName() {
       return this.selectedDough?.value === "large" ? "big" : "small";
     },

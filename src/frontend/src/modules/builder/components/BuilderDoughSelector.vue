@@ -27,17 +27,17 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "BuilderDoughSelector",
   computed: {
     ...mapState("Public", ["dough"]),
-    ...mapGetters("Builder", ["selectedDough"]),
+    ...mapState("Builder", ["selectedDoughId"]),
   },
   methods: {
     isChecked(item) {
-      return item.id === this.selectedDough?.id;
+      return item.id === this.selectedDoughId;
     },
     onChange(item) {
       this.$store.commit("Builder/selectDough", item.id);

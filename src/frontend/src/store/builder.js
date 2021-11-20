@@ -9,8 +9,8 @@ export default {
     sauces: [],
     ingredients: [],
     selectedDoughId: 0,
-    selectedSize: null,
-    selectedSauce: null,
+    selectedSizeId: 0,
+    selectedSauceId: 0,
     pizzaName: "",
     pizzaAmount: 1,
     pizzaId: "",
@@ -23,10 +23,10 @@ export default {
       state.selectedDoughId = payload;
     },
     selectSize(state, payload) {
-      state.selectedSize = payload;
+      state.selectedSizeId = payload;
     },
     selectSauce(state, payload) {
-      state.selectedSauce = payload;
+      state.selectedSauceId = payload;
     },
     setPizzaName(state, payload) {
       state.pizzaName = payload;
@@ -52,9 +52,9 @@ export default {
     },
     resetState(state, rootState) {
       Object.assign(state, {
-        selectedDoughId: rootState["Public/dough"][0]?.id,
-        selectedSize: state.sizes[0],
-        selectedSauce: state.sauces[0],
+        selectedDoughId: rootState.Public.dough[0]?.id,
+        selectedSizeId: rootState.Public.sizes[0].id,
+        selectedSauceId: rootState.Public.sauces[0]?.id,
         pizzaName: "",
         pizzaAmount: 1,
         pizzaId: "",
@@ -66,6 +66,12 @@ export default {
     selectedDough(state, rootState, getters, rootGetters) {
       return rootGetters["Public/doughById"](state.selectedDoughId);
     },
+    selectedSize(state, rootState, getters, rootGetters) {
+      return rootGetters["Public/sizeById"](state.selectedSizeId);
+    },
+    selectedSauce(state, rootState, getters, rootGetters) {
+      return rootGetters["Public/sauceById"](state.selectedSauceId);
+    },
     ingredientsPrice(state) {
       return state.ingredients.reduce((acc, item) => {
         return acc + item.price * item.amount;
@@ -74,9 +80,9 @@ export default {
     totalPrice(state, getters) {
       return (
         state.pizzaAmount *
-        state.selectedSize.multiplier *
+        getters.selectedSize.multiplier *
         (getters.selectedDough?.price +
-          state.selectedSauce.price +
+          getters.selectedSauce.price +
           getters.ingredientsPrice)
       );
     },
@@ -88,19 +94,19 @@ export default {
         id: state.pizzaId,
         name: state.pizzaName,
         dough: {
-          id: state.selectedDoughId,
-          name: state.selectedDough.name,
-          price: state.selectedDough.price,
+          id: getters.selectedDough.id,
+          name: getters.selectedDough.name,
+          price: getters.selectedDough.price,
         },
         size: {
-          id: state.selectedSize.id,
-          name: state.selectedSize.name,
-          multiplier: state.selectedSize.multiplier,
+          id: getters.selectedSize.id,
+          name: getters.selectedSize.name,
+          multiplier: getters.selectedSize.multiplier,
         },
         sauce: {
-          id: state.selectedSauce.id,
-          name: state.selectedSauce.name,
-          price: state.selectedSauce.price,
+          id: getters.selectedSauce.id,
+          name: getters.selectedSauce.name,
+          price: getters.selectedSauce.price,
         },
         ingredients: getters.pizzaIngredients,
         amount: state.pizzaAmount,
@@ -109,28 +115,21 @@ export default {
   },
   actions: {
     async init({ commit, rootState }) {
-      const [sizes, sauces, ingredients, additional] = await Promise.all([
-        publicService.fetchSizes(),
-        publicService.fetchSauces(),
+      const [ingredients, additional] = await Promise.all([
         publicService.fetchIngredients(),
         publicService.fetchAdditional(),
       ]);
       const changes = {
         isLoading: false,
-        sizes,
-        sauces,
         ingredients,
         selectedDoughId: rootState.Public.dough[0]?.id,
-        selectedSize: sizes[0],
-        selectedSauce: sauces[0],
+        selectedSizeId: rootState.Public.sizes[0]?.id,
+        selectedSauceId: rootState.Public.sauces[0]?.id,
       };
       commit("setState", changes);
       commit("Cart/setState", { additional }, { root: true });
     },
-    editPizza({ commit, state, rootGetters }, pizza) {
-      const dough = rootGetters["Public/doughById"](pizza.dough.id);
-      const size = state.sizes.find((item) => item.id === pizza.size.id);
-      const sauce = state.sauces.find((item) => item.id === pizza.sauce.id);
+    editPizza({ commit, state }, pizza) {
       state.ingredients.forEach((item) => {
         const pizzaIngredient = pizza.ingredients.find(
           (pizzaIng) => item.id === pizzaIng.id
@@ -138,9 +137,9 @@ export default {
         item.amount = pizzaIngredient ? pizzaIngredient.amount : 0;
       });
       commit("setState", {
-        selectedDoughId: dough.id,
-        selectedSize: size,
-        selectedSauce: sauce,
+        selectedDoughId: pizza.dough.id,
+        selectedSizeId: pizza.size.id,
+        selectedSauce: pizza.sauce.id,
         pizzaName: pizza.name,
         pizzaAmount: pizza.amount,
         pizzaId: pizza.id,
