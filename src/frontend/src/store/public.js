@@ -6,6 +6,7 @@ export default {
     dough: [],
     sizes: [],
     sauces: [],
+    ingredients: [],
   },
   mutations: {
     setState(state, newState) {
@@ -28,15 +29,21 @@ export default {
         return state.sauces.find((item) => item.id === id);
       };
     },
+    ingredientById(state) {
+      return (id) => {
+        return state.ingredients.find((item) => item.id === id);
+      };
+    },
   },
   actions: {
     async init({ commit }) {
-      const [dough, sizes, sauces] = await Promise.all([
+      const [dough, sizes, sauces, ingredients] = await Promise.all([
         publicService.fetchDough(),
         publicService.fetchSizes(),
         publicService.fetchSauces(),
+        publicService.fetchIngredients(),
       ]);
-      commit("setState", { dough, sizes, sauces });
+      commit("setState", { dough, sizes, sauces, ingredients });
     },
   },
 };

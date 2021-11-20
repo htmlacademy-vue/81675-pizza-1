@@ -48,13 +48,14 @@ export default {
   name: "BuilderPizzaView",
   components: { AppDrop },
   computed: {
-    ...mapState("Builder", ["ingredients", "pizzaName", "pizzaAmount"]),
+    ...mapState("Builder", ["selectedIngredients", "pizzaName", "pizzaAmount"]),
     ...mapGetters("Builder", [
       "totalPrice",
       "pizzaObj",
       "selectedDough",
       "selectedSauce",
     ]),
+    ...mapGetters("Public", ["ingredientById"]),
     doughClassName() {
       return this.selectedDough?.value === "large" ? "big" : "small";
     },
@@ -62,17 +63,16 @@ export default {
       return `pizza--foundation--${this.doughClassName}-${this.selectedSauce.value}`;
     },
     ingredientClasses() {
-      return this.ingredients
-        .filter((item) => item.amount > 0)
-        .map((item) => {
-          const classes = [`pizza__filling--${item.nameEn}`];
-          if (item.amount === 2) classes.push("pizza__filling--second");
-          if (item.amount === 3) classes.push("pizza__filling--third");
-          return classes.join(" ");
-        });
+      return this.selectedIngredients.map((item) => {
+        const ingredientData = this.ingredientById(item.id);
+        const classes = [`pizza__filling--${ingredientData.nameEn}`];
+        if (item.amount === 2) classes.push("pizza__filling--second");
+        if (item.amount === 3) classes.push("pizza__filling--third");
+        return classes.join(" ");
+      });
     },
     hasAnIngredient() {
-      return this.ingredients.some((item) => item.amount > 0);
+      return this.selectedIngredients.length > 0;
     },
     isPizzaReady() {
       return this.pizzaName && this.hasAnIngredient;
@@ -89,7 +89,7 @@ export default {
       const pizza = _.cloneDeep(this.pizzaObj);
       if (!pizza.id) pizza.id = _.uniqueId();
       this.$store.commit("Cart/addToCart", pizza);
-      this.$store.commit("Builder/resetState");
+      this.$store.dispatch("Builder/resetState");
     },
   },
 };

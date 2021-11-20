@@ -46,8 +46,8 @@ export default {
   name: "BuilderIngredientsSelector",
   components: { BuilderIngredientItem },
   computed: {
-    ...mapState("Public", ["sauces"]),
-    ...mapState("Builder", ["ingredients", "selectedSauceId"]),
+    ...mapState("Public", ["sauces", "ingredients"]),
+    ...mapState("Builder", ["selectedSauceId"]),
   },
   methods: {
     onSauceChange(item) {

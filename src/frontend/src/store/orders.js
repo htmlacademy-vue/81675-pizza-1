@@ -20,12 +20,9 @@ export default {
   actions: {
     async getOrders({ commit, rootState, rootGetters }) {
       const doughById = rootGetters["Public/doughById"];
-      const sauceById = (id) =>
-        rootState.Builder.sauces.find((item) => item.id === id);
-      const sizeById = (id) =>
-        rootState.Builder.sizes.find((item) => item.id === id);
-      const ingredientById = (id) =>
-        rootState.Builder.ingredients.find((item) => item.id === id);
+      const sauceById = rootGetters["Public/sauceById"];
+      const sizeById = rootGetters["Public/sizeById"];
+      const ingredientById = rootGetters["Public/ingredientById"];
       const miscById = (id) =>
         rootState.Cart.additional.find((item) => item.id === id);
 
