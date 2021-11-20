@@ -63,7 +63,20 @@ export default {
   },
   methods: {
     async onSubmit() {
-      await this.$store.dispatch("Orders/createOrder");
+      const phone = this.$store.state.Orders.userPhone;
+      const userId = this.$store.state.Auth.user.id;
+      const pizzas = this.$store.state.Cart.cart;
+      const misc = this.$store.state.Cart.additional;
+      const orderData = {
+        pizzas,
+        misc,
+        userId,
+        phone,
+      };
+      const address = this.$store.state.Orders.address;
+      orderData.address = address.street ? address : null;
+      await this.$store.dispatch("Orders/createOrder", orderData);
+      this.$store.commit("Cart/setOrderComplete", true);
     },
   },
 };

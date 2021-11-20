@@ -51,7 +51,7 @@ export default {
         const misc =
           order.orderMisc?.map((orderMisc) => {
             return {
-              ...miscById(orderMisc.id),
+              ...miscById(orderMisc.miscId),
               amount: orderMisc.quantity,
             };
           }) ?? [];
@@ -61,12 +61,14 @@ export default {
           orderAddress: order.orderAddress,
           orderPizzas: pizzas,
           orderMisc: misc,
+          phone: order.phone,
+          userId: order.userId,
         };
       });
       commit("setState", { orders: normalizedOrders });
     },
-    async createOrder({ state, rootState, commit, rootGetters, dispatch }) {
-      const pizzas = rootState.Cart.cart.map((item) => {
+    async createOrder({ rootGetters, dispatch }, orderData) {
+      const pizzas = orderData.pizzas.map((item) => {
         return {
           name: item.name,
           sauceId: item.sauce.id,
@@ -81,7 +83,7 @@ export default {
           }),
         };
       });
-      const misc = rootState.Cart.additional
+      const misc = orderData.misc
         .filter((item) => item.amount > 0)
         .map((item) => {
           return {
@@ -89,19 +91,16 @@ export default {
             quantity: item.amount,
           };
         });
-      const user = rootState.Auth.user;
       const order = {
-        userId: user.id,
-        phone: state.userPhone,
+        userId: orderData.userId,
+        phone: orderData.phone,
         pizzas,
         misc,
+        address: orderData.address,
       };
-      order.address = state.address.street ? state.address : null;
-      console.log("create", order);
 
       try {
         await ordersService.createOrder(order);
-        commit("Cart/setOrderComplete", true, { root: true });
         if (rootGetters["Auth/isAuthed"]) {
           dispatch("getOrders");
         }

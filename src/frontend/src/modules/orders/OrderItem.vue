@@ -78,7 +78,16 @@ export default {
       this.$store.dispatch("Orders/removeOrder", this.order.id);
     },
     onReOrder() {
-      console.log("todo reorder");
+      const { orderPizzas, orderAddress, orderMisc, phone, userId } =
+        this.order;
+      const orderData = {
+        pizzas: orderPizzas,
+        misc: orderMisc,
+        address: orderAddress,
+        phone,
+        userId,
+      };
+      this.$store.dispatch("Orders/createOrder", orderData);
     },
   },
 };
