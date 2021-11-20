@@ -12,8 +12,17 @@ function removeToken() {
   window.localStorage.removeItem(TOKEN_KEY);
 }
 
+function authParams() {
+  return {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  };
+}
+
 export default {
   getToken,
   saveToken,
   removeToken,
+  authParams,
 };

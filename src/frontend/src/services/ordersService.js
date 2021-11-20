@@ -1,40 +1,25 @@
 import axios from "axios";
 import jwtService from "@/services/jwtService";
+import { BASE_URL } from "@/common/constants";
 
-const BASE_URL = "http://localhost:3000";
-
-async function fetchOrders() {
+async function getAll() {
   const url = `${BASE_URL}/orders`;
-  const res = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${jwtService.getToken()}`,
-    },
-  });
+  const res = await axios.get(url, jwtService.authParams());
   return res.data;
 }
 
-function createOrder(payload) {
+function create(payload) {
   const url = `${BASE_URL}/orders`;
-  const params = {
-    headers: {
-      Authorization: `Bearer ${jwtService.getToken()}`,
-    },
-  };
-  return axios.post(url, payload, params);
+  return axios.post(url, payload, jwtService.authParams());
 }
 
-function removeOrder(id) {
+function remove(id) {
   const url = `${BASE_URL}/orders/${id}`;
-  const params = {
-    headers: {
-      Authorization: `Bearer ${jwtService.getToken()}`,
-    },
-  };
-  return axios.delete(url, params);
+  return axios.delete(url, jwtService.authParams());
 }
 
 export default {
-  fetchOrders,
-  createOrder,
-  removeOrder,
+  getAll,
+  create,
+  remove,
 };

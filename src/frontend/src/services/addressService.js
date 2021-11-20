@@ -1,52 +1,31 @@
 import axios from "axios";
 import jwtService from "@/services/jwtService";
+import { BASE_URL } from "@/common/constants";
 
-const BASE_URL = "http://localhost:3000";
-
-async function getAddresses() {
+async function getAll() {
   const url = `${BASE_URL}/addresses`;
-  const res = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${jwtService.getToken()}`,
-    },
-  });
+  const res = await axios.get(url, jwtService.authParams());
   return res.data;
 }
 
-function addAddress(payload) {
+function add(payload) {
   const url = `${BASE_URL}/addresses`;
-  const params = {
-    headers: {
-      Authorization: `Bearer ${jwtService.getToken()}`,
-    },
-  };
-
-  return axios.post(url, payload, params);
+  return axios.post(url, payload, jwtService.authParams());
 }
 
-function editAddress(payload) {
+function edit(payload) {
   const url = `${BASE_URL}/addresses/${payload.id}`;
-  const params = {
-    headers: {
-      Authorization: `Bearer ${jwtService.getToken()}`,
-    },
-  };
-  return axios.put(url, payload, params);
+  return axios.put(url, payload, jwtService.authParams());
 }
 
-function removeAddress(payload) {
+function remove(payload) {
   const url = `${BASE_URL}/addresses/${payload.id}`;
-  const params = {
-    headers: {
-      Authorization: `Bearer ${jwtService.getToken()}`,
-    },
-  };
-  return axios.delete(url, params);
+  return axios.delete(url, jwtService.authParams());
 }
 
 export default {
-  getAddresses,
-  addAddress,
-  editAddress,
-  removeAddress,
+  getAll,
+  add,
+  edit,
+  remove,
 };

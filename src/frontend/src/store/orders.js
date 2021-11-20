@@ -30,7 +30,7 @@ export default {
       const miscById = (id) =>
         rootState.Cart.additional.find((item) => item.id === id);
 
-      const orders = await ordersService.fetchOrders();
+      const orders = await ordersService.getAll();
       const normalizedOrders = orders.map((order) => {
         const pizzas = order.orderPizzas.map((orderPizza) => {
           return {
@@ -100,7 +100,7 @@ export default {
       };
 
       try {
-        await ordersService.createOrder(order);
+        await ordersService.create(order);
         if (rootGetters["Auth/isAuthed"]) {
           dispatch("getOrders");
         }
@@ -110,7 +110,7 @@ export default {
     },
     async removeOrder({ rootGetters, dispatch }, id) {
       try {
-        await ordersService.removeOrder(id);
+        await ordersService.remove(id);
         if (rootGetters["Auth/isAuthed"]) {
           dispatch("getOrders");
         }

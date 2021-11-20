@@ -1,4 +1,4 @@
-import Api from "@/services/Api";
+import publicService from "@/services/publicService";
 
 export default {
   namespaced: true,
@@ -108,11 +108,11 @@ export default {
     async init({ commit }) {
       const [dough, sizes, sauces, ingredients, additional] = await Promise.all(
         [
-          Api.fetchDough(),
-          Api.fetchSizes(),
-          Api.fetchSauces(),
-          Api.fetchIngredients(),
-          Api.fetchAdditional(),
+          publicService.fetchDough(),
+          publicService.fetchSizes(),
+          publicService.fetchSauces(),
+          publicService.fetchIngredients(),
+          publicService.fetchAdditional(),
         ]
       );
       const changes = {

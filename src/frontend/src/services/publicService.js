@@ -1,10 +1,8 @@
 import axios from "axios";
-import jwtService from "@/services/jwtService";
 import colaImg from "@/assets/img/cola.svg";
 import sauceImg from "@/assets/img/sauce.svg";
 import potatoImg from "@/assets/img/potato.svg";
-
-const BASE_URL = "http://localhost:3000";
+import { BASE_URL } from "@/common/constants";
 
 async function fetchDough() {
   const url = `${BASE_URL}/dough`;
@@ -69,37 +67,10 @@ async function fetchAdditional() {
   });
 }
 
-function login(payload) {
-  const url = `${BASE_URL}/login`;
-  return axios.post(url, payload);
-}
-
-async function logout() {
-  const url = `${BASE_URL}/logout`;
-  await axios.delete(url, {
-    headers: {
-      Authorization: `Bearer ${jwtService.getToken()}`,
-    },
-  });
-  jwtService.removeToken();
-}
-
-function whoAmI() {
-  const url = `${BASE_URL}/whoAmI`;
-  return axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${jwtService.getToken()}`,
-    },
-  });
-}
-
 export default {
   fetchDough,
   fetchSizes,
   fetchSauces,
   fetchIngredients,
   fetchAdditional,
-  login,
-  logout,
-  whoAmI,
 };

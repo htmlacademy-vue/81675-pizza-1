@@ -26,12 +26,12 @@ export default {
   },
   actions: {
     async fetchAddresses({ commit }) {
-      const addresses = await addressService.getAddresses();
+      const addresses = await addressService.getAll();
       commit("setState", { addresses });
     },
     async addAddress({ commit, dispatch }, payload) {
       try {
-        await addressService.addAddress(payload);
+        await addressService.add(payload);
         commit("setState", { form: null });
         dispatch("fetchAddresses");
       } catch (e) {
@@ -40,7 +40,7 @@ export default {
     },
     async editAddress({ commit, dispatch }, payload) {
       try {
-        await addressService.editAddress(payload);
+        await addressService.edit(payload);
         commit("setState", { form: null });
         dispatch("fetchAddresses");
       } catch (e) {
@@ -49,7 +49,7 @@ export default {
     },
     async removeAddress({ commit, dispatch }, payload) {
       try {
-        await addressService.removeAddress(payload);
+        await addressService.remove(payload);
         commit("setState", { form: null });
         dispatch("fetchAddresses");
       } catch (e) {

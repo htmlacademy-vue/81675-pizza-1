@@ -1,5 +1,5 @@
-import Api from "@/services/Api";
 import jwtService from "@/services/jwtService";
+import authService from "@/services/authService";
 
 const getEmptyUser = () => ({
   avatar: "",
@@ -31,7 +31,7 @@ export default {
       if (!token) return;
 
       try {
-        const userResult = await Api.whoAmI(token);
+        const userResult = await authService.whoAmI(token);
         const user = userResult.data;
         commit("setState", { token, user });
         commit("Orders/setState", { userPhone: user.phone }, { root: true });
@@ -46,7 +46,7 @@ export default {
     async login({ commit, dispatch }, payload) {
       commit("setState", { loginError: "" });
       try {
-        const loginResult = await Api.login(payload);
+        const loginResult = await authService.login(payload);
         const { token } = loginResult.data;
         jwtService.saveToken(token);
         dispatch("init");
@@ -58,7 +58,7 @@ export default {
       }
     },
     async logout({ commit }) {
-      await Api.logout();
+      await authService.logout();
       commit("setState", { user: getEmptyUser() });
     },
   },
