@@ -66,7 +66,7 @@ export default {
       const phone = this.$store.state.Orders.userPhone;
       const userId = this.$store.state.Auth.user?.id;
       const pizzas = this.$store.state.Cart.cart;
-      const misc = this.$store.state.Cart.additional;
+      const misc = this.$store.state.Cart.misc;
       const orderData = {
         pizzas,
         misc,
@@ -76,7 +76,7 @@ export default {
       const address = this.$store.state.Orders.address;
       orderData.address = address.street ? address : null;
       await this.$store.dispatch("Orders/createOrder", orderData);
-      this.$store.commit("Cart/setOrderComplete", true);
+      this.$store.commit("Cart/setState", { isOrderComplete: true });
     },
   },
 };

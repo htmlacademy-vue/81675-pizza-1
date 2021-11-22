@@ -3,10 +3,12 @@ import publicService from "@/services/publicService";
 export default {
   namespaced: true,
   state: {
+    isLoading: true,
     dough: [],
     sizes: [],
     sauces: [],
     ingredients: [],
+    misc: [],
   },
   mutations: {
     setState(state, newState) {
@@ -34,6 +36,11 @@ export default {
         return state.ingredients.find((item) => item.id === id);
       };
     },
+    miscById(state) {
+      return (id) => {
+        return state.misc.find((item) => item.id === id);
+      };
+    },
     pizzaPrice(state, getters) {
       return (pizza) => {
         const sauce = getters.sauceById(pizza.sauceId);
@@ -53,13 +60,20 @@ export default {
   },
   actions: {
     async init({ commit }) {
-      const [dough, sizes, sauces, ingredients] = await Promise.all([
+      const [dough, sizes, sauces, ingredients, misc] = await Promise.all([
         publicService.fetchDough(),
         publicService.fetchSizes(),
         publicService.fetchSauces(),
         publicService.fetchIngredients(),
+        publicService.fetchAdditional(),
       ]);
-      commit("setState", { dough, sizes, sauces, ingredients });
+      commit("setState", {
+        dough,
+        sizes,
+        sauces,
+        ingredients,
+        misc,
+      });
     },
   },
 };

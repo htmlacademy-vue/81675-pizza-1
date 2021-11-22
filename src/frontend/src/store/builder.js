@@ -1,9 +1,6 @@
-import publicService from "@/services/publicService";
-
 export default {
   namespaced: true,
   state: {
-    isLoading: true,
     selectedIngredients: [],
     selectedDoughId: 0,
     selectedSizeId: 0,
@@ -92,15 +89,12 @@ export default {
   },
   actions: {
     async init({ commit, rootState }) {
-      const [additional] = await Promise.all([publicService.fetchAdditional()]);
       const changes = {
-        isLoading: false,
         selectedDoughId: rootState.Public.dough[0]?.id,
         selectedSizeId: rootState.Public.sizes[0]?.id,
         selectedSauceId: rootState.Public.sauces[0]?.id,
       };
       commit("setState", changes);
-      commit("Cart/setState", { additional }, { root: true });
     },
     editPizza({ commit }, pizza) {
       const selectedIngredients = pizza.ingredients.map((ingredient) => {

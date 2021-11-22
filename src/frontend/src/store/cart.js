@@ -2,7 +2,7 @@ export default {
   namespaced: true,
   state: {
     cart: [],
-    additional: [],
+    misc: [],
     isOrderComplete: false,
   },
   mutations: {
@@ -26,30 +26,22 @@ export default {
     pizzaRemove(state, pizza) {
       pizza.amount--;
     },
-    additionalAdd(state, item) {
-      item.amount++;
-    },
-    additionalRemove(state, item) {
-      item.amount--;
-    },
-    setOrderComplete(state, payload) {
-      state.isOrderComplete = payload;
-    },
     resetCart(state) {
       Object.assign(state, {
         cart: [],
         isOrderComplete: false,
+        misc: [],
       });
-      state.additional.forEach((item) => (item.amount = 0));
     },
     setState(state, newState) {
       Object.assign(state, newState);
     },
   },
   getters: {
-    additionalPrice(state) {
-      return state.additional.reduce((acc, item) => {
-        return acc + item.price * item.amount;
+    miscPrice(state, getters, rootState, rootGetters) {
+      return state.misc.reduce((acc, item) => {
+        const miscData = rootGetters["Public/miscById"](item.id);
+        return acc + miscData.price * item.amount;
       }, 0);
     },
     cartTotalPrice(state, getters, rootState, rootGetters) {
@@ -57,7 +49,20 @@ export default {
         (acc, pizza) => acc + rootGetters["Public/pizzaPrice"](pizza),
         0
       );
-      return pizzasPrice + getters.additionalPrice;
+      return pizzasPrice + getters.miscPrice;
+    },
+  },
+  actions: {
+    miscAdd({ state }, id) {
+      const miscInCart = state.misc.find((item) => item.id === id);
+      miscInCart ? miscInCart.amount++ : state.misc.push({ id, amount: 1 });
+    },
+    miscRemove({ state }, id) {
+      const miscInCart = state.misc.find((item) => item.id === id);
+      if (!miscInCart) return;
+      miscInCart.amount--;
+      if (miscInCart.amount <= 0)
+        state.misc = state.misc.filter((item) => item.id !== id);
     },
   },
 };

@@ -18,10 +18,7 @@ export default {
     },
   },
   actions: {
-    async getOrders({ commit, rootState }) {
-      const miscById = (id) =>
-        rootState.Cart.additional.find((item) => item.id === id);
-
+    async getOrders({ commit }) {
       const orders = await ordersService.getAll();
       const normalizedOrders = orders.map((order) => {
         const pizzas = order.orderPizzas.map((orderPizza) => {
@@ -43,7 +40,7 @@ export default {
         const misc =
           order.orderMisc?.map((orderMisc) => {
             return {
-              ...miscById(orderMisc.miscId),
+              id: orderMisc.miscId,
               amount: orderMisc.quantity,
             };
           }) ?? [];
@@ -75,14 +72,12 @@ export default {
           }),
         };
       });
-      const misc = orderData.misc
-        .filter((item) => item.amount > 0)
-        .map((item) => {
-          return {
-            miscId: item.id,
-            quantity: item.amount,
-          };
-        });
+      const misc = orderData.misc.map((item) => {
+        return {
+          miscId: item.id,
+          quantity: item.amount,
+        };
+      });
       const order = {
         userId: orderData.userId,
         phone: orderData.phone,

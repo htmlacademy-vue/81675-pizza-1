@@ -49,7 +49,6 @@ async function fetchIngredients() {
     return {
       ...item,
       nameEn,
-      amount: 0,
     };
   });
 }
@@ -61,7 +60,6 @@ async function fetchAdditional() {
   return res.data.map((item, index) => {
     return {
       ...item,
-      amount: 0,
       image: images[index],
     };
   });

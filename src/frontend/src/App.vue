@@ -15,7 +15,7 @@ export default {
   name: "App",
   components: { AppLayout, AppSidebarLayout },
   computed: {
-    ...mapState("Builder", ["isLoading"]),
+    ...mapState("Public", ["isLoading"]),
     layout() {
       return this.$route.meta.layout || "AppLayout";
     },
@@ -24,6 +24,7 @@ export default {
     await this.$store.dispatch("Auth/init");
     await this.$store.dispatch("Public/init");
     await this.$store.dispatch("Builder/init");
+    this.$store.commit("Public/setState", { isLoading: false });
   },
 };
 </script>

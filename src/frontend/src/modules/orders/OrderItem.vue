@@ -31,10 +31,15 @@
 
     <ul class="order__additional">
       <li v-for="misc in order.orderMisc" :key="misc.id">
-        <img :src="misc.image" width="20" height="30" :alt="misc.name" />
+        <img
+          :src="miscData(misc.id).image"
+          width="20"
+          height="30"
+          :alt="miscData(misc.id).name"
+        />
         <p>
-          <span>{{ misc.name }}</span>
-          <b>{{ misc.price }} ₽ x {{ misc.amount }}</b>
+          <span>{{ miscData(misc.id).name }}</span>
+          <b>{{ miscData(misc.id).price }} ₽ x {{ misc.amount }}</b>
         </p>
       </li>
     </ul>
@@ -59,7 +64,8 @@ export default {
     ...mapGetters("Public", ["pizzaPrice"]),
     miscPrice() {
       return this.order.orderMisc.reduce((acc, item) => {
-        return acc + item.price * item.amount;
+        const miscData = this.$store.getters["Public/miscById"](item.id);
+        return acc + miscData.price * item.amount;
       }, 0);
     },
     orderAddress() {
@@ -88,6 +94,9 @@ export default {
         userId,
       };
       this.$store.dispatch("Orders/createOrder", orderData);
+    },
+    miscData(id) {
+      return this.$store.getters["Public/miscById"](id);
     },
   },
 };
