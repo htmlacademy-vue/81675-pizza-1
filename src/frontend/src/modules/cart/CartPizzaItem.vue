@@ -11,8 +11,8 @@
       <div class="product__text">
         <h2>{{ item.name }}</h2>
         <ul>
-          <li>{{ item.size.name }}, {{ item.dough.name }}</li>
-          <li>Соус: {{ item.sauce.name }}</li>
+          <li>{{ sizeName }}, {{ doughName }}</li>
+          <li>Соус: {{ sauceName }}</li>
           <li>Начинка: {{ ingredientNames }}</li>
         </ul>
       </div>
@@ -53,11 +53,23 @@ export default {
   computed: {
     ingredientNames() {
       return this.item.ingredients
-        .map((ingredient) => ingredient.name)
+        .map((ingredient) => {
+          return this.$store.getters["Public/ingredientById"](ingredient.id)
+            ?.name;
+        })
         .join(", ");
     },
     price() {
-      return this.$store.getters["Cart/pizzaPrice"](this.item);
+      return this.$store.getters["Public/pizzaPrice"](this.item);
+    },
+    sauceName() {
+      return this.$store.getters["Public/sauceById"](this.item.sauceId)?.name;
+    },
+    sizeName() {
+      return this.$store.getters["Public/sizeById"](this.item.sizeId)?.name;
+    },
+    doughName() {
+      return this.$store.getters["Public/doughById"](this.item.doughId)?.name;
     },
   },
   methods: {

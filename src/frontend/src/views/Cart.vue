@@ -64,7 +64,7 @@ export default {
   methods: {
     async onSubmit() {
       const phone = this.$store.state.Orders.userPhone;
-      const userId = this.$store.state.Auth.user.id;
+      const userId = this.$store.state.Auth.user?.id;
       const pizzas = this.$store.state.Cart.cart;
       const misc = this.$store.state.Cart.additional;
       const orderData = {

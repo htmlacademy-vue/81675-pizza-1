@@ -56,7 +56,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters("Cart", ["pizzaPrice"]),
+    ...mapGetters("Public", ["pizzaPrice"]),
     miscPrice() {
       return this.order.orderMisc.reduce((acc, item) => {
         return acc + item.price * item.amount;

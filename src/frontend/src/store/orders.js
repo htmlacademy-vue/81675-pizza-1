@@ -18,11 +18,7 @@ export default {
     },
   },
   actions: {
-    async getOrders({ commit, rootState, rootGetters }) {
-      const doughById = rootGetters["Public/doughById"];
-      const sauceById = rootGetters["Public/sauceById"];
-      const sizeById = rootGetters["Public/sizeById"];
-      const ingredientById = rootGetters["Public/ingredientById"];
+    async getOrders({ commit, rootState }) {
       const miscById = (id) =>
         rootState.Cart.additional.find((item) => item.id === id);
 
@@ -32,12 +28,12 @@ export default {
           return {
             name: orderPizza.name,
             amount: orderPizza.quantity,
-            dough: doughById(orderPizza.doughId),
-            sauce: sauceById(orderPizza.sauceId),
-            size: sizeById(orderPizza.sizeId),
+            doughId: orderPizza.doughId,
+            sauceId: orderPizza.sauceId,
+            sizeId: orderPizza.sizeId,
             ingredients: orderPizza.ingredients.map((item) => {
               return {
-                ...ingredientById(item.ingredientId),
+                id: item.ingredientId,
                 amount: item.quantity,
               };
             }),
@@ -67,9 +63,9 @@ export default {
       const pizzas = orderData.pizzas.map((item) => {
         return {
           name: item.name,
-          sauceId: item.sauce.id,
-          doughId: item.dough.id,
-          sizeId: item.size.id,
+          sauceId: item.sauceId,
+          doughId: item.doughId,
+          sizeId: item.sizeId,
           quantity: item.amount,
           ingredients: item.ingredients.map((ingredient) => {
             return {

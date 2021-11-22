@@ -49,12 +49,7 @@ export default {
   components: { AppDrop },
   computed: {
     ...mapState("Builder", ["selectedIngredients", "pizzaName", "pizzaAmount"]),
-    ...mapGetters("Builder", [
-      "totalPrice",
-      "pizzaObj",
-      "selectedDough",
-      "selectedSauce",
-    ]),
+    ...mapGetters("Builder", ["totalPrice", "selectedDough", "selectedSauce"]),
     ...mapGetters("Public", ["ingredientById"]),
     doughClassName() {
       return this.selectedDough?.value === "large" ? "big" : "small";
@@ -86,8 +81,24 @@ export default {
       this.$store.commit("Builder/setPizzaName", e.target.value);
     },
     onAddToCart() {
-      const pizza = _.cloneDeep(this.pizzaObj);
-      if (!pizza.id) pizza.id = _.uniqueId();
+      const {
+        pizzaId,
+        pizzaName,
+        selectedDoughId,
+        selectedSauceId,
+        selectedSizeId,
+        pizzaAmount,
+        selectedIngredients,
+      } = this.$store.state.Builder;
+      const pizza = {
+        id: pizzaId || _.uniqueId(),
+        name: pizzaName,
+        doughId: selectedDoughId,
+        sizeId: selectedSizeId,
+        sauceId: selectedSauceId,
+        ingredients: _.cloneDeep(selectedIngredients),
+        amount: pizzaAmount,
+      };
       this.$store.commit("Cart/addToCart", pizza);
       this.$store.dispatch("Builder/resetState");
     },

@@ -11,7 +11,7 @@
       <div class="product__text">
         <h2>{{ pizza.name }}</h2>
         <ul>
-          <li>{{ pizza.size.name }}, {{ doughName }}</li>
+          <li>{{ sizeName }}, {{ doughName }}</li>
           <li>Соус: {{ sauceName }}</li>
           <li>Начинка: {{ ingredients }}</li>
         </ul>
@@ -23,8 +23,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   name: "OrderItemPizza",
   props: {
@@ -34,19 +32,31 @@ export default {
     },
   },
   computed: {
-    ...mapGetters("Cart", ["pizzaPrice"]),
     doughName() {
-      return this.pizza.dough?.name?.toLowerCase();
+      return this.$store.getters["Public/doughById"](
+        this.pizza.doughId
+      )?.name?.toLowerCase();
     },
     sauceName() {
-      return this.pizza.sauce?.name?.toLowerCase();
+      return this.$store.getters["Public/sauceById"](
+        this.pizza.sauceId
+      )?.name?.toLowerCase();
+    },
+    sizeName() {
+      return this.$store.getters["Public/sizeById"](
+        this.pizza.sauceId
+      )?.name?.toLowerCase();
     },
     price() {
-      return this.pizzaPrice(this.pizza);
+      return this.$store.getters["Public/pizzaPrice"](this.pizza);
     },
     ingredients() {
       return this.pizza.ingredients
-        .map((item) => item?.name?.toLowerCase())
+        .map((item) => {
+          return this.$store.getters["Public/ingredientById"](
+            item.id
+          )?.name?.toLowerCase();
+        })
         .join(", ");
     },
   },

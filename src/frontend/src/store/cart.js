@@ -52,22 +52,9 @@ export default {
         return acc + item.price * item.amount;
       }, 0);
     },
-    pizzaPrice() {
-      return (pizza) => {
-        const { dough, size, sauce, ingredients } = pizza;
-        const ingredientsPrice = ingredients.reduce((acc, item) => {
-          return acc + item.price * item.amount;
-        }, 0);
-        return (
-          size.multiplier *
-          (dough.price + sauce.price + ingredientsPrice) *
-          pizza.amount
-        );
-      };
-    },
-    cartTotalPrice(state, getters) {
+    cartTotalPrice(state, getters, rootState, rootGetters) {
       const pizzasPrice = state.cart.reduce(
-        (acc, pizza) => acc + getters.pizzaPrice(pizza),
+        (acc, pizza) => acc + rootGetters["Public/pizzaPrice"](pizza),
         0
       );
       return pizzasPrice + getters.additionalPrice;

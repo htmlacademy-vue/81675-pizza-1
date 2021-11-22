@@ -34,6 +34,22 @@ export default {
         return state.ingredients.find((item) => item.id === id);
       };
     },
+    pizzaPrice(state, getters) {
+      return (pizza) => {
+        const sauce = getters.sauceById(pizza.sauceId);
+        const size = getters.sizeById(pizza.sizeId);
+        const dough = getters.doughById(pizza.doughId);
+        const ingredientsPrice = pizza.ingredients.reduce((acc, item) => {
+          const itemPrice = getters.ingredientById(item.id).price;
+          return acc + itemPrice * item.amount;
+        }, 0);
+        return (
+          size.multiplier *
+          (dough.price + sauce.price + ingredientsPrice) *
+          pizza.amount
+        );
+      };
+    },
   },
   actions: {
     async init({ commit }) {

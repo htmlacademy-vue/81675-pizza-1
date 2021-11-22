@@ -4,9 +4,6 @@ export default {
   namespaced: true,
   state: {
     isLoading: true,
-    dough: [],
-    sizes: [],
-    sauces: [],
     selectedIngredients: [],
     selectedDoughId: 0,
     selectedSizeId: 0,
@@ -82,44 +79,15 @@ export default {
         return acc + price * item.amount;
       }, 0);
     },
-    totalPrice(state, getters) {
-      return (
-        state.pizzaAmount *
-        getters.selectedSize.multiplier *
-        (getters.selectedDough?.price +
-          getters.selectedSauce.price +
-          getters.ingredientsPrice)
-      );
-    },
-    pizzaObj(state, getters, rootState, rootGetters) {
-      const ingredients = state.selectedIngredients.map((item) => {
-        const dataItem = rootGetters["Public/ingredientById"](item.id);
-        return {
-          ...item,
-          price: dataItem.price,
-        };
-      });
-      return {
-        id: state.pizzaId,
-        name: state.pizzaName,
-        dough: {
-          id: getters.selectedDough.id,
-          name: getters.selectedDough.name,
-          price: getters.selectedDough.price,
-        },
-        size: {
-          id: getters.selectedSize.id,
-          name: getters.selectedSize.name,
-          multiplier: getters.selectedSize.multiplier,
-        },
-        sauce: {
-          id: getters.selectedSauce.id,
-          name: getters.selectedSauce.name,
-          price: getters.selectedSauce.price,
-        },
-        ingredients,
+    totalPrice(state, getters, rootState, rootGetters) {
+      const pizza = {
+        doughId: state.selectedDoughId,
+        sizeId: state.selectedSizeId,
+        sauceId: state.selectedSauceId,
+        ingredients: state.selectedIngredients,
         amount: state.pizzaAmount,
       };
+      return rootGetters["Public/pizzaPrice"](pizza);
     },
   },
   actions: {
