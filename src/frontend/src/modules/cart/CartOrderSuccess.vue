@@ -24,7 +24,7 @@ export default {
   methods: {
     onClose() {
       this.$store.commit("Cart/resetCart");
-      this.$store.commit("Builder/resetState");
+      this.$store.dispatch("Builder/resetState");
       const path = this.isAuthed ? "/orders" : "/";
       this.$router.push({ path });
     },

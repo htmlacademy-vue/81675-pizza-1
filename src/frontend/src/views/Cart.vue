@@ -60,6 +60,12 @@ export default {
     isCartEmpty() {
       return this.cart.length === 0;
     },
+    addressData() {
+      const { addressId, isSelfDelivery } = this.$store.state.Orders;
+      if (isSelfDelivery) return null;
+      if (addressId) return { id: addressId };
+      return this.$store.state.Order;
+    },
   },
   methods: {
     async onSubmit() {
@@ -72,9 +78,8 @@ export default {
         misc,
         userId,
         phone,
+        address: this.addressData,
       };
-      const address = this.$store.state.Orders.address;
-      orderData.address = address.street ? address : null;
       await this.$store.dispatch("Orders/createOrder", orderData);
       this.$store.commit("Cart/setState", { isOrderComplete: true });
     },

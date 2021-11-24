@@ -4,7 +4,12 @@
       <label class="cart-form__select">
         <span class="cart-form__label">Получение заказа:</span>
 
-        <select name="test" class="select" v-model="deliveryOptionId">
+        <select
+          name="test"
+          class="select"
+          v-model="deliveryOptionId"
+          @change="onDeliveryOptionChange"
+        >
           <option :value="-1">Заберу сам</option>
           <option :value="0">Новый адрес</option>
           <option
@@ -90,25 +95,22 @@ export default {
       return this.deliveryOptionId > 0;
     },
   },
-  data() {
-    return {
-      deliveryOptionId: -1,
-    };
+  created() {
+    if (this.$store.state.Orders.isSelfDelivery) {
+      this.deliveryOptionId = -1;
+    }
   },
-  watch: {
-    deliveryOptionId(value) {
-      const address = this.addresses.find((item) => item.id === value);
-      const addressData = address
-        ? {
-            street: address.street,
-            building: address.building,
-            flat: address.flat,
-            comment: address.comment,
-          }
-        : { street: "", building: "", flat: "", comment: "" };
-      this.$store.commit("Orders/setState", { address: addressData });
-      Object.assign(this, addressData);
-    },
+  data() {
+    const { isSelfDelivery, addressId } = this.$store.state.Orders;
+    let deliveryOptionId = null;
+    if (isSelfDelivery) {
+      deliveryOptionId = -1;
+    } else {
+      deliveryOptionId = addressId ? addressId : 0;
+    }
+    return {
+      deliveryOptionId,
+    };
   },
   methods: {
     updateAddress(payload) {
@@ -127,6 +129,21 @@ export default {
     },
     onUserPhoneInput(e) {
       this.$store.commit("Orders/setState", { userPhone: e.target.value });
+    },
+    onDeliveryOptionChange(e) {
+      const value = Number(e.target.value);
+      const isSelfDelivery = value === -1;
+      const addressId = value ? value : null;
+      this.$store.commit("Orders/setState", { isSelfDelivery, addressId });
+      const address = this.addresses.find((item) => item.id === value);
+      const addressData = address
+        ? {
+            street: address.street,
+            building: address.building,
+            flat: address.flat,
+          }
+        : { street: "", building: "", flat: "" };
+      this.$store.commit("Orders/setState", { address: addressData });
     },
   },
 };

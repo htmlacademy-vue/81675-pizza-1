@@ -5,11 +5,12 @@ export default {
   state: {
     orders: [],
     userPhone: "",
+    addressId: null,
+    isSelfDelivery: true,
     address: {
       street: "",
       building: "",
       flat: "",
-      comment: "",
     },
   },
   mutations: {
