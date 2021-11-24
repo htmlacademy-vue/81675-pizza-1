@@ -75,10 +75,10 @@ export default {
   },
   methods: {
     onDrop(ingredient) {
-      this.$store.commit("Builder/ingredientAddById", ingredient.id);
+      this.$store.commit("Builder/ingredientAdd", ingredient.id);
     },
     onPizzaNameChange(e) {
-      this.$store.commit("Builder/setPizzaName", e.target.value);
+      this.$store.commit("Builder/setState", { pizzaName: e.target.value });
     },
     onAddToCart() {
       const {

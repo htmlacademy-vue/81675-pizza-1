@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     onSelect(item) {
-      this.$store.commit("Builder/selectSize", item.id);
+      this.$store.commit("Builder/setState", { selectedSizeId: item.id });
     },
   },
 };

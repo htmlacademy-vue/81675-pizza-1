@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     onSauceChange(item) {
-      this.$store.commit("Builder/selectSauce", item.id);
+      this.$store.commit("Builder/setState", { selectedSauceId: item.id });
     },
   },
 };

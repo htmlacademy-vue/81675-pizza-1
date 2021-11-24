@@ -40,7 +40,7 @@ export default {
       return item.id === this.selectedDoughId;
     },
     onChange(item) {
-      this.$store.commit("Builder/selectDough", item.id);
+      this.$store.commit("Builder/setState", { selectedDoughId: item.id });
     },
   },
 };

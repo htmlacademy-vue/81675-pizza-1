@@ -10,27 +10,6 @@ export default {
     pizzaId: "",
   },
   mutations: {
-    setIngredients(state, payload) {
-      state.selectedIngredients = payload;
-    },
-    selectDough(state, payload) {
-      state.selectedDoughId = payload;
-    },
-    selectSize(state, payload) {
-      state.selectedSizeId = payload;
-    },
-    selectSauce(state, payload) {
-      state.selectedSauceId = payload;
-    },
-    setPizzaName(state, payload) {
-      state.pizzaName = payload;
-    },
-    setPizzaAmount(state, payload) {
-      state.pizzaAmount = payload;
-    },
-    setPizzaId(state, payload) {
-      state.pizzaId = payload;
-    },
     ingredientAdd(state, id) {
       const builderItem = state.selectedIngredients.find(
         (item) => item.id === id
@@ -51,10 +30,6 @@ export default {
           (item) => item.id !== id
         );
       }
-    },
-    ingredientAddById(state, payload) {
-      const item = state.ingredients.find((item) => item.id === payload);
-      item.amount++;
     },
     setState(state, newState) {
       Object.assign(state, newState);
@@ -89,25 +64,18 @@ export default {
   },
   actions: {
     async init({ commit, rootState }) {
-      const changes = {
+      commit("setState", {
         selectedDoughId: rootState.Public.dough[0]?.id,
         selectedSizeId: rootState.Public.sizes[0]?.id,
         selectedSauceId: rootState.Public.sauces[0]?.id,
-      };
-      commit("setState", changes);
+      });
     },
     editPizza({ commit }, pizza) {
-      const selectedIngredients = pizza.ingredients.map((ingredient) => {
-        return {
-          id: ingredient.id,
-          amount: ingredient.quantity,
-        };
-      });
       commit("setState", {
-        selectedDoughId: pizza.dough.id,
-        selectedSizeId: pizza.size.id,
-        selectedSauce: pizza.sauce.id,
-        selectedIngredients,
+        selectedDoughId: pizza.doughId,
+        selectedSizeId: pizza.sizeId,
+        selectedSauce: pizza.sauceId,
+        selectedIngredients: pizza.ingredients,
         pizzaName: pizza.name,
         pizzaAmount: pizza.amount,
         pizzaId: pizza.id,
