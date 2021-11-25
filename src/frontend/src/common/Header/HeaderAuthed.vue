@@ -36,7 +36,7 @@ export default {
   methods: {
     onLogout() {
       this.$store.dispatch("Auth/logout");
-      this.$router.push({ path: "/" });
+      if (this.$route.name !== "Index") this.$router.push({ name: "Index" });
     },
   },
 };

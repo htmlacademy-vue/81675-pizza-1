@@ -5,6 +5,8 @@ import Login from "@/views/Login";
 import Cart from "@/views/Cart";
 import Orders from "@/views/Orders";
 import Profile from "@/views/Profile";
+import isLoggedIn from "@/middlewares/isLoggedIn";
+import isNotLoggedIn from "@/middlewares/isNotLoggedIn";
 
 Vue.use(VueRouter);
 
@@ -23,6 +25,7 @@ const routes = [
     component: Login,
     meta: {
       layout: "AppLayout",
+      middleware: isNotLoggedIn,
     },
   },
   {
@@ -39,6 +42,7 @@ const routes = [
     component: Orders,
     meta: {
       layout: "AppSidebarLayout",
+      middleware: isLoggedIn,
     },
   },
   {
@@ -47,6 +51,7 @@ const routes = [
     component: Profile,
     meta: {
       layout: "AppSidebarLayout",
+      middleware: isLoggedIn,
     },
   },
 ];
@@ -54,6 +59,14 @@ const routes = [
 const router = new VueRouter({
   mode: "history",
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta?.middleware) {
+    to.meta.middleware({ to, from, next });
+  } else {
+    next();
+  }
 });
 
 export default router;
