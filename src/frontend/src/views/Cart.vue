@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     ...mapState("Auth", ["user"]),
-    ...mapState("Cart", ["isOrderComplete", "cart", "additional"]),
+    ...mapState("Cart", ["isOrderComplete", "cart"]),
     ...mapGetters("Cart", ["cartTotalPrice"]),
     isCartEmpty() {
       return this.cart.length === 0;
@@ -65,6 +65,10 @@ export default {
       if (isSelfDelivery) return null;
       if (addressId) return { id: addressId };
       return this.$store.state.Orders.address;
+    },
+    isNewAddress() {
+      const { addressId, isSelfDelivery } = this.$store.state.Orders;
+      return !isSelfDelivery && !addressId;
     },
   },
   methods: {
@@ -82,6 +86,9 @@ export default {
       };
       await this.$store.dispatch("Orders/createOrder", orderData);
       this.$store.commit("Cart/setState", { isOrderComplete: true });
+      if (this.isNewAddress) {
+        await this.$store.dispatch("Address/fetchAddresses");
+      }
     },
   },
 };

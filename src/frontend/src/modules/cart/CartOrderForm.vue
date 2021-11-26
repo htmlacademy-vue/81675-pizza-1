@@ -49,7 +49,7 @@ export default {
   components: { CartAddressForm },
   computed: {
     ...mapGetters("Auth", ["isAuthed"]),
-    ...mapState("Address", ["addresses", "form"]),
+    ...mapState("Address", ["addresses"]),
     ...mapState("Orders", [
       "address",
       "userPhone",

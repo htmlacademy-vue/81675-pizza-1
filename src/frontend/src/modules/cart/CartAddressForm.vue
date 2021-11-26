@@ -56,7 +56,7 @@ export default {
   methods: {
     updateAddress(payload) {
       this.$store.commit("Orders/setState", {
-        address: { ...this.address, ...payload },
+        address: { ...this.addressData, ...payload },
       });
     },
     onStreetInput(e) {
