@@ -20,6 +20,17 @@ export default {
       const index = state.cart.findIndex((item) => item === payload);
       state.cart.splice(index, 1);
     },
+    miscAdd(state, id) {
+      const miscInCart = state.misc.find((item) => item.id === id);
+      miscInCart ? miscInCart.amount++ : state.misc.push({ id, amount: 1 });
+    },
+    miscRemove(state, id) {
+      const miscInCart = state.misc.find((item) => item.id === id);
+      if (!miscInCart) return;
+      miscInCart.amount--;
+      if (miscInCart.amount <= 0)
+        state.misc = state.misc.filter((item) => item.id !== id);
+    },
     pizzaAdd(state, pizza) {
       pizza.amount++;
     },
@@ -50,19 +61,6 @@ export default {
         0
       );
       return pizzasPrice + getters.miscPrice;
-    },
-  },
-  actions: {
-    miscAdd({ state }, id) {
-      const miscInCart = state.misc.find((item) => item.id === id);
-      miscInCart ? miscInCart.amount++ : state.misc.push({ id, amount: 1 });
-    },
-    miscRemove({ state }, id) {
-      const miscInCart = state.misc.find((item) => item.id === id);
-      if (!miscInCart) return;
-      miscInCart.amount--;
-      if (miscInCart.amount <= 0)
-        state.misc = state.misc.filter((item) => item.id !== id);
     },
   },
 };

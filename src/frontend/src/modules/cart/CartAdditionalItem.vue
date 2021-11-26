@@ -40,10 +40,10 @@ export default {
   },
   methods: {
     onPlus() {
-      this.$store.dispatch("Cart/miscAdd", this.item.id);
+      this.$store.commit("Cart/miscAdd", this.item.id);
     },
     onMinus() {
-      this.$store.dispatch("Cart/miscRemove", this.item.id);
+      this.$store.commit("Cart/miscRemove", this.item.id);
     },
   },
 };
