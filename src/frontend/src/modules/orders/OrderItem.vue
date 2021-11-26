@@ -84,16 +84,17 @@ export default {
       this.$store.dispatch("Orders/removeOrder", this.order.id);
     },
     onReOrder() {
-      const { orderPizzas, orderAddress, orderMisc, phone, userId } =
-        this.order;
-      const orderData = {
-        pizzas: orderPizzas,
-        misc: orderMisc,
-        address: orderAddress,
-        phone,
-        userId,
-      };
-      this.$store.dispatch("Orders/createOrder", orderData);
+      const { orderPizzas, orderMisc, phone, addressId } = this.order;
+      this.$store.commit("Cart/setState", {
+        cart: orderPizzas,
+        misc: orderMisc || [],
+      });
+      this.$store.commit("Orders/setState", {
+        addressId,
+        isSelfDelivery: !addressId,
+        userPhone: phone,
+      });
+      this.$router.push({ name: "Cart" });
     },
     miscData(id) {
       return this.$store.getters["Public/miscById"](id);

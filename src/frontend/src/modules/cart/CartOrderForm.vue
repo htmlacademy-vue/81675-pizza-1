@@ -4,12 +4,7 @@
       <label class="cart-form__select">
         <span class="cart-form__label">Получение заказа:</span>
 
-        <select
-          name="test"
-          class="select"
-          v-model="deliveryOptionId"
-          @change="onDeliveryOptionChange"
-        >
+        <select name="test" class="select" v-model="deliveryOptionId">
           <option :value="-1">Заберу сам</option>
           <option :value="0">Новый адрес</option>
           <option
@@ -33,72 +28,37 @@
         />
       </label>
 
-      <div class="cart-form__address" v-if="isAddressFormVisible">
-        <span class="cart-form__label">Новый адрес:</span>
-
-        <div class="cart-form__input">
-          <label class="input">
-            <span>Улица*</span>
-            <input
-              type="text"
-              name="street"
-              :value="address.street"
-              @input="onStreetInput"
-              :disabled="isAddressInputDisabled"
-            />
-          </label>
-        </div>
-
-        <div class="cart-form__input cart-form__input--small">
-          <label class="input">
-            <span>Дом*</span>
-            <input
-              type="text"
-              name="house"
-              :value="address.building"
-              @input="onBuildingInput"
-              :disabled="isAddressInputDisabled"
-            />
-          </label>
-        </div>
-
-        <div class="cart-form__input cart-form__input--small">
-          <label class="input">
-            <span>Квартира</span>
-            <input
-              type="text"
-              name="apartment"
-              :value="address.flat"
-              @input="onFlatInput"
-              :disabled="isAddressInputDisabled"
-            />
-          </label>
-        </div>
-      </div>
+      <template v-if="!isSelfDelivery">
+        <CartAddressForm
+          v-if="existingAddressData"
+          :address-data="existingAddressData"
+          is-disabled
+        />
+        <CartAddressForm v-else :address-data="address" />
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import CartAddressForm from "@/modules/cart/CartAddressForm";
 
 export default {
   name: "CartOrderForm",
+  components: { CartAddressForm },
   computed: {
     ...mapGetters("Auth", ["isAuthed"]),
     ...mapState("Address", ["addresses", "form"]),
-    ...mapState("Orders", ["address", "userPhone"]),
-    isAddressFormVisible() {
-      return this.deliveryOptionId !== -1;
+    ...mapState("Orders", [
+      "address",
+      "userPhone",
+      "addressId",
+      "isSelfDelivery",
+    ]),
+    existingAddressData() {
+      return this.addresses.find((item) => item.id === this.addressId);
     },
-    isAddressInputDisabled() {
-      return this.deliveryOptionId > 0;
-    },
-  },
-  created() {
-    if (this.$store.state.Orders.isSelfDelivery) {
-      this.deliveryOptionId = -1;
-    }
   },
   data() {
     const { isSelfDelivery, addressId } = this.$store.state.Orders;
@@ -112,38 +72,17 @@ export default {
       deliveryOptionId,
     };
   },
-  methods: {
-    updateAddress(payload) {
-      this.$store.commit("Orders/setState", {
-        address: { ...this.address, ...payload },
-      });
-    },
-    onStreetInput(e) {
-      this.updateAddress({ street: e.target.value });
-    },
-    onBuildingInput(e) {
-      this.updateAddress({ building: e.target.value });
-    },
-    onFlatInput(e) {
-      this.updateAddress({ flat: e.target.value });
-    },
-    onUserPhoneInput(e) {
-      this.$store.commit("Orders/setState", { userPhone: e.target.value });
-    },
-    onDeliveryOptionChange(e) {
-      const value = Number(e.target.value);
+  watch: {
+    deliveryOptionId(v) {
+      const value = Number(v);
       const isSelfDelivery = value === -1;
       const addressId = value ? value : null;
       this.$store.commit("Orders/setState", { isSelfDelivery, addressId });
-      const address = this.addresses.find((item) => item.id === value);
-      const addressData = address
-        ? {
-            street: address.street,
-            building: address.building,
-            flat: address.flat,
-          }
-        : { street: "", building: "", flat: "" };
-      this.$store.commit("Orders/setState", { address: addressData });
+    },
+  },
+  methods: {
+    onUserPhoneInput(e) {
+      this.$store.commit("Orders/setState", { userPhone: e.target.value });
     },
   },
 };

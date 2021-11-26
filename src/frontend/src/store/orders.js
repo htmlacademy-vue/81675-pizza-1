@@ -53,6 +53,7 @@ export default {
           orderMisc: misc,
           phone: order.phone,
           userId: order.userId,
+          addressId: order.addressId,
         };
       });
       commit("setState", { orders: normalizedOrders });
