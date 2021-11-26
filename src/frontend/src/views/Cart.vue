@@ -64,7 +64,7 @@ export default {
       const { addressId, isSelfDelivery } = this.$store.state.Orders;
       if (isSelfDelivery) return null;
       if (addressId) return { id: addressId };
-      return this.$store.state.Order;
+      return this.$store.state.Orders.address;
     },
   },
   methods: {
