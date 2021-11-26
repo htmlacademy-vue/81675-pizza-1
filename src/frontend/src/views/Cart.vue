@@ -54,15 +54,41 @@ export default {
     CartAdditionalList,
   },
   computed: {
+    ...mapState("Auth", ["user"]),
     ...mapState("Cart", ["isOrderComplete", "cart"]),
     ...mapGetters("Cart", ["cartTotalPrice"]),
     isCartEmpty() {
       return this.cart.length === 0;
     },
+    addressData() {
+      const { addressId, isSelfDelivery } = this.$store.state.Orders;
+      if (isSelfDelivery) return null;
+      if (addressId) return { id: addressId };
+      return this.$store.state.Orders.address;
+    },
+    isNewAddress() {
+      const { addressId, isSelfDelivery } = this.$store.state.Orders;
+      return !isSelfDelivery && !addressId;
+    },
   },
   methods: {
-    onSubmit() {
-      this.$store.commit("Cart/setOrderComplete", true);
+    async onSubmit() {
+      const phone = this.$store.state.Orders.userPhone;
+      const userId = this.$store.state.Auth.user?.id;
+      const pizzas = this.$store.state.Cart.cart;
+      const misc = this.$store.state.Cart.misc;
+      const orderData = {
+        pizzas,
+        misc,
+        userId,
+        phone,
+        address: this.addressData,
+      };
+      await this.$store.dispatch("Orders/createOrder", orderData);
+      this.$store.commit("Cart/setState", { isOrderComplete: true });
+      if (this.isNewAddress) {
+        await this.$store.dispatch("Address/fetchAddresses");
+      }
     },
   },
 };

@@ -15,7 +15,7 @@
             name="dough"
             :value="item.value"
             class="visually-hidden"
-            :checked="item.id === selectedDough.id"
+            :checked="isChecked(item)"
             @change="onChange(item)"
           />
           <b>{{ item.name }}</b>
@@ -32,11 +32,15 @@ import { mapState } from "vuex";
 export default {
   name: "BuilderDoughSelector",
   computed: {
-    ...mapState("Builder", ["dough", "selectedDough"]),
+    ...mapState("Public", ["dough"]),
+    ...mapState("Builder", ["selectedDoughId"]),
   },
   methods: {
+    isChecked(item) {
+      return item.id === this.selectedDoughId;
+    },
     onChange(item) {
-      this.$store.commit("Builder/selectDough", item);
+      this.$store.commit("Builder/setState", { selectedDoughId: item.id });
     },
   },
 };

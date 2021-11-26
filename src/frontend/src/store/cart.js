@@ -1,31 +1,9 @@
-import miscData from "@/static/misc.json";
-import colaImg from "@/assets/img/cola.svg";
-import sauceImg from "@/assets/img/sauce.svg";
-import potatoImg from "@/assets/img/potato.svg";
-
-const images = [
-  { id: 1, image: colaImg },
-  { id: 2, image: sauceImg },
-  { id: 3, image: potatoImg },
-];
-
-const defaultState = () => ({
-  cart: [],
-  additional: miscData.map((item) => {
-    const img = images.find((imgItem) => imgItem.id === item.id);
-    return {
-      ...item,
-      image: img.image,
-      amount: 0,
-    };
-  }),
-  isOrderComplete: false,
-});
-
 export default {
   namespaced: true,
   state: {
-    ...defaultState(),
+    cart: [],
+    misc: [],
+    isOrderComplete: false,
   },
   mutations: {
     addToCart(state, pizza) {
@@ -42,50 +20,47 @@ export default {
       const index = state.cart.findIndex((item) => item === payload);
       state.cart.splice(index, 1);
     },
+    miscAdd(state, id) {
+      const miscInCart = state.misc.find((item) => item.id === id);
+      miscInCart ? miscInCart.amount++ : state.misc.push({ id, amount: 1 });
+    },
+    miscRemove(state, id) {
+      const miscInCart = state.misc.find((item) => item.id === id);
+      if (!miscInCart) return;
+      miscInCart.amount--;
+      if (miscInCart.amount <= 0)
+        state.misc = state.misc.filter((item) => item.id !== id);
+    },
     pizzaAdd(state, pizza) {
       pizza.amount++;
     },
     pizzaRemove(state, pizza) {
       pizza.amount--;
     },
-    additionalAdd(state, item) {
-      item.amount++;
-    },
-    additionalRemove(state, item) {
-      item.amount--;
-    },
-    setOrderComplete(state, payload) {
-      state.isOrderComplete = payload;
-    },
     resetCart(state) {
-      Object.assign(state, defaultState());
+      Object.assign(state, {
+        cart: [],
+        isOrderComplete: false,
+        misc: [],
+      });
+    },
+    setState(state, newState) {
+      Object.assign(state, newState);
     },
   },
   getters: {
-    additionalPrice(state) {
-      return state.additional.reduce((acc, item) => {
-        return acc + item.price * item.amount;
+    miscPrice(state, getters, rootState, rootGetters) {
+      return state.misc.reduce((acc, item) => {
+        const miscData = rootGetters["Public/miscById"](item.id);
+        return acc + miscData.price * item.amount;
       }, 0);
     },
-    pizzaPrice() {
-      return (pizza) => {
-        const { dough, size, sauce, ingredients } = pizza;
-        const ingredientsPrice = ingredients.reduce((acc, item) => {
-          return acc + item.price * item.amount;
-        }, 0);
-        return (
-          size.multiplier *
-          (dough.price + sauce.price + ingredientsPrice) *
-          pizza.amount
-        );
-      };
-    },
-    cartTotalPrice(state, getters) {
+    cartTotalPrice(state, getters, rootState, rootGetters) {
       const pizzasPrice = state.cart.reduce(
-        (acc, pizza) => acc + getters.pizzaPrice(pizza),
+        (acc, pizza) => acc + rootGetters["Public/pizzaPrice"](pizza),
         0
       );
-      return pizzasPrice + getters.additionalPrice;
+      return pizzasPrice + getters.miscPrice;
     },
   },
 };

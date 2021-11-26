@@ -16,7 +16,7 @@
               type="radio"
               name="sauce"
               :value="sauce.value"
-              :checked="sauce.id === selectedSauce.id"
+              :checked="sauce.id === selectedSauceId"
               @change="onSauceChange(sauce)"
             />
             <span>{{ sauce.name }}</span>
@@ -46,11 +46,12 @@ export default {
   name: "BuilderIngredientsSelector",
   components: { BuilderIngredientItem },
   computed: {
-    ...mapState("Builder", ["sauces", "ingredients", "selectedSauce"]),
+    ...mapState("Public", ["sauces", "ingredients"]),
+    ...mapState("Builder", ["selectedSauceId"]),
   },
   methods: {
     onSauceChange(item) {
-      this.$store.commit("Builder/selectSauce", item);
+      this.$store.commit("Builder/setState", { selectedSauceId: item.id });
     },
   },
 };

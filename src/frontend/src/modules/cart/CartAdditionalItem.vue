@@ -7,7 +7,7 @@
 
     <div class="additional-list__wrapper">
       <PlusMinus
-        :value="item.amount"
+        :value="amount"
         @plus="onPlus"
         @minus="onMinus"
         type="orange"
@@ -30,12 +30,20 @@ export default {
       required: true,
     },
   },
+  computed: {
+    amount() {
+      const miscInCart = this.$store.state.Cart.misc.find(
+        (item) => item.id === this.item.id
+      );
+      return miscInCart?.amount ?? 0;
+    },
+  },
   methods: {
     onPlus() {
-      this.$store.commit("Cart/additionalAdd", this.item);
+      this.$store.commit("Cart/miscAdd", this.item.id);
     },
     onMinus() {
-      this.$store.commit("Cart/additionalRemove", this.item);
+      this.$store.commit("Cart/miscRemove", this.item.id);
     },
   },
 };

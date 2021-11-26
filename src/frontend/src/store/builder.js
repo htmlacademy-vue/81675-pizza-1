@@ -1,133 +1,96 @@
-import pizzaData from "@/static/pizza.json";
-
-function initIngredients(ingredients) {
-  return ingredients.map((item) => {
-    const match = item.image.match(/(\w+).svg/);
-    const nameEn = match?.[1] ?? "";
-    return {
-      ...item,
-      nameEn,
-      amount: 0,
-    };
-  });
-}
-
 export default {
   namespaced: true,
   state: {
-    dough: pizzaData.dough,
-    sizes: pizzaData.sizes,
-    sauces: pizzaData.sauces,
-    ingredients: initIngredients(pizzaData.ingredients),
-    selectedDough: pizzaData.dough[0],
-    selectedSize: pizzaData.sizes[0],
-    selectedSauce: pizzaData.sauces[0],
+    selectedIngredients: [],
+    selectedDoughId: 0,
+    selectedSizeId: 0,
+    selectedSauceId: 0,
     pizzaName: "",
     pizzaAmount: 1,
     pizzaId: "",
   },
   mutations: {
-    setIngredients(state, payload) {
-      state.ingredients = payload;
+    ingredientAdd(state, id) {
+      const builderItem = state.selectedIngredients.find(
+        (item) => item.id === id
+      );
+      if (builderItem) {
+        builderItem.amount++;
+      } else {
+        state.selectedIngredients.push({ id, amount: 1 });
+      }
     },
-    selectDough(state, payload) {
-      state.selectedDough = payload;
+    ingredientRemove(state, id) {
+      const builderItem = state.selectedIngredients.find(
+        (item) => item.id === id
+      );
+      builderItem.amount--;
+      if (builderItem.amount <= 0) {
+        state.selectedIngredients = state.selectedIngredients.filter(
+          (item) => item.id !== id
+        );
+      }
     },
-    selectSize(state, payload) {
-      state.selectedSize = payload;
-    },
-    selectSauce(state, payload) {
-      state.selectedSauce = payload;
-    },
-    setPizzaName(state, payload) {
-      state.pizzaName = payload;
-    },
-    setPizzaAmount(state, payload) {
-      state.pizzaAmount = payload;
-    },
-    setPizzaId(state, payload) {
-      state.pizzaId = payload;
-    },
-    ingredientAdd(state, payload) {
-      payload.amount++;
-    },
-    ingredientRemove(state, payload) {
-      payload.amount--;
-    },
-    ingredientAddById(state, payload) {
-      const item = state.ingredients.find((item) => item.id === payload);
-      item.amount++;
-    },
-    resetState(state) {
-      state.selectedDough = pizzaData.dough[0];
-      state.selectedSize = pizzaData.sizes[0];
-      state.selectedSauce = pizzaData.sauces[0];
-      state.pizzaName = "";
-      state.pizzaAmount = 1;
-      state.ingredients = initIngredients(pizzaData.ingredients);
+    setState(state, newState) {
+      Object.assign(state, newState);
     },
   },
   getters: {
-    ingredientsPrice(state) {
-      return state.ingredients.reduce((acc, item) => {
-        return acc + item.price * item.amount;
+    selectedDough(state, getters, rootState, rootGetters) {
+      return rootGetters["Public/doughById"](state.selectedDoughId);
+    },
+    selectedSize(state, getters, rootState, rootGetters) {
+      return rootGetters["Public/sizeById"](state.selectedSizeId);
+    },
+    selectedSauce(state, getters, rootState, rootGetters) {
+      return rootGetters["Public/sauceById"](state.selectedSauceId);
+    },
+    ingredientsPrice(state, getters, rootState, rootGetters) {
+      return state.selectedIngredients.reduce((acc, item) => {
+        const { price } = rootGetters["Public/ingredientById"](item.id);
+        return acc + price * item.amount;
       }, 0);
     },
-    totalPrice(state, getters) {
-      return (
-        state.pizzaAmount *
-        state.selectedSize.multiplier *
-        (state.selectedDough.price +
-          state.selectedSauce.price +
-          getters.ingredientsPrice)
-      );
-    },
-    pizzaIngredients(state) {
-      return state.ingredients.filter((item) => item.amount > 0);
-    },
-    pizzaObj(state, getters) {
-      return {
-        id: state.pizzaId,
-        name: state.pizzaName,
-        dough: {
-          id: state.selectedDough.id,
-          name: state.selectedDough.name,
-          price: state.selectedDough.price,
-        },
-        size: {
-          id: state.selectedSize.id,
-          name: state.selectedSize.name,
-          multiplier: state.selectedSize.multiplier,
-        },
-        sauce: {
-          id: state.selectedSauce.id,
-          name: state.selectedSauce.name,
-          price: state.selectedSauce.price,
-        },
-        ingredients: getters.pizzaIngredients,
+    totalPrice(state, getters, rootState, rootGetters) {
+      const pizza = {
+        doughId: state.selectedDoughId,
+        sizeId: state.selectedSizeId,
+        sauceId: state.selectedSauceId,
+        ingredients: state.selectedIngredients,
         amount: state.pizzaAmount,
       };
+      return rootGetters["Public/pizzaPrice"](pizza);
     },
   },
   actions: {
-    editPizza({ commit }, pizza) {
-      const dough = pizzaData.dough.find((item) => item.id === pizza.dough.id);
-      const size = pizzaData.sizes.find((item) => item.id === pizza.size.id);
-      const sauce = pizzaData.sauces.find((item) => item.id === pizza.sauce.id);
-      const allIngredients = initIngredients(pizzaData.ingredients);
-      pizza.ingredients.forEach((pizzaIngredient) => {
-        const ingredient = allIngredients.find(
-          (ingredient) => ingredient.id === pizzaIngredient.id
-        );
-        ingredient.amount = pizzaIngredient.amount;
+    async init({ commit, rootState }) {
+      commit("setState", {
+        selectedDoughId: rootState.Public.dough[0]?.id,
+        selectedSizeId: rootState.Public.sizes[0]?.id,
+        selectedSauceId: rootState.Public.sauces[0]?.id,
       });
-      commit("selectDough", dough);
-      commit("selectSize", size);
-      commit("selectSauce", sauce);
-      commit("setPizzaName", pizza.name);
-      commit("setIngredients", allIngredients);
-      commit("setPizzaAmount", pizza.amount);
-      commit("setPizzaId", pizza.id);
+    },
+    editPizza({ commit }, pizza) {
+      commit("setState", {
+        selectedDoughId: pizza.doughId,
+        selectedSizeId: pizza.sizeId,
+        selectedSauce: pizza.sauceId,
+        selectedIngredients: pizza.ingredients,
+        pizzaName: pizza.name,
+        pizzaAmount: pizza.amount,
+        pizzaId: pizza.id,
+      });
+    },
+    resetState({ commit, rootState }) {
+      commit("setState", {
+        selectedDoughId: rootState.Public.dough[0]?.id,
+        selectedSizeId: rootState.Public.sizes[0].id,
+        selectedSauceId: rootState.Public.sauces[0]?.id,
+        selectedIngredients: [],
+        pizzaName: "",
+        pizzaAmount: 1,
+        pizzaId: "",
+      });
     },
   },
 };

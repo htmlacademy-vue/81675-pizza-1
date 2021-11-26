@@ -14,17 +14,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "CartOrderSuccess",
   computed: {
-    ...mapState("Auth", ["isAuthed"]),
+    ...mapGetters("Auth", ["isAuthed"]),
   },
   methods: {
     onClose() {
       this.$store.commit("Cart/resetCart");
-      this.$store.commit("Builder/resetState");
+      this.$store.dispatch("Builder/resetState");
       const path = this.isAuthed ? "/orders" : "/";
       this.$router.push({ path });
     },

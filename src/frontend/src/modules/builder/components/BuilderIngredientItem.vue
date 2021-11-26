@@ -8,11 +8,11 @@
     <PlusMinus
       class="ingredients__counter"
       v-if="true"
-      :value="item.amount"
+      :value="amount"
       :min="min"
       :max="max"
-      @plus="onAdd(item)"
-      @minus="onRemove(item)"
+      @plus="onAdd"
+      @minus="onRemove"
     />
   </li>
 </template>
@@ -24,6 +24,7 @@ import {
   INGREDIENT_MIN_AMOUNT,
 } from "@/common/constants";
 import PlusMinus from "@/common/components/PlusMinus";
+import { mapState } from "vuex";
 
 export default {
   name: "BuilderIngredientItem",
@@ -35,6 +36,16 @@ export default {
     },
   },
   computed: {
+    ...mapState("Public", ["ingredients"]),
+    ...mapState("Builder", ["selectedIngredients"]),
+    builderItem() {
+      return this.selectedIngredients.find(
+        (ingredient) => ingredient.id === this.item.id
+      );
+    },
+    amount() {
+      return this.builderItem?.amount ?? 0;
+    },
     min() {
       return INGREDIENT_MIN_AMOUNT;
     },
@@ -46,11 +57,11 @@ export default {
     },
   },
   methods: {
-    onAdd(item) {
-      this.$store.commit("Builder/ingredientAdd", item);
+    onAdd() {
+      this.$store.commit("Builder/ingredientAdd", this.item.id);
     },
-    onRemove(item) {
-      this.$store.commit("Builder/ingredientRemove", item);
+    onRemove() {
+      this.$store.commit("Builder/ingredientRemove", this.item.id);
     },
   },
 };

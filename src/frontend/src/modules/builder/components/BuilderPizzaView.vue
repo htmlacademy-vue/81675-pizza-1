@@ -48,33 +48,26 @@ export default {
   name: "BuilderPizzaView",
   components: { AppDrop },
   computed: {
-    ...mapState("Builder", [
-      "selectedDough",
-      "selectedSauce",
-      "selectedSize",
-      "ingredients",
-      "pizzaName",
-      "pizzaAmount",
-    ]),
-    ...mapGetters("Builder", ["totalPrice", "pizzaObj"]),
+    ...mapState("Builder", ["selectedIngredients", "pizzaName", "pizzaAmount"]),
+    ...mapGetters("Builder", ["totalPrice", "selectedDough", "selectedSauce"]),
+    ...mapGetters("Public", ["ingredientById"]),
     doughClassName() {
-      return this.selectedDough.value === "large" ? "big" : "small";
+      return this.selectedDough?.value === "large" ? "big" : "small";
     },
     pizzaClass() {
       return `pizza--foundation--${this.doughClassName}-${this.selectedSauce.value}`;
     },
     ingredientClasses() {
-      return this.ingredients
-        .filter((item) => item.amount > 0)
-        .map((item) => {
-          const classes = [`pizza__filling--${item.nameEn}`];
-          if (item.amount === 2) classes.push("pizza__filling--second");
-          if (item.amount === 3) classes.push("pizza__filling--third");
-          return classes.join(" ");
-        });
+      return this.selectedIngredients.map((item) => {
+        const ingredientData = this.ingredientById(item.id);
+        const classes = [`pizza__filling--${ingredientData.nameEn}`];
+        if (item.amount === 2) classes.push("pizza__filling--second");
+        if (item.amount === 3) classes.push("pizza__filling--third");
+        return classes.join(" ");
+      });
     },
     hasAnIngredient() {
-      return this.ingredients.some((item) => item.amount > 0);
+      return this.selectedIngredients.length > 0;
     },
     isPizzaReady() {
       return this.pizzaName && this.hasAnIngredient;
@@ -82,16 +75,32 @@ export default {
   },
   methods: {
     onDrop(ingredient) {
-      this.$store.commit("Builder/ingredientAddById", ingredient.id);
+      this.$store.commit("Builder/ingredientAdd", ingredient.id);
     },
     onPizzaNameChange(e) {
-      this.$store.commit("Builder/setPizzaName", e.target.value);
+      this.$store.commit("Builder/setState", { pizzaName: e.target.value });
     },
     onAddToCart() {
-      const pizza = _.cloneDeep(this.pizzaObj);
-      if (!pizza.id) pizza.id = _.uniqueId();
+      const {
+        pizzaId,
+        pizzaName,
+        selectedDoughId,
+        selectedSauceId,
+        selectedSizeId,
+        pizzaAmount,
+        selectedIngredients,
+      } = this.$store.state.Builder;
+      const pizza = {
+        id: pizzaId || _.uniqueId(),
+        name: pizzaName,
+        doughId: selectedDoughId,
+        sizeId: selectedSizeId,
+        sauceId: selectedSauceId,
+        ingredients: _.cloneDeep(selectedIngredients),
+        amount: pizzaAmount,
+      };
       this.$store.commit("Cart/addToCart", pizza);
-      this.$store.commit("Builder/resetState");
+      this.$store.dispatch("Builder/resetState");
     },
   },
 };
