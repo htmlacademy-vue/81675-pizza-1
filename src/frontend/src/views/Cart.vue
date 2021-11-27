@@ -35,7 +35,7 @@
         </div>
       </section>
     </form>
-    <CartOrderSuccess v-if="isOrderComplete" />
+    <CartOrderSuccess />
   </div>
 </template>
 
@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     ...mapState("Auth", ["user"]),
-    ...mapState("Cart", ["isOrderComplete", "cart"]),
+    ...mapState("Cart", ["cart"]),
     ...mapGetters("Cart", ["cartTotalPrice"]),
     isCartEmpty() {
       return this.cart.length === 0;
