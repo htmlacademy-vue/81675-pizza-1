@@ -14,14 +14,14 @@
     <AppDrop @drop="onDrop">
       <div class="content__constructor">
         <div class="pizza" :class="pizzaClass">
-          <div class="pizza__wrapper">
+          <transition-group tag="div" name="ingredient" class="pizza__wrapper">
             <div
-              v-for="item in ingredientClasses"
-              :key="item"
+              v-for="item in selectedIngredients"
+              :key="item.id"
               class="pizza__filling"
-              :class="item"
+              :class="ingredientClasses(item)"
             ></div>
-          </div>
+          </transition-group>
         </div>
       </div>
     </AppDrop>
@@ -57,15 +57,6 @@ export default {
     pizzaClass() {
       return `pizza--foundation--${this.doughClassName}-${this.selectedSauce.value}`;
     },
-    ingredientClasses() {
-      return this.selectedIngredients.map((item) => {
-        const ingredientData = this.ingredientById(item.id);
-        const classes = [`pizza__filling--${ingredientData.nameEn}`];
-        if (item.amount === 2) classes.push("pizza__filling--second");
-        if (item.amount === 3) classes.push("pizza__filling--third");
-        return classes.join(" ");
-      });
-    },
     hasAnIngredient() {
       return this.selectedIngredients.length > 0;
     },
@@ -74,6 +65,13 @@ export default {
     },
   },
   methods: {
+    ingredientClasses(item) {
+      const ingredientData = this.ingredientById(item.id);
+      const classes = [`pizza__filling--${ingredientData.nameEn}`];
+      if (item.amount === 2) classes.push("pizza__filling--second");
+      if (item.amount === 3) classes.push("pizza__filling--third");
+      return classes.join(" ");
+    },
     onDrop(ingredient) {
       this.$store.commit("Builder/ingredientAdd", ingredient.id);
     },
@@ -105,3 +103,18 @@ export default {
   },
 };
 </script>
+
+<style>
+.pizza__filling {
+  transition: all 0.5s;
+}
+.ingredient-enter {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.ingredient-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+</style>
