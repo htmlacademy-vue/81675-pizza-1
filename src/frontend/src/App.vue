@@ -2,7 +2,13 @@
   <div id="app">
     <div v-if="isLoading">Загрузка...</div>
     <component :is="layout" v-else>
-      <router-view />
+      <transition
+        name="view"
+        appear
+        enter-active-class="animate__animated animate__slideInRight"
+      >
+        <router-view />
+      </transition>
     </component>
   </div>
 </template>
