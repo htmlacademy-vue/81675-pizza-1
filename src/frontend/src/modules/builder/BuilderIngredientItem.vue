@@ -7,7 +7,6 @@
     </AppDrag>
     <PlusMinus
       class="ingredients__counter"
-      v-if="true"
       :value="amount"
       :min="min"
       :max="max"
