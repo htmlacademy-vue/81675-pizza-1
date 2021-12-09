@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import BuilderIngredientItem from "@/modules/builder/components/BuilderIngredientItem";
+import BuilderIngredientItem from "@/modules/builder/BuilderIngredientItem";
 import { mapState } from "vuex";
 export default {
   name: "BuilderIngredientsSelector",
