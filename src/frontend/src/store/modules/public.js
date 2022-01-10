@@ -47,9 +47,10 @@ export default {
         const size = getters.sizeById(pizza.sizeId);
         const dough = getters.doughById(pizza.doughId);
         const ingredientsPrice = pizza.ingredients.reduce((acc, item) => {
-          const itemPrice = getters.ingredientById(item.id).price;
+          const itemPrice = getters.ingredientById(item.id)?.price ?? 0;
           return acc + itemPrice * item.amount;
         }, 0);
+        if (!sauce || !size || !dough) return 0;
         return (
           size.multiplier *
           (dough.price + sauce.price + ingredientsPrice) *
