@@ -74,7 +74,7 @@ export default {
       commit("setState", {
         selectedDoughId: pizza.doughId,
         selectedSizeId: pizza.sizeId,
-        selectedSauce: pizza.sauceId,
+        selectedSauceId: pizza.sauceId,
         selectedIngredients: pizza.ingredients,
         pizzaName: pizza.name,
         pizzaAmount: pizza.amount,
