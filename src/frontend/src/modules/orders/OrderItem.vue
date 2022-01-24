@@ -10,12 +10,22 @@
       </div>
 
       <div class="order__button">
-        <button type="button" class="button button--border" @click="onRemove">
+        <button
+          type="button"
+          class="button button--border"
+          data-test="remove"
+          @click="onRemove"
+        >
           Удалить
         </button>
       </div>
       <div class="order__button">
-        <button type="button" class="button" @click="onReOrder">
+        <button
+          type="button"
+          class="button"
+          data-test="reorder"
+          @click="onReOrder"
+        >
           Повторить
         </button>
       </div>
