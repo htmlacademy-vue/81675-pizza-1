@@ -73,6 +73,7 @@
         <button
           type="button"
           class="button button--transparent"
+          data-test="remove"
           @click="onRemove"
         >
           {{ isNew ? "Отмена" : "Удалить" }}
