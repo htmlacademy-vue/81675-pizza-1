@@ -28,21 +28,21 @@ describe("BuilderIngredientItem", () => {
     wrapper.destroy();
   });
 
-  it("Инкремент", () => {
+  it("Инкремент", async () => {
     createComponent({ localVue, store, propsData });
     const plusMinus = wrapper.findComponent(PlusMinus);
-    expect(wrapper.vm.amount).toBe(0);
-    plusMinus.vm.$emit("plus");
-    expect(wrapper.vm.amount).toBe(1);
+    expect(plusMinus.props("value")).toBe(0);
+    await plusMinus.vm.$emit("plus");
+    expect(plusMinus.props("value")).toBe(1);
   });
 
-  it("Декремент", () => {
+  it("Декремент", async () => {
     createComponent({ localVue, store, propsData });
     const plusMinus = wrapper.findComponent(PlusMinus);
-    expect(wrapper.vm.amount).toBe(0);
-    plusMinus.vm.$emit("plus");
-    plusMinus.vm.$emit("plus");
-    plusMinus.vm.$emit("minus");
-    expect(wrapper.vm.amount).toBe(1);
+    expect(plusMinus.props("value")).toBe(0);
+    await plusMinus.vm.$emit("plus");
+    await plusMinus.vm.$emit("plus");
+    await plusMinus.vm.$emit("minus");
+    expect(plusMinus.props("value")).toBe(1);
   });
 });
