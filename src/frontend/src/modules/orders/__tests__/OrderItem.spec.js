@@ -5,7 +5,6 @@ import { generateMockStore } from "@/store/mocks";
 import miscData from "@/static/misc.json";
 import pizzaData from "@/static/pizza.json";
 import OrderItemPizza from "@/modules/orders/OrderItemPizza";
-import ordersService from "@/services/ordersService";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -48,6 +47,7 @@ describe("OrderItem", () => {
   beforeEach(() => {
     store = generateMockStore();
     store.commit("Public/setState", { misc: miscData });
+    store.dispatch = jest.fn();
   });
 
   afterEach(() => {
@@ -80,9 +80,11 @@ describe("OrderItem", () => {
 
   it("Заказ удаляется", async () => {
     createComponent({ localVue, store, propsData });
-    const spy = jest.spyOn(ordersService, "remove");
     await wrapper.find('[data-test="remove"]').trigger("click");
-    expect(spy).toHaveBeenCalledWith(propsData.order.id);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      "Orders/removeOrder",
+      propsData.order.id
+    );
   });
 
   it("Можно повторить заказ", async () => {
