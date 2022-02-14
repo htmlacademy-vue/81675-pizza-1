@@ -74,7 +74,7 @@ export default {
       commit("setState", {
         selectedDoughId: pizza.doughId,
         selectedSizeId: pizza.sizeId,
-        selectedSauce: pizza.sauceId,
+        selectedSauceId: pizza.sauceId,
         selectedIngredients: pizza.ingredients,
         pizzaName: pizza.name,
         pizzaAmount: pizza.amount,
@@ -84,7 +84,7 @@ export default {
     resetState({ commit, rootState }) {
       commit("setState", {
         selectedDoughId: rootState.Public.dough[0]?.id,
-        selectedSizeId: rootState.Public.sizes[0].id,
+        selectedSizeId: rootState.Public.sizes[0]?.id,
         selectedSauceId: rootState.Public.sauces[0]?.id,
         selectedIngredients: [],
         pizzaName: "",

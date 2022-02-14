@@ -3,6 +3,7 @@
     <button
       type="button"
       class="counter__button counter__button--minus"
+      data-test="minus"
       :disabled="isMinusDisabled"
       @click="$emit('minus')"
     >
@@ -12,6 +13,7 @@
     <button
       type="button"
       class="counter__button counter__button--plus"
+      data-test="plus"
       :class="[isOrange && 'counter__button--orange']"
       :disabled="isPlusDisabled"
       @click="$emit('plus')"

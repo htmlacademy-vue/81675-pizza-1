@@ -9,6 +9,7 @@
           v-for="item in dough"
           :key="item.id"
           :class="`dough__input--${item.value}`"
+          data-test="dough"
         >
           <input
             type="radio"

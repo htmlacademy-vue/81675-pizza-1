@@ -55,7 +55,7 @@ export default {
       return this.selectedDough?.value === "large" ? "big" : "small";
     },
     pizzaClass() {
-      return `pizza--foundation--${this.doughClassName}-${this.selectedSauce.value}`;
+      return `pizza--foundation--${this.doughClassName}-${this.selectedSauce?.value}`;
     },
     hasAnIngredient() {
       return this.selectedIngredients.length > 0;
@@ -67,7 +67,7 @@ export default {
   methods: {
     ingredientClasses(item) {
       const ingredientData = this.ingredientById(item.id);
-      const classes = [`pizza__filling--${ingredientData.nameEn}`];
+      const classes = [`pizza__filling--${ingredientData?.nameEn}`];
       if (item.amount === 2) classes.push("pizza__filling--second");
       if (item.amount === 3) classes.push("pizza__filling--third");
       return classes.join(" ");

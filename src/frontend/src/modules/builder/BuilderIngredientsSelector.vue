@@ -11,6 +11,7 @@
             class="radio ingredients__input"
             v-for="sauce in sauces"
             :key="sauce.id"
+            data-test="sauce"
           >
             <input
               type="radio"
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import BuilderIngredientItem from "@/modules/builder/components/BuilderIngredientItem";
+import BuilderIngredientItem from "@/modules/builder/BuilderIngredientItem";
 import { mapState } from "vuex";
 export default {
   name: "BuilderIngredientsSelector",
