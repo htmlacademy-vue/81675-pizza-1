@@ -53,6 +53,7 @@ export default {
     CartPizzaList,
     CartAdditionalList,
   },
+  layout: "AppLayout",
   computed: {
     ...mapState("Auth", ["user"]),
     ...mapState("Cart", ["cart"]),

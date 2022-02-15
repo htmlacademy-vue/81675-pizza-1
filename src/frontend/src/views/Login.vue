@@ -40,9 +40,12 @@
 
 <script>
 import { mapState } from "vuex";
+import isNotLoggedIn from "@/middlewares/isNotLoggedIn";
 
 export default {
   name: "Login",
+  layout: "AppLayout",
+  middleware: isNotLoggedIn,
   data() {
     return {
       email: "",
