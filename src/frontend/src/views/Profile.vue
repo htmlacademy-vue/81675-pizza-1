@@ -44,10 +44,13 @@
 import { mapState } from "vuex";
 import AddressList from "@/modules/profile/AddressList";
 import AddressForm from "@/modules/profile/AddressForm";
+import isLoggedIn from "@/middlewares/isLoggedIn";
 
 export default {
   name: "Profile",
   components: { AddressForm, AddressList },
+  layout: "AppSidebarLayout",
+  middleware: isLoggedIn,
   computed: {
     ...mapState("Auth", ["user"]),
     ...mapState("Address", ["form"]),

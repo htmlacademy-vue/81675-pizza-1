@@ -11,9 +11,12 @@
 <script>
 import OrderItem from "@/modules/orders/OrderItem";
 import { mapState } from "vuex";
+import isLoggedIn from "@/middlewares/isLoggedIn";
 export default {
   name: "Orders",
   components: { OrderItem },
+  layout: "AppSidebarLayout",
+  middleware: isLoggedIn,
   computed: {
     ...mapState("Orders", ["orders"]),
   },
