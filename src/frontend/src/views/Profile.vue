@@ -62,3 +62,31 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.user {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 33px;
+}
+
+.user__name {
+  @include b-s20-h23;
+
+  margin-left: 30px;
+
+  span {
+    display: inline-block;
+
+    vertical-align: middle;
+  }
+}
+
+.user__button {
+  display: inline-block;
+
+  cursor: pointer;
+  vertical-align: middle;
+}
+</style>
