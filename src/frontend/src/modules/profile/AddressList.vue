@@ -36,6 +36,7 @@ export default {
   computed: {
     ...mapState("Address", ["addresses"]),
   },
+
   methods: {
     onEdit(address) {
       this.$store.commit("Address/editAddress", address);

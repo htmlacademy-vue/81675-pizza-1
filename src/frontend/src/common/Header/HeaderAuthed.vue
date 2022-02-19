@@ -35,6 +35,7 @@ export default {
   computed: {
     ...mapState("Auth", ["user"]),
   },
+
   methods: {
     onLogout() {
       this.$store.dispatch("Auth/logout");

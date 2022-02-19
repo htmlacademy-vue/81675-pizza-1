@@ -61,16 +61,20 @@ export default {
     doughClassName() {
       return this.selectedDough?.value === "large" ? "big" : "small";
     },
+
     pizzaClass() {
       return `pizza--foundation--${this.doughClassName}-${this.selectedSauce?.value}`;
     },
+
     hasAnIngredient() {
       return this.selectedIngredients.length > 0;
     },
+
     isPizzaReady() {
       return this.pizzaName && this.hasAnIngredient;
     },
   },
+
   methods: {
     ingredientClasses(item) {
       const ingredientData = this.ingredientById(item.id);
@@ -79,12 +83,15 @@ export default {
       if (item.amount === 3) classes.push("pizza__filling--third");
       return classes.join(" ");
     },
+
     onDrop(ingredient) {
       this.$store.commit("Builder/ingredientAdd", ingredient.id);
     },
+
     onPizzaNameChange(e) {
       this.$store.commit("Builder/setState", { pizzaName: e.target.value });
     },
+
     onAddToCart() {
       const {
         pizzaId,

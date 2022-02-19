@@ -35,6 +35,7 @@ export default {
       required: true,
     },
   },
+
   computed: {
     amount() {
       const miscInCart = this.$store.state.Cart.misc.find(
@@ -43,10 +44,12 @@ export default {
       return miscInCart?.amount ?? 0;
     },
   },
+
   methods: {
     onPlus() {
       this.$store.commit("Cart/miscAdd", this.item.id);
     },
+
     onMinus() {
       this.$store.commit("Cart/miscRemove", this.item.id);
     },

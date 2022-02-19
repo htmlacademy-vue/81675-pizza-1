@@ -72,6 +72,7 @@ export default {
     CartPizzaList,
     CartAdditionalList,
   },
+
   layout: "AppLayout",
   computed: {
     ...mapState("Auth", ["user"]),
@@ -80,17 +81,20 @@ export default {
     isCartEmpty() {
       return this.cart.length === 0;
     },
+
     addressData() {
       const { addressId, isSelfDelivery } = this.$store.state.Orders;
       if (isSelfDelivery) return null;
       if (addressId) return { id: addressId };
       return this.$store.state.Orders.address;
     },
+
     isNewAddress() {
       const { addressId, isSelfDelivery } = this.$store.state.Orders;
       return !isSelfDelivery && !addressId;
     },
   },
+
   methods: {
     async onSubmit() {
       const phone = this.$store.state.Orders.userPhone;

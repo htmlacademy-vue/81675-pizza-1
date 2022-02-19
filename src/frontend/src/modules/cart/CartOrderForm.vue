@@ -66,6 +66,7 @@ export default {
       deliveryOptionId,
     };
   },
+
   computed: {
     ...mapGetters("Auth", ["isAuthed"]),
     ...mapState("Address", ["addresses"]),
@@ -75,10 +76,12 @@ export default {
       "addressId",
       "isSelfDelivery",
     ]),
+
     existingAddressData() {
       return this.addresses.find((item) => item.id === this.addressId);
     },
   },
+
   watch: {
     deliveryOptionId(v) {
       const value = Number(v);
@@ -87,6 +90,7 @@ export default {
       this.$store.commit("Orders/setState", { isSelfDelivery, addressId });
     },
   },
+
   methods: {
     onUserPhoneInput(e) {
       this.$store.commit("Orders/setState", { userPhone: e.target.value });

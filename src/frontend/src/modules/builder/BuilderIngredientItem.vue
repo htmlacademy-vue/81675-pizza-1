@@ -40,6 +40,7 @@ export default {
       required: true,
     },
   },
+
   computed: {
     ...mapState("Public", ["ingredients"]),
     ...mapState("Builder", ["selectedIngredients"]),
@@ -48,23 +49,29 @@ export default {
         (ingredient) => ingredient.id === this.item.id
       );
     },
+
     amount() {
       return this.builderItem?.amount ?? 0;
     },
+
     min() {
       return INGREDIENT_MIN_AMOUNT;
     },
+
     max() {
       return INGREDIENT_MAX_AMOUNT;
     },
+
     isDndDisabled() {
       return this.item.amount >= this.max;
     },
   },
+
   methods: {
     onAdd() {
       this.$store.commit("Builder/ingredientAdd", this.item.id);
     },
+
     onRemove() {
       this.$store.commit("Builder/ingredientRemove", this.item.id);
     },

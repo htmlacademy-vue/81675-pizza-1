@@ -26,6 +26,7 @@ export default {
   computed: {
     ...mapState("Orders", ["orders"]),
   },
+
   created() {
     this.$store.dispatch("Orders/getOrders");
   },

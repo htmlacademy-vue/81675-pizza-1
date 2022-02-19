@@ -32,6 +32,7 @@ export default {
     BuilderSizeSelector,
     BuilderDoughSelector,
   },
+
   layout: "AppLayout",
 };
 </script>

@@ -75,6 +75,7 @@ export default {
       required: true,
     },
   },
+
   computed: {
     ...mapGetters("Public", ["pizzaPrice"]),
     miscPrice() {
@@ -83,9 +84,11 @@ export default {
         return acc + miscData.price * item.amount;
       }, 0);
     },
+
     orderAddress() {
       return this.order.orderAddress?.name ?? "самовывоз";
     },
+
     orderPrice() {
       const pizzasPrice = this.order.orderPizzas.reduce(
         (acc, pizza) => acc + this.pizzaPrice(pizza),
@@ -94,10 +97,12 @@ export default {
       return pizzasPrice + this.miscPrice;
     },
   },
+
   methods: {
     onRemove() {
       this.$store.dispatch("Orders/removeOrder", this.order.id);
     },
+
     onReOrder() {
       const { orderPizzas, orderMisc, phone, addressId } = this.order;
       this.$store.commit("Cart/setState", {
@@ -111,6 +116,7 @@ export default {
       });
       this.$router.push({ name: "Cart" });
     },
+
     miscData(id) {
       return this.$store.getters["Public/miscById"](id);
     },

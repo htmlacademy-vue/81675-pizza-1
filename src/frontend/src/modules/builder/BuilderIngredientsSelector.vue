@@ -52,6 +52,7 @@ export default {
     ...mapState("Public", ["sauces", "ingredients"]),
     ...mapState("Builder", ["selectedSauceId"]),
   },
+
   methods: {
     onSauceChange(item) {
       this.$store.commit("Builder/setState", { selectedSauceId: item.id });

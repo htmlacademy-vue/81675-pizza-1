@@ -61,6 +61,7 @@ export default {
     ...mapState("Auth", ["user"]),
     ...mapState("Address", ["form"]),
   },
+
   methods: {
     onNewAddress() {
       this.$store.commit("Address/startNewAddress");

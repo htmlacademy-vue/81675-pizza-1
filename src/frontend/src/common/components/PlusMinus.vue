@@ -36,26 +36,32 @@ export default {
       type: Number,
       required: true,
     },
+
     type: {
       type: String,
       default: "green",
     },
+
     min: {
       type: Number,
       default: 0,
     },
+
     max: {
       type: Number,
       default: 10,
     },
   },
+
   computed: {
     isMinusDisabled() {
       return this.value <= this.min;
     },
+
     isPlusDisabled() {
       return this.value >= this.max;
     },
+
     isOrange() {
       return this.type === "orange";
     },

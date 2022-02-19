@@ -36,6 +36,7 @@ export default {
     ...mapState("Public", ["sizes"]),
     ...mapState("Builder", ["selectedSizeId"]),
   },
+
   methods: {
     onSelect(item) {
       this.$store.commit("Builder/setState", { selectedSizeId: item.id });

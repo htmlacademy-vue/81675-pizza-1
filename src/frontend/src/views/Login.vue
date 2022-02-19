@@ -62,9 +62,11 @@ export default {
       password: "",
     };
   },
+
   computed: {
     ...mapState("Auth", ["loginError"]),
   },
+
   methods: {
     async onSubmit() {
       try {

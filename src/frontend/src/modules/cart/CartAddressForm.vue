@@ -51,20 +51,25 @@ export default {
       type: Object,
       required: true,
     },
+
     isDisabled: Boolean,
   },
+
   methods: {
     updateAddress(payload) {
       this.$store.commit("Orders/setState", {
         address: { ...this.addressData, ...payload },
       });
     },
+
     onStreetInput(e) {
       this.updateAddress({ street: e.target.value });
     },
+
     onBuildingInput(e) {
       this.updateAddress({ building: e.target.value });
     },
+
     onFlatInput(e) {
       this.updateAddress({ flat: e.target.value });
     },

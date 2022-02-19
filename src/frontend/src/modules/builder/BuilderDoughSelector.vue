@@ -38,10 +38,12 @@ export default {
     ...mapState("Public", ["dough"]),
     ...mapState("Builder", ["selectedDoughId"]),
   },
+
   methods: {
     isChecked(item) {
       return item.id === this.selectedDoughId;
     },
+
     onChange(item) {
       this.$store.commit("Builder/setState", { selectedDoughId: item.id });
     },

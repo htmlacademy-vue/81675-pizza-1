@@ -100,10 +100,12 @@ export default {
     isNew() {
       return !this.form.id;
     },
+
     title() {
       return this.isNew ? "Новый адрес" : `Адрес №${this.form.id}`;
     },
   },
+
   methods: {
     ...mapActions("Address", ["addAddress", "editAddress", "removeAddress"]),
     onSave() {
@@ -113,6 +115,7 @@ export default {
       };
       this.form.id ? this.editAddress(payload) : this.addAddress(payload);
     },
+
     onRemove() {
       if (this.isNew) {
         this.$store.commit("Address/setState", { form: null });

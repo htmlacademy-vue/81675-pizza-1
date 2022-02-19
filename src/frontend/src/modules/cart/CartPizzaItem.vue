@@ -54,6 +54,7 @@ export default {
       required: true,
     },
   },
+
   computed: {
     ingredientNames() {
       return this.item.ingredients
@@ -63,26 +64,33 @@ export default {
         })
         .join(", ");
     },
+
     price() {
       return this.$store.getters["Public/pizzaPrice"](this.item);
     },
+
     sauceName() {
       return this.$store.getters["Public/sauceById"](this.item.sauceId)?.name;
     },
+
     sizeName() {
       return this.$store.getters["Public/sizeById"](this.item.sizeId)?.name;
     },
+
     doughName() {
       return this.$store.getters["Public/doughById"](this.item.doughId)?.name;
     },
   },
+
   methods: {
     onMinus() {
       this.$store.commit("Cart/pizzaRemove", this.item);
     },
+
     onPlus() {
       this.$store.commit("Cart/pizzaAdd", this.item);
     },
+
     onEditPizza() {
       this.$store.dispatch("Builder/editPizza", this.item);
       this.$router.push({ path: "/" });

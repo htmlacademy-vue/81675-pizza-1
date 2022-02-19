@@ -37,6 +37,7 @@ export default {
     ...mapState("Cart", ["isOrderComplete"]),
     ...mapGetters("Auth", ["isAuthed"]),
   },
+
   methods: {
     onClose() {
       this.$store.commit("Cart/setState", { isOrderComplete: false });
