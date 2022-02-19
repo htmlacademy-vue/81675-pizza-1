@@ -31,6 +31,7 @@ export default {
       return this.$route.meta.layout || "AppLayout";
     },
   },
+
   async created() {
     await this.$store.dispatch("Auth/init");
     await this.$store.dispatch("Public/init");
