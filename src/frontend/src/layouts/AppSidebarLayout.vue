@@ -2,7 +2,7 @@
   <div>
     <HeaderBar />
     <main class="layout">
-      <Sidebar />
+      <AppSidebar />
       <slot />
     </main>
   </div>
@@ -10,9 +10,9 @@
 
 <script>
 import HeaderBar from "@/common/Header/HeaderBar";
-import Sidebar from "@/common/components/Sidebar";
+import AppSidebar from "@/common/components/AppSidebar";
 export default {
   name: "AppSidebarLayout",
-  components: { Sidebar, HeaderBar },
+  components: { AppSidebar, HeaderBar },
 };
 </script>

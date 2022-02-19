@@ -9,9 +9,9 @@
           type="text"
           name="street"
           :value="addressData.street"
-          @input="onStreetInput"
           :disabled="isDisabled"
-        />
+          @input="onStreetInput"
+        >
       </label>
     </div>
 
@@ -22,9 +22,9 @@
           type="text"
           name="house"
           :value="addressData.building"
-          @input="onBuildingInput"
           :disabled="isDisabled"
-        />
+          @input="onBuildingInput"
+        >
       </label>
     </div>
 
@@ -35,9 +35,9 @@
           type="text"
           name="apartment"
           :value="addressData.flat"
-          @input="onFlatInput"
           :disabled="isDisabled"
-        />
+          @input="onFlatInput"
+        >
       </label>
     </div>
   </div>
@@ -51,20 +51,25 @@ export default {
       type: Object,
       required: true,
     },
+
     isDisabled: Boolean,
   },
+
   methods: {
     updateAddress(payload) {
       this.$store.commit("Orders/setState", {
         address: { ...this.addressData, ...payload },
       });
     },
+
     onStreetInput(e) {
       this.updateAddress({ street: e.target.value });
     },
+
     onBuildingInput(e) {
       this.updateAddress({ building: e.target.value });
     },
+
     onFlatInput(e) {
       this.updateAddress({ flat: e.target.value });
     },

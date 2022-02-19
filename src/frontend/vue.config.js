@@ -26,10 +26,5 @@ module.exports = {
         pathRewrite: { "/docs/explorer": "/explorer" },
       },
     },
-
-    overlay: {
-      warnings: true,
-      errors: true,
-    },
   },
 };
