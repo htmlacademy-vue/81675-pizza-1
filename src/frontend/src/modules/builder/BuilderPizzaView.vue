@@ -25,9 +25,17 @@
             <div
               v-for="item in selectedIngredients"
               :key="item.id"
-              class="pizza__filling"
-              :class="ingredientClasses(item)"
-            />
+            >
+              <div :class="['pizza__filling', ingredientClassname(item)]" />
+              <div
+                v-if="item.amount > 1"
+                :class="['pizza__filling', 'pizza__filling--second', ingredientClassname(item)]"
+              />
+              <div
+                v-if="item.amount > 2"
+                :class="['pizza__filling', 'pizza__filling--third', ingredientClassname(item)]"
+              />
+            </div>
           </transition-group>
         </div>
       </div>
@@ -76,12 +84,9 @@ export default {
   },
 
   methods: {
-    ingredientClasses(item) {
+    ingredientClassname(item) {
       const ingredientData = this.ingredientById(item.id);
-      const classes = [`pizza__filling--${ingredientData?.nameEn}`];
-      if (item.amount === 2) classes.push("pizza__filling--second");
-      if (item.amount === 3) classes.push("pizza__filling--third");
-      return classes.join(" ");
+      return `pizza__filling--${ingredientData?.nameEn}`;
     },
 
     onDrop(ingredient) {
