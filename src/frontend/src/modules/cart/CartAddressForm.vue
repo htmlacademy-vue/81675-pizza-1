@@ -9,9 +9,9 @@
           type="text"
           name="street"
           :value="addressData.street"
-          @input="onStreetInput"
           :disabled="isDisabled"
-        />
+          @input="onStreetInput"
+        >
       </label>
     </div>
 
@@ -22,9 +22,9 @@
           type="text"
           name="house"
           :value="addressData.building"
-          @input="onBuildingInput"
           :disabled="isDisabled"
-        />
+          @input="onBuildingInput"
+        >
       </label>
     </div>
 
@@ -35,9 +35,9 @@
           type="text"
           name="apartment"
           :value="addressData.flat"
-          @input="onFlatInput"
           :disabled="isDisabled"
-        />
+          @input="onFlatInput"
+        >
       </label>
     </div>
   </div>

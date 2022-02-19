@@ -1,13 +1,15 @@
 <template>
   <div class="content__diameter">
     <div class="sheet">
-      <h2 class="title title--small sheet__title">Выберите размер</h2>
+      <h2 class="title title--small sheet__title">
+        Выберите размер
+      </h2>
 
       <div class="sheet__content diameter">
         <label
-          class="diameter__input"
           v-for="size in sizes"
           :key="size.id"
+          class="diameter__input"
           :class="`diameter__input--${size.value}`"
         >
           <input
@@ -17,7 +19,7 @@
             class="visually-hidden"
             :checked="size.id === selectedSizeId"
             @change="onSelect(size)"
-          />
+          >
           <span>{{ size.name }}</span>
         </label>
       </div>

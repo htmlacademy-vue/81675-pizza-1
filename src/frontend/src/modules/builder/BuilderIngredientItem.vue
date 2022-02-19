@@ -1,7 +1,13 @@
 <template>
   <li class="ingredients__item">
-    <AppDrag :transfer-data="item" :disabled="isDndDisabled">
-      <span class="filling" :class="`filling--${item.nameEn}`">
+    <AppDrag
+      :transfer-data="item"
+      :disabled="isDndDisabled"
+    >
+      <span
+        class="filling"
+        :class="`filling--${item.nameEn}`"
+      >
         {{ item.name }}
       </span>
     </AppDrag>

@@ -7,7 +7,7 @@
         width="56"
         height="56"
         :alt="item.name"
-      />
+      >
       <div class="product__text">
         <h2>{{ item.name }}</h2>
         <ul>
@@ -20,11 +20,11 @@
 
     <PlusMinus
       :value="item.amount"
-      @plus="onPlus"
-      @minus="onMinus"
       :min="0"
       :max="10"
       type="orange"
+      @plus="onPlus"
+      @minus="onMinus"
     />
 
     <div class="cart-list__price">
@@ -32,7 +32,11 @@
     </div>
 
     <div class="cart-list__button">
-      <button type="button" class="cart-list__edit" @click="onEditPizza">
+      <button
+        type="button"
+        class="cart-list__edit"
+        @click="onEditPizza"
+      >
         Изменить
       </button>
     </div>

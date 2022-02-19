@@ -1,7 +1,9 @@
 <template>
   <div class="layout__content">
     <div class="layout__title">
-      <h1 class="title title--big">Мои данные</h1>
+      <h1 class="title title--big">
+        Мои данные
+      </h1>
     </div>
 
     <div class="user">
@@ -12,14 +14,14 @@
             @/assets/img/users/user5@2x.webp 1x,
             @/assets/img/users/user5@4x.webp 2x
           "
-        />
+        >
         <img
           src="@/assets/img/users/user5@2x.jpg"
           srcset="@/assets/img/users/user5@4x.jpg"
           :alt="user.name"
           width="72"
           height="72"
-        />
+        >
       </picture>
       <div class="user__name">
         <span>{{ user.name }}</span>
@@ -33,7 +35,11 @@
 
     <AddressForm v-if="form" />
     <div class="layout__button">
-      <button type="button" class="button button--border" @click="onNewAddress">
+      <button
+        type="button"
+        class="button button--border"
+        @click="onNewAddress"
+      >
         Добавить новый адрес
       </button>
     </div>

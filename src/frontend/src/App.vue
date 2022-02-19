@@ -1,7 +1,12 @@
 <template>
   <div id="app">
-    <div v-if="isLoading">Загрузка...</div>
-    <component :is="layout" v-else>
+    <div v-if="isLoading">
+      Загрузка...
+    </div>
+    <component
+      :is="layout"
+      v-else
+    >
       <transition
         name="view"
         appear

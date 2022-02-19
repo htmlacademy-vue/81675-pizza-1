@@ -8,19 +8,26 @@
         placeholder="Введите название пиццы"
         :value="pizzaName"
         @input="onPizzaNameChange"
-      />
+      >
     </label>
 
     <AppDrop @drop="onDrop">
       <div class="content__constructor">
-        <div class="pizza" :class="pizzaClass">
-          <transition-group tag="div" name="ingredient" class="pizza__wrapper">
+        <div
+          class="pizza"
+          :class="pizzaClass"
+        >
+          <transition-group
+            tag="div"
+            name="ingredient"
+            class="pizza__wrapper"
+          >
             <div
               v-for="item in selectedIngredients"
               :key="item.id"
               class="pizza__filling"
               :class="ingredientClasses(item)"
-            ></div>
+            />
           </transition-group>
         </div>
       </div>

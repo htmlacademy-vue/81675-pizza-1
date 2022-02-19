@@ -34,19 +34,22 @@
     <ul class="order__list">
       <OrderItemPizza
         v-for="pizza in order.orderPizzas"
-        :pizza="pizza"
         :key="pizza.id"
+        :pizza="pizza"
       />
     </ul>
 
     <ul class="order__additional">
-      <li v-for="misc in order.orderMisc" :key="misc.id">
+      <li
+        v-for="misc in order.orderMisc"
+        :key="misc.id"
+      >
         <img
           :src="miscData(misc.id).image"
           width="20"
           height="30"
           :alt="miscData(misc.id).name"
-        />
+        >
         <p>
           <span>{{ miscData(misc.id).name }}</span>
           <b>{{ miscData(misc.id).price }} ₽ x {{ misc.amount }}</b>
@@ -54,7 +57,9 @@
       </li>
     </ul>
 
-    <p class="order__address">Адрес доставки: {{ orderAddress }}</p>
+    <p class="order__address">
+      Адрес доставки: {{ orderAddress }}
+    </p>
   </section>
 </template>
 

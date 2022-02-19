@@ -7,7 +7,7 @@
         width="56"
         height="56"
         :alt="pizza.name"
-      />
+      >
       <div class="product__text">
         <h2>{{ pizza.name }}</h2>
         <ul>
@@ -18,7 +18,9 @@
       </div>
     </div>
 
-    <p class="order__price">{{ price }} ₽</p>
+    <p class="order__price">
+      {{ price }} ₽
+    </p>
   </li>
 </template>
 

@@ -4,13 +4,17 @@
       <label class="cart-form__select">
         <span class="cart-form__label">Получение заказа:</span>
 
-        <select name="test" class="select" v-model="deliveryOptionId">
+        <select
+          v-model="deliveryOptionId"
+          name="test"
+          class="select"
+        >
           <option :value="-1">Заберу сам</option>
           <option :value="0">Новый адрес</option>
           <option
-            :value="address.id"
             v-for="address in addresses"
             :key="address.id"
+            :value="address.id"
           >
             {{ address.name }}
           </option>
@@ -25,7 +29,7 @@
           placeholder="+7 999-999-99-99"
           :value="userPhone"
           @input="onUserPhoneInput"
-        />
+        >
       </label>
 
       <template v-if="!isSelfDelivery">
@@ -34,7 +38,10 @@
           :address-data="existingAddressData"
           is-disabled
         />
-        <CartAddressForm v-else :address-data="address" />
+        <CartAddressForm
+          v-else
+          :address-data="address"
+        />
       </template>
     </div>
   </div>
@@ -47,6 +54,18 @@ import CartAddressForm from "@/modules/cart/CartAddressForm";
 export default {
   name: "CartOrderForm",
   components: { CartAddressForm },
+  data() {
+    const { isSelfDelivery, addressId } = this.$store.state.Orders;
+    let deliveryOptionId = null;
+    if (isSelfDelivery) {
+      deliveryOptionId = -1;
+    } else {
+      deliveryOptionId = addressId ? addressId : 0;
+    }
+    return {
+      deliveryOptionId,
+    };
+  },
   computed: {
     ...mapGetters("Auth", ["isAuthed"]),
     ...mapState("Address", ["addresses"]),
@@ -59,18 +78,6 @@ export default {
     existingAddressData() {
       return this.addresses.find((item) => item.id === this.addressId);
     },
-  },
-  data() {
-    const { isSelfDelivery, addressId } = this.$store.state.Orders;
-    let deliveryOptionId = null;
-    if (isSelfDelivery) {
-      deliveryOptionId = -1;
-    } else {
-      deliveryOptionId = addressId ? addressId : 0;
-    }
-    return {
-      deliveryOptionId,
-    };
   },
   watch: {
     deliveryOptionId(v) {

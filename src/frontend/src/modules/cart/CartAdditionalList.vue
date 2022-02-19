@@ -1,7 +1,11 @@
 <template>
   <div class="cart__additional">
     <ul class="additional-list">
-      <CartAdditionalItem v-for="item in misc" :key="item.id" :item="item" />
+      <CartAdditionalItem
+        v-for="item in misc"
+        :key="item.id"
+        :item="item"
+      />
     </ul>
   </div>
 </template>

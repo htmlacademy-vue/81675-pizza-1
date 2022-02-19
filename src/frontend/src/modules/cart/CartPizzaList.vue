@@ -1,6 +1,10 @@
 <template>
   <ul class="cart-list sheet">
-    <CartPizzaItem v-for="(item, index) in cart" :item="item" :key="index" />
+    <CartPizzaItem
+      v-for="(item, index) in cart"
+      :key="index"
+      :item="item"
+    />
   </ul>
 </template>
 
