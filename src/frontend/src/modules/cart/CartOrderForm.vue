@@ -4,13 +4,17 @@
       <label class="cart-form__select">
         <span class="cart-form__label">Получение заказа:</span>
 
-        <select name="test" class="select" v-model="deliveryOptionId">
+        <select
+          v-model="deliveryOptionId"
+          name="test"
+          class="select"
+        >
           <option :value="-1">Заберу сам</option>
           <option :value="0">Новый адрес</option>
           <option
-            :value="address.id"
             v-for="address in addresses"
             :key="address.id"
+            :value="address.id"
           >
             {{ address.name }}
           </option>
@@ -25,7 +29,7 @@
           placeholder="+7 999-999-99-99"
           :value="userPhone"
           @input="onUserPhoneInput"
-        />
+        >
       </label>
 
       <template v-if="!isSelfDelivery">
@@ -34,7 +38,10 @@
           :address-data="existingAddressData"
           is-disabled
         />
-        <CartAddressForm v-else :address-data="address" />
+        <CartAddressForm
+          v-else
+          :address-data="address"
+        />
       </template>
     </div>
   </div>
@@ -47,19 +54,6 @@ import CartAddressForm from "@/modules/cart/CartAddressForm";
 export default {
   name: "CartOrderForm",
   components: { CartAddressForm },
-  computed: {
-    ...mapGetters("Auth", ["isAuthed"]),
-    ...mapState("Address", ["addresses"]),
-    ...mapState("Orders", [
-      "address",
-      "userPhone",
-      "addressId",
-      "isSelfDelivery",
-    ]),
-    existingAddressData() {
-      return this.addresses.find((item) => item.id === this.addressId);
-    },
-  },
   data() {
     const { isSelfDelivery, addressId } = this.$store.state.Orders;
     let deliveryOptionId = null;
@@ -72,6 +66,22 @@ export default {
       deliveryOptionId,
     };
   },
+
+  computed: {
+    ...mapGetters("Auth", ["isAuthed"]),
+    ...mapState("Address", ["addresses"]),
+    ...mapState("Orders", [
+      "address",
+      "userPhone",
+      "addressId",
+      "isSelfDelivery",
+    ]),
+
+    existingAddressData() {
+      return this.addresses.find((item) => item.id === this.addressId);
+    },
+  },
+
   watch: {
     deliveryOptionId(v) {
       const value = Number(v);
@@ -80,6 +90,7 @@ export default {
       this.$store.commit("Orders/setState", { isSelfDelivery, addressId });
     },
   },
+
   methods: {
     onUserPhoneInput(e) {
       this.$store.commit("Orders/setState", { userPhone: e.target.value });
@@ -87,3 +98,47 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.cart-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cart-form__select {
+  display: flex;
+  align-items: center;
+
+  margin-right: auto;
+
+  span {
+    margin-right: 16px;
+  }
+}
+
+.cart-form__label {
+  @include b-s16-h19;
+
+  white-space: nowrap;
+}
+
+.cart-form__address {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  margin-top: 20px;
+}
+
+.cart-form__input {
+  flex-grow: 1;
+
+  margin-bottom: 20px;
+  margin-left: 16px;
+
+  &--small {
+    max-width: 120px;
+  }
+}
+</style>

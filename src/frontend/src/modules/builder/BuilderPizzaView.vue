@@ -8,19 +8,34 @@
         placeholder="Введите название пиццы"
         :value="pizzaName"
         @input="onPizzaNameChange"
-      />
+      >
     </label>
 
     <AppDrop @drop="onDrop">
       <div class="content__constructor">
-        <div class="pizza" :class="pizzaClass">
-          <transition-group tag="div" name="ingredient" class="pizza__wrapper">
+        <div
+          class="pizza"
+          :class="pizzaClass"
+        >
+          <transition-group
+            tag="div"
+            name="ingredient"
+            class="pizza__wrapper"
+          >
             <div
               v-for="item in selectedIngredients"
               :key="item.id"
-              class="pizza__filling"
-              :class="ingredientClasses(item)"
-            ></div>
+            >
+              <div :class="['pizza__filling', ingredientClassname(item)]" />
+              <div
+                v-if="item.amount > 1"
+                :class="['pizza__filling', 'pizza__filling--second', ingredientClassname(item)]"
+              />
+              <div
+                v-if="item.amount > 2"
+                :class="['pizza__filling', 'pizza__filling--third', ingredientClassname(item)]"
+              />
+            </div>
           </transition-group>
         </div>
       </div>
@@ -54,30 +69,34 @@ export default {
     doughClassName() {
       return this.selectedDough?.value === "large" ? "big" : "small";
     },
+
     pizzaClass() {
       return `pizza--foundation--${this.doughClassName}-${this.selectedSauce?.value}`;
     },
+
     hasAnIngredient() {
       return this.selectedIngredients.length > 0;
     },
+
     isPizzaReady() {
       return this.pizzaName && this.hasAnIngredient;
     },
   },
+
   methods: {
-    ingredientClasses(item) {
+    ingredientClassname(item) {
       const ingredientData = this.ingredientById(item.id);
-      const classes = [`pizza__filling--${ingredientData?.nameEn}`];
-      if (item.amount === 2) classes.push("pizza__filling--second");
-      if (item.amount === 3) classes.push("pizza__filling--third");
-      return classes.join(" ");
+      return `pizza__filling--${ingredientData?.nameEn}`;
     },
+
     onDrop(ingredient) {
       this.$store.commit("Builder/ingredientAdd", ingredient.id);
     },
+
     onPizzaNameChange(e) {
       this.$store.commit("Builder/setState", { pizzaName: e.target.value });
     },
+
     onAddToCart() {
       const {
         pizzaId,
@@ -104,7 +123,124 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.pizza {
+  position: relative;
+
+  display: block;
+
+  box-sizing: border-box;
+  width: 100%;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+
+  &--foundation--big-creamy {
+    background-image: url("~@/assets/img/foundation/big-creamy.svg");
+  }
+
+  &--foundation--big-tomato {
+    background-image: url("~@/assets/img/foundation/big-tomato.svg");
+  }
+
+  &--foundation--small-creamy {
+    background-image: url("~@/assets/img/foundation/small-creamy.svg");
+  }
+
+  &--foundation--small-tomato {
+    background-image: url("~@/assets/img/foundation/small-tomato.svg");
+  }
+}
+
+.pizza__wrapper {
+  width: 100%;
+  padding-bottom: 100%;
+}
+
+.pizza__filling {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+
+  &--second {
+    transform: rotate(45deg);
+  }
+
+  &--third {
+    transform: rotate(-45deg);
+  }
+
+  &--ananas {
+    background-image: url("~@/assets/img/filling-big/ananas.svg");
+  }
+
+  &--bacon {
+    background-image: url("~@/assets/img/filling-big/bacon.svg");
+  }
+
+  &--blue_cheese {
+    background-image: url("~@/assets/img/filling-big/blue_cheese.svg");
+  }
+
+  &--cheddar {
+    background-image: url("~@/assets/img/filling-big/cheddar.svg");
+  }
+
+  &--chile {
+    background-image: url("~@/assets/img/filling-big/chile.svg");
+  }
+
+  &--ham {
+    background-image: url("~@/assets/img/filling-big/ham.svg");
+  }
+
+  &--jalapeno {
+    background-image: url("~@/assets/img/filling-big/jalapeno.svg");
+  }
+
+  &--mozzarella {
+    background-image: url("~@/assets/img/filling-big/mozzarella.svg");
+  }
+
+  &--mushrooms {
+    background-image: url("~@/assets/img/filling-big/mushrooms.svg");
+  }
+
+  &--olives {
+    background-image: url("~@/assets/img/filling-big/olives.svg");
+  }
+
+  &--onion {
+    background-image: url("~@/assets/img/filling-big/onion.svg");
+  }
+
+  &--parmesan {
+    background-image: url("~@/assets/img/filling-big/parmesan.svg");
+  }
+
+  &--salami {
+    background-image: url("~@/assets/img/filling-big/salami.svg");
+  }
+
+  &--salmon {
+    background-image: url("~@/assets/img/filling-big/salmon.svg");
+  }
+
+  &--tomatoes {
+    background-image: url("~@/assets/img/filling-big/tomatoes.svg");
+  }
+}
+
 .pizza__filling {
   transition: all 0.5s;
 }

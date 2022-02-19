@@ -7,7 +7,7 @@
         width="56"
         height="56"
         :alt="pizza.name"
-      />
+      >
       <div class="product__text">
         <h2>{{ pizza.name }}</h2>
         <ul>
@@ -18,7 +18,9 @@
       </div>
     </div>
 
-    <p class="order__price">{{ price }} ₽</p>
+    <p class="order__price">
+      {{ price }} ₽
+    </p>
   </li>
 </template>
 
@@ -31,25 +33,30 @@ export default {
       required: true,
     },
   },
+
   computed: {
     doughName() {
       return this.$store.getters["Public/doughById"](
         this.pizza.doughId
       )?.name?.toLowerCase();
     },
+
     sauceName() {
       return this.$store.getters["Public/sauceById"](
         this.pizza.sauceId
       )?.name?.toLowerCase();
     },
+
     sizeName() {
       return this.$store.getters["Public/sizeById"](
         this.pizza.sauceId
       )?.name?.toLowerCase();
     },
+
     price() {
       return this.$store.getters["Public/pizzaPrice"](this.pizza);
     },
+
     ingredients() {
       return this.pizza.ingredients
         .map((item) => {

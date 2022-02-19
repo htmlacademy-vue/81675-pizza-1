@@ -3,14 +3,18 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: ["plugin:vue/essential", "eslint:recommended", "@vue/prettier"],
+  extends: ["plugin:vue/recommended"],
   parserOptions: {
-    parser: "babel-eslint",
+    parser: "@babel/eslint-parser",
   },
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "vue/component-name-in-template-casing": ["error", "PascalCase"]
+    "vue/component-name-in-template-casing": ["error", "PascalCase"],
+    "vue/new-line-between-multi-line-property": "error",
+    'vue/multi-word-component-names': ['error', {
+      'ignores': ['Index', 'Cart', 'Login', 'Orders', 'Profile']
+    }]
   },
   overrides: [
     {

@@ -18,8 +18,10 @@ export default {
       type: Object,
       required: true,
     },
+
     disabled: Boolean,
   },
+
   methods: {
     onDrag({ dataTransfer }) {
       dataTransfer.effectAllowed = MOVE;
